@@ -73,3 +73,7 @@ input[readonly] {
   background-color: white !important;
   cursor: text !important;
 }
+
+.navbar-inverse{
+    z-index:90;
+}

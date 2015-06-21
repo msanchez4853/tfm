@@ -6,14 +6,12 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Enumeration"%>
 <%@page import="java.util.Map"%>
-<%@page import="es.uned.tfm.xml.Xml"%>
+<%@page import="es.uned.msanchez.tmf.xml.Xml"%>
 <%@page contentType="text/xml" pageEncoding="UTF-8" autoFlush="false"%>
 <%
 //response.setHeader("Content-Disposition","attachment;filename=config.xml");
 
-
 Xml xml = new Xml();
-
 Map opciones_generales = new HashMap();
 Map opciones_avanzadas = new HashMap();
 Map opciones_iconos = new HashMap();

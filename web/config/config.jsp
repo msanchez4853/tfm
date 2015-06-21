@@ -11,7 +11,8 @@
         <link rel="stylesheet" href="../resources/bootstrap/css/bootstrap-theme.min.css"/>
         <link rel="stylesheet" href="../resources/css/config.css"/>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+       <%--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>--%>
+       <script src="../resources/jquery/jquery.js"></script>
         <script src="../resources/js/config.js"></script>
 
     </head>

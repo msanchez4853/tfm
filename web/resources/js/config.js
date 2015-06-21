@@ -67,6 +67,7 @@ function accederOpciones(){
         $("li[class~='active']").removeClass('active');
         _this.addClass('active');
     //console.log('accederOpciones 3')
+    $("#bs-example-navbar-collapse-1").collapse('hide');
     }
 }
 
