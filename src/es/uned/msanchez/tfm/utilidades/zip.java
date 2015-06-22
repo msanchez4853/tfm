@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package es.uned.msanchez.tmf.utilidades;
+package es.uned.msanchez.tfm.utilidades;
 
 import java.io.File;
 import java.io.FileInputStream;

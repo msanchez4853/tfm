@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package es.uned.msanchez.tmf.xml;
+package es.uned.msanchez.tfm.xml;
 
-import es.uned.msanchez.tmf.utilidades.Util;
+import es.uned.msanchez.tfm.utilidades.Util;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
