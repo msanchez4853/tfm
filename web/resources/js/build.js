@@ -5,69 +5,17 @@
 
 var mitoken=null;
 
-/*
-var createCORSRequest = function(method, url) {
-    var xhr = new XMLHttpRequest();
-     xhr.withCredentials = false;
-    if ("withCredentials" in xhr) {
-        // Most browsers.
-      //  xhr.setRequestHeader("Content-Type", "application/json");
-      //  xhr.setRequestHeader("Access-Control-Allow-Methods","GET, PUT, POST, DELETE, OPTIONS"),
-        
-       // xhr.setRequestHeader("X-Requested-With","XMLHttpRequest");
-     //   xhr.setRequestHeader("Accept","application/json");
-        xhr.open(method, url, true);
-        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-        xhr.setRequestHeader("Access-Control-Allow-Methods","GET, PUT, POST, DELETE, OPTIONS");
-        xhr.setRequestHeader("Accept","application/json");
-         xhr.setRequestHeader("Content-Type", "application/json");
-         xhr.setRequestHeader("X-Requested-With","XMLHttpRequest");
-    } else if (typeof XDomainRequest != "undefined") {
-        // IE8 & IE9
-        xhr = new XDomainRequest();
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.setRequestHeader("Access-Control-Allow-Methods","GET, PUT, POST, DELETE, OPTIONS"),
-        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-       // xhr.setRequestHeader("X-Requested-With","XMLHttpRequest");
-        xhr.setRequestHeader("Accept","application/json");
-        xhr.open(method, url);
-    } else {
-        // CORS not supported.
-        xhr = null;
-    }
-    return xhr;
-};
-
-var url = 'https://build.phonegap.com//authorize/token?client_id=7c533be0f63a942b02c1&code';
-var method = 'POST';
-var xhr = createCORSRequest(method, url);
-
-xhr.onload = function() {
-    // Success code goes here.
-    };
-
-xhr.onerror = function() {
-    // Error code goes here.
-    };
-
-  
-
-xhr.send();
-*/
 
 $(window).ready(function(){
     
-    /*   var url = 'http://api.alice.com/cors';
-var xhr = createCORSRequest('GET', url);
-xhr.send();
-*/
-      mitoken = getAuthorization();
+
+      
     //  ajustartam();
     // defineEvents();  
     
-    /*  $("#apps_phonegap").datagrid({
+    $("#apps_phonegap").datagrid({
         singleSelect:true,
-        url:'getApps.jsp',    
+        //url:'getApps.jsp',    
         columns:[[
         {
             field:'ck',
@@ -116,9 +64,13 @@ xhr.send();
         loadMsg: 'Obteniendo Informacion. Espere Por favor!!'
     });
     
-    $("#menuPlatform").menu();*/
-    }
-    );
+    $("#menuPlatform").menu();
+    mitoken = getAuthorization('apps','GET',{},gestionRespuesta,gestionError);    
+
+}
+    
+    
+);
 
 
 
@@ -183,7 +135,7 @@ function gestionError(jqXHR, textStatus, errorThrown){
     $.messager.alert('Mis Apps','Se ha generado un error al realizar la operacion','error');
 }
 
-function gestionRespuesta(data,  textStatus,  jqXHR){
+function gestionRespuesta(_data,  textStatus,  jqXHR){
     $.messager.show(
     {
         title:'Mis Apps',
@@ -195,8 +147,8 @@ function gestionRespuesta(data,  textStatus,  jqXHR){
             bottom:''
         }
     });
-    console.log(data)
-    $('#apps_phonegap').datagrid('reload');
+    console.log(_data)
+    $('#apps_phonegap').datagrid('loadData',  _data);
     closeProgress();
 }
 
@@ -210,6 +162,7 @@ function editApp(e){
 
 function addApp(e){
     initProgress();
+    getAuthorization(url,method,data, gestionRespuesta, gestionError)
     $.ajax({
         url:'addApp.jsp',
         data:{
@@ -245,7 +198,7 @@ function formatPlatform(val,row,index){
 function getApliApp(e){
     //La aplicacion se encuentra pending
     // alert('aqui')
-    /* var id = $(this).attr('data-apli');
+    var id = $(this).attr('data-apli');
     $("#getApli").window({
         title:'Inf. Apli'+id,
         modal:true,
@@ -266,12 +219,12 @@ function getApliApp(e){
             text:'Cerrar',
             handler:function(){
                 $("#getApli").window('close')
-                }
-        }],
-    onResize:function(){
-                $(this).window('hcenter');
             }
-    });*/
+        }],
+        onResize:function(){
+            $(this).window('hcenter');
+        }
+    });
     
     $("#menuPlatform").menu('show',{
         left: e.pageX,
@@ -291,19 +244,14 @@ function closeProgress(){
     $.messager.progress('close');
 }
 
-function getAuthorization(){
+function getAuthorization(_url,_method,_data, _gestionRespuesta, _gestionError){
+      initProgress();
     if($.support.cors){
-        $.ajax({
-            url:'https://build.phonegap.com/authorize/token',
-            method:'OPTIONS',
-            data:{
-                client_id:"7c533be0f63a942b02c1",
-                code:"b3511beac8a433bcb2f5e652e8",
-                client_secret:"3e5e7f2c079f5902eac4e64247261556d80b8467"
-            },
-            success:function(  data,  textStatus, jqXHR){
-                console.log(data)
-            },
+        $.ajax({        
+            url:'http://localhost:8080/tfm_final/webservices/'+_url,
+            method:_method,
+            data:_data,
+            success:_gestionRespuesta,
             xhrFields: {
                 // The 'xhrFields' property sets additional fields on the XMLHttpRequest.
                 // This can be used to set the 'withCredentials' property.
@@ -312,19 +260,15 @@ function getAuthorization(){
                 // 'Access-Control-Allow-Credentials: true'.
                 withCredentials: false
             },
-            crossDomain: true,
-            dataType: 'json',
-            
-            error:function(jqXHR, textStatus, error){
-                console.log(jqXHR+''+error)
-            },
-            beforeSend: setHeader
-        
+            crossDomain: true,                    
+            error:_gestionError,
+            beforeSend: setHeader        
         })
     }else{
         console.log('No soportado')
     }
 }
+
 function setHeader(xhr) {
 
     //xhr.setRequestHeader('Authorization', token);
@@ -335,44 +279,3 @@ function setHeader(xhr) {
     xhr.setRequestHeader("X-Requested-With","XMLHttpRequest");
     xhr.setRequestHeader("Accept","application/json");
 }
-/*
-function createCORSRequest(method, url) {
-  var xhr = new XMLHttpRequest();
-  if ("withCredentials" in xhr) {
-
-    // Check if the XMLHttpRequest object has a "withCredentials" property.
-    // "withCredentials" only exists on XMLHTTPRequest2 objects.
-    xhr.open(method, url, true);
-
-  } else if (typeof XDomainRequest != "undefined") {
-
-    // Otherwise, check if XDomainRequest.
-    // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-    xhr = new XDomainRequest();
-    xhr.open(method, url);
-
-  } else {
-
-    // Otherwise, CORS is not supported by the browser.
-    xhr = null;
-
-  }
-  return xhr;
-}
-
-var xhr = createCORSRequest('GET', 'https://build.phonegap.com/authorize?client_id=7c533be0f63a942b02c1');
-if (!xhr) {
-  throw new Error('CORS not supported');
-}
-
-xhr.onload = function() {
- var responseText = xhr.responseText;
- console.log(responseText);
- // process the response.
-};
-
-xhr.onerror = function() {
-  console.log('There was an error!');
-};
-
-xhr.send();*/
