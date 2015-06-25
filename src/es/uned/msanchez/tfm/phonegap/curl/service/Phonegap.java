@@ -7,12 +7,30 @@ package es.uned.msanchez.tfm.phonegap.curl.service;
 import es.uned.msanchez.tfm.phonegap.curl.exception.CurlException;
 import es.uned.msanchez.tfm.phonegap.curl.Curl;
 import es.uned.msanchez.tfm.utilidades.Util;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.UriInfo;
+
+import javax.ws.rs.ext.Providers;
+import org.apache.http.HttpHeaders;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -21,6 +39,13 @@ import org.json.simple.JSONObject;
 @Path("/apps")
 public class Phonegap {
 
+
+    /**
+     * Obtiene la informacion de las aplicaciones registradas en Phonega Build.
+     *
+     * @return
+     * @throws CurlException
+     */
     @GET
     @Produces("application/json")
     public String getMeApps() throws CurlException {
@@ -57,6 +82,14 @@ public class Phonegap {
         return resul.toJSONString();
     }
 
+    /**
+     * Obtiene la informacion de la aplicacion indicada que se encuentra en
+     * Phonega Build.
+     *
+     * @param idapli
+     * @return
+     * @throws CurlException
+     */
     @GET
     @Path("/{idapli}")
     @Produces("application/json")
@@ -98,4 +131,62 @@ public class Phonegap {
         }
         return resul.toJSONString();
     }
+
+    /**
+     *
+     * @param idapli
+     * @return
+     * @throws CurlException
+     */
+    @DELETE
+    @Path("/{idapli}")
+    @Produces("application/json")
+    public String delApp(@PathParam("idapli") Long idapli) throws CurlException {
+        Curl phonegap = new Curl();
+        JSONObject misdatos;
+        if (Util.isNulo(idapli)) {
+            misdatos = phonegap.getApps();
+        } else {
+            misdatos = phonegap.deleteApp(idapli);
+        }
+
+        return misdatos.toJSONString();
+    }
+
+
+    @POST
+    @Produces("application/json")
+    public String addApp(@Context UriInfo uri,@Context Application request,@FormParam("datos") String data) {
+
+        System.out.println("Title :" + data);
+        JSONParser parser = new JSONParser();
+        System.out.println(data);
+        System.out.println("URI_Path -->"+uri.getPath());
+       
+      
+        MultivaluedMap<String,String> queryParams = uri.getQueryParameters();
+         MultivaluedMap<String,String> pathParams = uri.getPathParameters();
+         System.out.println("QUERY PARAMS ______");
+         for(String qp : queryParams.keySet()){
+         System.out.println(qp+" = "+queryParams.get(qp));
+         }
+         System.out.println("FIN ::::: QUERY PARAMS ______");
+        
+         System.out.println("PATH PARAMS ______");
+         for(String pp : pathParams.keySet()){
+         System.out.println(pp+" = "+queryParams.get(pp));
+         }
+         System.out.println("FIN ::::: PATH PARAMS ______");
+        JSONObject respuestaJSON = null;
+        try {
+            respuestaJSON = Util.isNulo(data) ? null : (JSONObject) parser.parse(data);
+            return respuestaJSON.toJSONString();
+        } catch (ParseException ex) {
+            Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+         
+     //    System.out.print(headers.getRequestHeader(HttpHeaders.ACCEPT));
+        return " ";
+    } 
 }

@@ -10,8 +10,8 @@ $(window).ready(function(){
     
 
       
-    //  ajustartam();
-    // defineEvents();  
+    ajustartam();
+    defineEvents();  
     
     $("#apps_phonegap").datagrid({
         singleSelect:true,
@@ -107,9 +107,13 @@ function delApp(e){
      
     var row = $('#apps_phonegap').datagrid('getSelected');
     if (row){        
+        
         $.messager.confirm('Mis Apps', 'Esta seguro de eliminar la aplicacion seleccionada?', function(r){
             if (r){
-                initProgress();
+                mitoken = getAuthorization('apps','DELETE',{
+                    idApp:''+row.id
+                    },gestionRespuesta,gestionError);    
+            /*initProgress();
                 $.ajax({
                     url:'deleteApp.jsp',
                     data:{
@@ -119,7 +123,7 @@ function delApp(e){
                     method:'POST',
                     success:gestionRespuesta,
                     error:gestionError
-                })
+                })*/
             }
         });
     }else{
@@ -148,12 +152,13 @@ function gestionRespuesta(_data,  textStatus,  jqXHR){
         }
     });
     console.log(_data)
+    if(_data.length)
     $('#apps_phonegap').datagrid('loadData',  _data);
     closeProgress();
 }
 
 function reloadApp(e){
-    $('#apps_phonegap').datagrid('reload');
+    mitoken = getAuthorization('apps','GET',{},gestionRespuesta,gestionError);  
 }
 
 function editApp(e){
@@ -161,7 +166,16 @@ function editApp(e){
 }
 
 function addApp(e){
-    initProgress();
+    _info={};
+    _info.title = "Memoria con Git";
+    _info.method = "remote_repo";
+    _info.url = "https://github.com/msanchez4853/memory.git";
+  
+    _data = {};
+    _data.datos = JSON.stringify(_info);
+    console.log(_data);
+    mitoken = getAuthorization('apps','POST',_data,gestionRespuesta,gestionError);  
+/*initProgress();
     getAuthorization(url,method,data, gestionRespuesta, gestionError)
     $.ajax({
         url:'addApp.jsp',
@@ -172,7 +186,7 @@ function addApp(e){
         method:'POST',
         success:gestionRespuesta,
         error:gestionError
-    })
+    })*/
 }
 
 
@@ -245,7 +259,7 @@ function closeProgress(){
 }
 
 function getAuthorization(_url,_method,_data, _gestionRespuesta, _gestionError){
-      initProgress();
+    initProgress();
     if($.support.cors){
         $.ajax({        
             url:'http://localhost:8080/tfm_final/webservices/'+_url,
@@ -260,9 +274,9 @@ function getAuthorization(_url,_method,_data, _gestionRespuesta, _gestionError){
                 // 'Access-Control-Allow-Credentials: true'.
                 withCredentials: false
             },
-            crossDomain: true,                    
+            //crossDomain: true,                    
             error:_gestionError,
-            beforeSend: setHeader        
+            beforeSend: setHeader
         })
     }else{
         console.log('No soportado')
@@ -272,10 +286,34 @@ function getAuthorization(_url,_method,_data, _gestionRespuesta, _gestionError){
 function setHeader(xhr) {
 
     //xhr.setRequestHeader('Authorization', token);
-    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+    //xhr.setRequestHeader("Content-Type", "application/json");
     xhr.setRequestHeader("Access-Control-Allow-Methods","GET, PUT, POST, DELETE, OPTIONS"),
     xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
   
-    xhr.setRequestHeader("X-Requested-With","XMLHttpRequest");
+    //   xhr.setRequestHeader("X-Requested-With","XMLHttpRequest");
     xhr.setRequestHeader("Accept","application/json");
 }
+
+
+
+JSON.stringify = JSON.stringify || function (obj) {
+    var t = typeof (obj);
+    if (t != "object" || obj === null) {
+        // simple data type
+        if (t == "string") obj = '"'+obj+'"';
+        return String(obj);
+    }
+    else {
+        // recurse array or object
+        var n, v, json = [], arr = (obj && obj.constructor == Array);
+        for (n in obj) {
+            v = obj[n];
+            t = typeof(v);
+            if (t == "string") v = '"'+v+'"';
+            else if (t == "object" && v !== null) v = JSON.stringify(v);
+            json.push((arr ? "" : '"' + n + '":') + String(v));
+        }
+        return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+    }
+};

@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -124,33 +125,22 @@ public class Curl {
 
     public void init() {
         Properties prop = new Properties();
-        try {
+        String user;
+        String pass;
 
+        ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.phonegap.curl.resources.config");
+        user = rb.getString("user");
+        pass = rb.getString("pass");
 
-            String propFileName = "config.properties";
-            System.out.println(getClass().getResource());
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("/es/uned/msanchez/tfm/phonegap/curl/resources/config.properties");
-
-            if (inputStream != null) {
-                prop.load(inputStream);
-            } else {
-                throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
-            }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-        String user = prop.getProperty("user");
-        String pass = prop.getProperty("pass");
 
         HttpHost targetHost = new HttpHost("localhost", 80, "http");
         credsProvider = new BasicCredentialsProvider();
 
-      
+
         UsernamePasswordCredentials creds = new UsernamePasswordCredentials(user, pass);
         credsProvider.setCredentials(
                 new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT), creds);
-        // System.out.println(creds.getUserPrincipal().getName());
-        // System.out.println(creds.getPassword());
+        
         RequestConfig globalConfig = RequestConfig.custom()
                 .setCookieSpec(CookieSpecs.STANDARD)
                 .build();
