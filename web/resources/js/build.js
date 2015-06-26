@@ -262,7 +262,8 @@ function getAuthorization(_url,_method,_data, _gestionRespuesta, _gestionError){
     initProgress();
     if($.support.cors){
         $.ajax({        
-            url:'http://localhost:8080/tfm_final/webservices/'+_url,
+            //url:'http://localhost:8084/tfm/webservices/'+_url,
+            url:serverRest+_url,
             method:_method,
             data:_data,
             success:_gestionRespuesta,

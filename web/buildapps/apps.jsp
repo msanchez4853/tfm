@@ -1,4 +1,5 @@
 
+<%@page import="java.util.ResourceBundle"%>
 <%@page import="org.apache.http.HttpHeaders"%>
 
 <%//@page import="org.json.simple.JSONArray"%>
@@ -7,13 +8,8 @@
 <%//@page import="es.uned.curl.Curl"%>
 <%//@page import="org.json.simple.JSONObject"%> 
 <%
-response.addHeader("Access-Control-Allow-Origin", "*");
-        response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
-        response.addHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
-        response.addHeader("Access-Control-Max-Age", "1728000");
- //       Curl curl = new Curl();
- //       JSONObject autorize = curl.getAutorize();
- //       out.println(autorize);
+    ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.phonegap.curl.resources.config");
+    String serverRestFull = rb.getString("serverRESTFUL");
 %>
 
 <html>
@@ -31,6 +27,9 @@ response.addHeader("Access-Control-Allow-Origin", "*");
 
         <script src="../resources/jquery/jquery.js"></script>
         <script src="../resources/jquery-easyui/jquery.easyui.min.js"></script>
+        <script type="text/javascript">
+    var serverRest= '<%=serverRestFull%>';
+</script>
         <script src="../resources/js/build.js"></script>
 
     </head>

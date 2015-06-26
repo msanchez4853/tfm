@@ -120,27 +120,30 @@ public class Curl {
          dataApp.put("title", "Prueba API");
          dataApp.put("create_method", "file");
          */
-
     }
 
     public void init() {
         Properties prop = new Properties();
         String user;
         String pass;
+        String server;
+        String port;
+        String protocol;
 
         ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.phonegap.curl.resources.config");
         user = rb.getString("user");
         pass = rb.getString("pass");
-
-
-        HttpHost targetHost = new HttpHost("localhost", 80, "http");
+        server = rb.getString("server");
+        port = rb.getString("port");
+        protocol = rb.getString("protocol");
+        Integer puerto = (port!=null)?Integer.parseInt(port):80;
+        HttpHost targetHost = new HttpHost(server, puerto,protocol);
         credsProvider = new BasicCredentialsProvider();
-
 
         UsernamePasswordCredentials creds = new UsernamePasswordCredentials(user, pass);
         credsProvider.setCredentials(
                 new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT), creds);
-        
+
         RequestConfig globalConfig = RequestConfig.custom()
                 .setCookieSpec(CookieSpecs.STANDARD)
                 .build();
@@ -149,7 +152,6 @@ public class Curl {
                 .setCookieSpec(CookieSpecs.STANDARD)
                 .build();
         httpclient = HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
-
 
     }
 
@@ -431,7 +433,6 @@ public class Curl {
 
         respuestaJSON = postMethodPhonegap("/api/v1/apps/", params);
 
-
         return respuestaJSON;
 
     }
@@ -457,9 +458,7 @@ public class Curl {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("data", data_p);
 
-
         respuestaJSON = postMethodPhonegap("/api/v1/apps/", params);
-
 
         return respuestaJSON;
 
@@ -477,7 +476,6 @@ public class Curl {
      */
     public JSONObject buildApp(Long _idApli, JSONObject _data) throws CurlException {
         JSONObject respuestaJSON = null;
-
 
         StringBody data_p = null;
         Map<String, Object> params = new HashMap<String, Object>();
@@ -505,10 +503,8 @@ public class Curl {
     public JSONObject buildApp(Long _idApli, String _platform) throws CurlException {
         JSONObject respuestaJSON = null;
 
-
         StringBody data_p = null;
         Map<String, Object> params = new HashMap<String, Object>();
-
 
         respuestaJSON = postMethodPhonegap("/api/v1/apps/" + _idApli + "/build/" + _platform, params);
         return respuestaJSON;
@@ -526,7 +522,6 @@ public class Curl {
 
         FileBody file = new FileBody(_icon);
 
-
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("icon", file);
 
@@ -537,7 +532,6 @@ public class Curl {
 
     public JSONObject addCollab(Long _idApli, JSONObject _data) throws CurlException {
         JSONObject respuestaJSON = null;
-
 
         StringBody data_p = null;
         Map<String, Object> params = new HashMap<String, Object>();
@@ -553,7 +547,6 @@ public class Curl {
 
     public JSONObject setRoleCollab(Long _idApli, Long _idCollab, JSONObject _data) throws CurlException {
         JSONObject respuestaJSON = null;
-
 
         StringBody data_p = null;
         Map<String, Object> params = new HashMap<String, Object>();
@@ -580,7 +573,6 @@ public class Curl {
         respuestaJSON = putMethodPhonegap("/api/v1/apps/" + _idApli, params);
 
         return respuestaJSON;
-
 
     }
 
@@ -641,7 +633,6 @@ public class Curl {
     private JSONObject getResponseJSON(HttpResponse _response) throws CurlException {
         InputStream content = null;
 
-
         JSONObject respuestaJSON = null;
         try {
             HttpEntity entity1 = _response.getEntity();
@@ -653,7 +644,6 @@ public class Curl {
             JSONParser parser = new JSONParser();
             System.out.println(theString);
             respuestaJSON = Util.isNulo(theString) ? null : (JSONObject) parser.parse(theString);
-
 
         } catch (ParseException ex) {
             Logger.getLogger(Curl.class.getName()).log(Level.SEVERE, null, ex);
@@ -696,7 +686,6 @@ public class Curl {
         HttpGet httpget = new HttpGet(uri);
         httpget.setConfig(localConfig);
 
-
         HttpResponse response;
         try {
             response = httpclient.execute(httpget);
@@ -724,7 +713,6 @@ public class Curl {
         HttpGet httpget = new HttpGet(uri);
         httpget.setConfig(localConfig);
 
-
         HttpResponse response;
         try {
             response = httpclient.execute(httpget);
@@ -745,7 +733,6 @@ public class Curl {
 
     private JSONObject getResponseJSONWithDowload(HttpResponse _response) throws CurlException {
         InputStream content = null;
-
 
         JSONObject respuestaJSON = null;
         try {
@@ -805,7 +792,6 @@ public class Curl {
 
         URI uri = getUriPhonegapMethods(_link);
 
-
         HttpPost httpPost = new HttpPost(uri);
         httpPost.setConfig(localConfig);
 
@@ -826,7 +812,6 @@ public class Curl {
             Logger.getLogger(Curl.class.getName()).log(Level.SEVERE, _link, ex);
             throw new CurlException(ex, "No se ha podido realizar la llamada del metodo " + _link);
         }
-
 
         respuestaJSON = getResponseJSON(response);
 
@@ -853,7 +838,6 @@ public class Curl {
 
         URI uri = getUriPhonegapMethods(_link);
 
-
         HttpPut httpPut = new HttpPut(uri);
         httpPut.setConfig(localConfig);
 
@@ -874,7 +858,6 @@ public class Curl {
             Logger.getLogger(Curl.class.getName()).log(Level.SEVERE, _link, ex);
             throw new CurlException(ex, "No se ha podido realizar la llamada del metodo " + _link);
         }
-
 
         respuestaJSON = getResponseJSON(response);
         resultado.put("status", response.getStatusLine().getStatusCode());
@@ -901,7 +884,6 @@ public class Curl {
 
         HttpDelete httpDel = new HttpDelete(uri);
         httpDel.setConfig(localConfig);
-
 
         HttpResponse response;
         try {

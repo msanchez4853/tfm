@@ -180,6 +180,7 @@ public class Phonegap {
         JSONObject respuestaJSON = null;
         try {
             respuestaJSON = Util.isNulo(data) ? null : (JSONObject) parser.parse(data);
+            if(Util.isNulo(respuestaJSON)) return "";
             return respuestaJSON.toJSONString();
         } catch (ParseException ex) {
             Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
