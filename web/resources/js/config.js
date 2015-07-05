@@ -17,6 +17,11 @@ $(window).ready(function(){
         $(this).parent().append('<p>'+$(this).attr('alt')+'</p>');
     });
     
+    //Ocultar las opciones avanzadas.
+    // $("[data-agr='avanzada']").hide();
+    $('div[data-config="seccion"]').hide();
+    $('div#_opciones_generales').show();
+    
     reiniciarFormAcceso();
 }
 );
@@ -39,7 +44,6 @@ function ajustartam(){
 function defineEvents(){
     $("#_opciones_guardar").click(generarXml);    
     $("li > a[id!='_opciones_guardar']").click(accederOpciones);
-    console.log($("input[type='radio'][name='_bt_avan_rad']").size())
     $("input[type='radio'][name='_bt_avan_rad']").change(grupoOpciones);
     $("input[type='radio'][name='_bt_icon_rad']").change(grupoOpciones);
     $("input[type='radio'][name='_bt_splash_rad']").change(grupoOpciones);
@@ -50,24 +54,110 @@ function defineEvents(){
     $("#_bt_perm_del_acc").click(eliminarAcceso);
     $("#_bt_perm_mod_acc").click(editarAcceso);
     
+    $("._mostrar_info[data-alert]").click(mostrarinfo);
+    $('[data-toggle="popover"]').each(function(){
+        var _this= $(this);
+        var s_pop_cont = _this.children("span.data-content");
+        var s_pop_title = _this.children("span.data-title");
+        
+        $(this).popover({
+            title:s_pop_title.html(),
+            trigger:'hover',
+            content:s_pop_cont.html(),
+            html:true
+        });
+        s_pop_cont.html('&nbsp;');
+    })
+    $('[data-toggle="tooltip"]').tooltip();
+    $("[required]").blur(validate_event);
     
 }
 
-function generarXml(){
-    console.log('generarXml');
-    $("#form_guardar").submit();
+
+function mostrarinfo(){
+    var _this = $(this);
+    var tipo = _this.attr('data-alert');
+    if($("#info_"+tipo).is(':visible'))
+        $("#info_"+tipo).hide()
+    else
+        $("#info_"+tipo).show()
 }
 
-function accederOpciones(){
+function validate_event(e){    
+    var _this = $(this);
+    if(validate_element(_this)!=true){
+        e.preventDefault();    
+        this.focus();
+    }
+    
+    
+}
+
+function validate_element(_this){
+    
+    if(_this.val() == ''){
+           _this.focus();
+             
+        _this.parent().addClass('has-error'); 
+        //_this.attr('title','Obligatorio');
+        _this.popover({content:'Obligatorio',trigger:'manual'});
+        _this.popover('show');
+        return false;
+    }else{
+        if( _this.parent().hasClass("has-error")){
+            _this.parent().removeClass('has-error');
+            _this.popover('destroy');
+        }
+        return true;
+    }
+}
+function generarXml(){
+   
+    var validate = true;
+    var _requeridos = $("[required]");
+    for(i=0;i<_requeridos.length;i++){
+        var _elem  = _requeridos[i];
+        if(validate_element($("#"+_elem.id))!=true){           
+            validate = false; 
+            break;
+        }
+        
+    }
+   
+    if(validate) $("#form_guardar").submit();
+}
+
+function accederOpciones(e){
+    var validate = true;
+    //console.log($("li.active > a").attr('href'));
+    var seccion=$("li.active > a").attr('href');
+    var _requeridos = $(seccion).find($("[required]"))//$("[required]");
+    console.log(_requeridos.length)
+    for(i=0;i<_requeridos.length;i++){
+        var _elem  = _requeridos[i];
+        if(validate_element($("#"+_elem.id))!=true){           
+            validate = false; 
+            break;
+        }
+        
+    }
+    
+    if(validate==false){
+         e.preventDefault();    
+         return;
+    }
     // console.log('accederOpciones')
     _this = $(this).parent();
+    console.log('asdfasd    '+$(this).attr('href'));
+    $('div[data-config="seccion"]').hide();
+    $('div'+$(this).attr('href')).show();
     // console.log('accederOpciones1')
     if(!_this.hasClass('active')){
         // console.log('accederOpciones 2 --> ')
         $("li[class~='active']").removeClass('active');
         _this.addClass('active');
-    //console.log('accederOpciones 3')
-    $("#bs-example-navbar-collapse-1").collapse('hide');
+        //console.log('accederOpciones 3')
+        $("#bs-example-navbar-collapse-1").collapse('hide');
     }
 }
 
@@ -109,7 +199,7 @@ function handleFileSelect(evt,numFiles, label) {
     for (var i = 0, f; f = files[i]; i++) {
 
         console.log(f.type);
-        console.log();
+        console.log(f.name);
 
         // Only process image files.
         if (!f.type.match('image.*') && $("#"+_id_img).attr('src')!=undefined) {

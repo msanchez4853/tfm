@@ -9,7 +9,7 @@
 <%//@page import="org.json.simple.JSONObject"%> 
 <%
     ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.phonegap.curl.resources.config");
-    String serverRestFull = rb.getString("serverRESTFUL");
+    String serverRestFull = rb.getString("serverRESTFUL").trim();
 %>
 
 <html>

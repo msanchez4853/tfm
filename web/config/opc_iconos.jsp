@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<div class="panel panel-default" id="_opciones_iconos">
+<div class="panel panel-default" id="_opciones_iconos"  data-config="seccion">
     <div class="panel-heading">
         <h3 class="panel-title">Iconos</h3>
     </div>

@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<div class="panel panel-default" id="_opciones_permisos">
+<div class="panel panel-default" id="_opciones_permisos"  data-config="seccion">
     <div class="panel-heading">
         <h3 class="panel-title">Permisos</h3>
     </div>

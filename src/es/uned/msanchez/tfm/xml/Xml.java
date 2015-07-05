@@ -129,6 +129,11 @@ public class Xml {
                 setPreference("phonegap-version", _opciones_generales.get(param));
             }
             
+            if(param.equals("source_file")){
+                setContentApp(_opciones_generales.get(param));
+                
+            }
+            
         }
         if (!Util.isNulo(platform)) {
             setPlatform(platform);
@@ -373,7 +378,7 @@ public class Xml {
     }
     
     public void setDescripApp(String _desc) throws Exception {
-        if (Util.isNulo(this.widget)) {
+        if (Util.isNulo(this.widget)) { 
             throw new Exception();
         }
         
@@ -388,6 +393,24 @@ public class Xml {
         String descripcion = Util.isNulo(_desc) ? "Un Ejemplo de aplicacion ...." : _desc;
         
         e_desc.addContent(descripcion);
+    }
+    
+    public void setContentApp(String _content) throws Exception {
+        if (Util.isNulo(this.widget)) {
+            throw new Exception();
+        }
+        
+        Element e_cont = widget.getChild("content");
+        if (Util.isNulo(e_cont)) {
+            e_cont = new Element("content");
+            widget.addContent(e_cont);
+        } else {
+            e_cont.removeContent();
+        }
+        
+        String descripcion = Util.isNulo(_content) ? "index.html" : _content;
+        
+        e_cont.addContent(descripcion);
     }
     
     public void setAuthorApp(String _author, String _href, String _email) throws Exception {
@@ -433,6 +456,7 @@ public class Xml {
         }
         
     }
+    
     
     public void setPreference(String _namePref, String _valuePref) throws Exception {
         if (Util.isNulo(this.widget)) {

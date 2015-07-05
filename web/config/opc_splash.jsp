@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<div class="panel panel-default" id="_opciones_splash">
+<div class="panel panel-default" id="_opciones_splash"  data-config="seccion">
     <div class="panel-heading">
         <h3 class="panel-title">Splash Screen</h3>
     </div>

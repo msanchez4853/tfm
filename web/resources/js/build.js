@@ -152,7 +152,7 @@ function gestionRespuesta(_data,  textStatus,  jqXHR){
         }
     });
     console.log(_data)
-    if(_data.length)
+   // if(_data.length)
     $('#apps_phonegap').datagrid('loadData',  _data);
     closeProgress();
 }

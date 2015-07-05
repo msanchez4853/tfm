@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<div class="panel panel-default" id="_opciones_plugins">
+<div class="panel panel-default" id="_opciones_plugins"  data-config="seccion">
     <div class="panel-heading">
         <h3 class="panel-title">Plugins</h3>
     </div>
