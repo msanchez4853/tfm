@@ -151,8 +151,8 @@ function gestionRespuesta(_data,  textStatus,  jqXHR){
             bottom:''
         }
     });
-    console.log(_data)
-    if(_data.length)
+ 
+ 
     $('#apps_phonegap').datagrid('loadData',  _data);
     closeProgress();
 }
