@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<div class="panel panel-default" id="_opciones_avanzadas">
+<div class="panel panel-default" id="_opciones_avanzadas" data-config="seccion">
     <div class="panel-heading">
         <h3 class="panel-title">Avanzadas</h3>
     </div>

@@ -6,7 +6,7 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Enumeration"%>
 <%@page import="java.util.Map"%>
-<%@page import="es.uned.msanchez.tmf.xml.Xml"%>
+<%@page import="es.uned.msanchez.tfm.xml.Xml"%>
 <%@page contentType="text/xml" pageEncoding="UTF-8" autoFlush="false"%>
 <%
 //response.setHeader("Content-Disposition","attachment;filename=config.xml");
@@ -24,7 +24,6 @@ for(Enumeration e= request.getParameterNames(); e.hasMoreElements();)
 {
     String params = (String)e.nextElement();
     String valueParams = request.getParameter(params);
-   
     if(params.indexOf("_opc_gen_")>=0){
         opciones_generales.put(params.replaceFirst("_opc_gen_", ""),valueParams );
     }

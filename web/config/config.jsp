@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <%--     <meta http-equiv="X-UA-Compatible" content="IE=edge">--%>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Wizard Config.</title>
         <link rel="stylesheet" href="../resources/bootstrap/css/bootstrap.min.css"/>
@@ -36,9 +35,9 @@
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
                             <li class="active"><a href="#_opciones_generales">General <span class="sr-only">(current)</span></a></li>
-                            <li><a href="#_opciones_avanzadas">Avanzadas</a></li>
-                            <li><a href="#_opciones_iconos">Iconos</a></li>
-                            <li><a href="#_opciones_splash">Splash Screen</a></li>
+                            <li data-agr="avanzada"><a href="#_opciones_avanzadas">Avanzadas</a></li>
+                            <li ><a href="#_opciones_iconos">Iconos</a></li>
+                            <li ><a href="#_opciones_splash">Splash Screen</a></li>
                             <li><a href="#_opciones_permisos">Permisos</a></li>
                             <li><a href="#_opciones_desarrollador">Info. Desarrolador</a></li>
                             <li><a href="#_opciones_plugins">Plugins</a></li>
