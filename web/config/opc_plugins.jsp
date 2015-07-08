@@ -7,11 +7,22 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="panel panel-default" id="_opciones_plugins"  data-config="seccion">
     <div class="panel-heading">
-        <h3 class="panel-title">Plugins</h3>
+        <h3 class="panel-title">Plugins&nbsp; 
+            <span class="_mostrar_info glyphicon glyphicon-question-sign" data-alert="plugins" data-toggle="tooltip" title="Muestra /oculta informacion adicional">&nbsp;</span></h3>
     </div>
     <div class="panel-body panel_contenido">
 
-        <div class="container-fluid">                                                    
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="info_plugins" class="jumbotron img-rounded" >
+                        <button type="button" class="_mostrar_info close" data-alert="plugins"><span aria-hidden="true">&times;</span></button>
+                        <strong>General.</strong> Define aspectos generales de configuracion de nuestra aplicacion Phonegap Build.                        
+                        <br/>
+                        Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/configuring_basics.md.html#The%20Basics" class="alert-link" target="_blank">Configuring - The Basics</a>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-12 col-sm-12">                                
                     <div class="row form-group">

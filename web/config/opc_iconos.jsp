@@ -5,31 +5,79 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<div class="panel panel-default" id="_opciones_iconos"  data-config="seccion">
+<div class="panel panel-success" id="_opciones_iconos"  data-config="seccion">
     <div class="panel-heading">
-        <h3 class="panel-title">Iconos</h3>
+        <h3 class="panel-title">Iconos&nbsp; 
+            <span class="_mostrar_info glyphicon glyphicon-question-sign" data-alert="iconos" data-toggle="tooltip" title="Muestra /oculta informacion adicional">&nbsp;</span></h3>
     </div>
     <div class="panel-body panel_contenido">
-        <div class="container-fluid">                       
+        <div class="container-fluid">  
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="info_iconos" class="jumbotron img-rounded" >
+                        <button type="button" class="_mostrar_info close" data-alert="iconos"><span aria-hidden="true">&times;</span></button>
+                        <strong>Iconos.</strong> Nos permite definir para cada una de las plataformas los iconos de nuestra aplicación. 
+                        <br/>
+                        Para asegurar compatibilidad es recomendable que las imágenes utilizadas sean en formato .png o el indicado en su defecto.
+                        <br/>
+                        Por defecto las imágenes se buscaran en el raíz salvo que el campo path recurso se especifique la ruta realativa.
+
+                        <br/>
+                        Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/configuring_icons_and_splash.md.html#Icons%20and%20Splash%20Screens" class="alert-link" target="_blank">Icons and Splash Screens</a>
+                    </div>
+                </div>
+            </div>
             <div id="_acc_avan_option" class="row" style="text-align: center; margin-bottom: 5px">
-                <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-primary active">
-                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_ios" value="_opc_icon_ios" checked> iOS
+                <div class="btn-group col-md-12" data-toggle="buttons">
+                    <label class="btn btn-primary active" data-toggle="popover"> 
+                        <span class="data-content glyphicon glyphicon-question-sign" >
+                            Muestra para la plataformas iOS disponibles actualmente las distintas resoluciones que se pueden definir. 
+                        </span>                           
+                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_ios" value="_opc_icon_ios" checked> 
+                        <span class="data-title"> iOS</span>
                     </label>
-                    <label class="btn btn-primary ">
-                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_android"  value="_opc_icon_android" > Android
+                    <label class="btn btn-primary " data-toggle="popover"> 
+                        <span class="data-content glyphicon glyphicon-question-sign" >
+                            Muestra para la plataforma Android disponibles actualmente las distintas resoluciones que se pueden definir. 
+                        </span>   
+                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_android"  value="_opc_icon_android" >
+                        <span class="data-title"> Android</span>
                     </label>  
-                    <label class="btn btn-primary ">
-                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_win"  value="_opc_icon_win"  > Windows Phone
+                    <label class="btn btn-primary " data-toggle="popover"> 
+                        <span class="data-content glyphicon glyphicon-question-sign" >
+                            Muestra para la plataforma Windows Phone las distintas resoluciones que se pueden definir. 
+                        </span>  
+                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_win"  value="_opc_icon_win"  > 
+                        <span class="data-title">Windows Phone</span>
                     </label>
-                    <label class="btn btn-primary ">
-                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_default"  value="_opc_icon_default"  > Default
+                    <label class="btn btn-primary " data-toggle="popover"> 
+                        <span class="data-content glyphicon glyphicon-question-sign" >
+                            Permite definir el icono por defecto para nuestra aplicacion.
+                        </span>  
+                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_default"  value="_opc_icon_default"  > 
+                        <span class="data-title">Default</span>
                     </label>
                 </div>
             </div>
             <div id="_opc_icon_ios">
                 <div class="row">
                     <div class="col-md-12"> 
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12"> 
+                                <div class="row  form-group">
+                                    <label for="_opc_icon_ios_path" data-toggle="popover"> 
+                                        <span class="data-content glyphicon glyphicon-question-sign" >
+                                            Path relativo donde se encuentran los archivos a partir del directorio de nuestra aplicacion.
+                                            <br/>
+                                            <strong>Importante</strong><em>La ruta de directorios se formara utilizando como separador de directorios el caracter / </em>
+                                            <br/>
+                                            <em><strong>Por defecto</strong>El raiz de nuestra aplicacion.</em>
+                                        </span>
+                                        <span class="data-title">Path Relativo (iOS)</span>:</label>
+                                    <input data-path type="text" name="_opc_icon_ios_path" id="_opc_icon_ios_path"  class="form-control" placeholder="Path relativo donde se encuentra los iconos para iOS. Por ejemplo /res/ios/"/>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row form-group">
                             <label >iOS 6</label>
                             <div class="row form-control form_agrupa">
@@ -71,7 +119,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-md-2 col-md-offset-1 thumbnail ">
                                     <div class="row text-center img_icons ">
                                         <img style="width:60px;height:60px" src="../resources/imagenes/default.png" alt="57X57 <br/> (iPhone / iPod Touch)"  id="_img_icon_ios6_57"/>
@@ -348,6 +396,22 @@
             <div id="_opc_icon_android">
                 <div class="row">
                     <div class="col-md-12"> 
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12"> 
+                                <div class="row  form-group">
+                                    <label for="_opc_icon_android_path" data-toggle="popover"> 
+                                        <span class="data-content glyphicon glyphicon-question-sign" >
+                                            Path relativo donde se encuentran los archivos a partir del directorio de nuestra aplicacion.
+                                            <br/>
+                                            <strong>Importante</strong><em>La ruta de directorios se formara utilizando como separador de directorios el caracter / </em>
+                                            <br/>
+                                            <em><strong>Por defecto</strong>El raiz de nuestra aplicacion.</em>
+                                        </span>
+                                        <span class="data-title">Path Relativo (Android)</span>:</label>
+                                    <input data-path type="text" name="_opc_icon_android_path" id="_opc_icon_android_path"  class="form-control" placeholder="Path relativo donde se encuentra los iconos para Android. Por ejemplo /res/android/"/>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row form-group">
                             <label >Android</label>
                             <div class="row form-control form_agrupa">  
@@ -428,7 +492,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2 col-md-offset-1 thumbnail">
-                                        
+
                                         <div class="row text-center img_icons">
                                             <img style="width:144px;height:144px" src="../resources/imagenes/default.png" alt="xxhdpi"  id="_img_icon_android_xxhdpi"/>
                                         </div>
@@ -474,7 +538,24 @@
             <div id="_opc_icon_win">
                 <div class="row">
                     <div class="col-md-12"> 
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12"> 
+                                <div class="row  form-group">
+                                    <label for="_opc_icon_win_path" data-toggle="popover"> 
+                                        <span class="data-content glyphicon glyphicon-question-sign" >
+                                            Path relativo donde se encuentran los archivos a partir del directorio de nuestra aplicacion.
+                                            <br/>
+                                            <strong>Importante</strong><em>La ruta de directorios se formara utilizando como separador de directorios el caracter / </em>
+                                            <br/>
+                                            <em><strong>Por defecto</strong>El raiz de nuestra aplicacion.</em>
+                                        </span>
+                                        <span class="data-title">Path Relativo (Windows Phone)</span>:</label>
+                                    <input data-path type="text" name="_opc_icon_win_path" id="_opc_icon_win_path"  class="form-control" placeholder="Path relativo donde se encuentra los iconos para Windows Phone. Por ejemplo /res/win/"/>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row form-group">
+                            
                             <label >WinPhone</label>
                             <div class="row form-control form_agrupa">
 
@@ -483,36 +564,36 @@
                                         <img style="width:173px;height:173px" src="../resources/imagenes/default.png" alt="Icon"  id="_img_icon_win_role_"/>
                                     </div>
                                     <div class="caption">
-                                            <div class="input-group col-md-12">
-                                                <span class="input-group-btn">
-                                                    <span class="btn btn-default " aria-label="Borrar" id="_bt_del_icon_win_role_">
-                                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                                    </span>
-                                                    <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_win_role_" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                        <input type="file" name="_opc_icon_win_role_" id="_opc_icon_win_role_"/>
-                                                    </span> 
+                                        <div class="input-group col-md-12">
+                                            <span class="input-group-btn">
+                                                <span class="btn btn-default " aria-label="Borrar" id="_bt_del_icon_win_role_">
+                                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
-                                                <input class=" form-control"  id="_text_icon_win_role_" type="text"  readonly>
-                                            </div>
+                                                <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_win_role_" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+                                                    <input type="file" name="_opc_icon_win_role_" id="_opc_icon_win_role_"/>
+                                                </span> 
+                                            </span>
+                                            <input class=" form-control"  id="_text_icon_win_role_" type="text"  readonly>
                                         </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-2 col-md-offset-1 thumbnail">
                                     <div class="row text-center img_icons">
                                         <img style="width:173px;height:173px" src="../resources/imagenes/default.png" alt="BackGround"  id="_img_icon_win_role_background"/>
                                     </div>
                                     <div class="caption">
-                                            <div class="input-group col-md-12">
-                                                <span class="input-group-btn">
-                                                    <span class="btn btn-default " aria-label="Borrar" id="_bt_del_icon_win_role_background">
-                                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                                    </span>
-                                                    <span  class="btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_win_role_background" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                        <input type="file" name="_opc_icon_win_role_background" id="_opc_icon_win_role_background"/>
-                                                    </span> 
+                                        <div class="input-group col-md-12">
+                                            <span class="input-group-btn">
+                                                <span class="btn btn-default " aria-label="Borrar" id="_bt_del_icon_win_role_background">
+                                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
-                                                <input class=" form-control" id="_text_icon_win_role_background" type="text"  readonly>
-                                            </div>
+                                                <span  class="btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_win_role_background" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+                                                    <input type="file" name="_opc_icon_win_role_background" id="_opc_icon_win_role_background"/>
+                                                </span> 
+                                            </span>
+                                            <input class=" form-control" id="_text_icon_win_role_background" type="text"  readonly>
                                         </div>
+                                    </div>
                                 </div>                                
                             </div>
                         </div>
@@ -522,6 +603,22 @@
             <div id="_opc_icon_default">
                 <div class="row">
                     <div class="col-md-12"> 
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12"> 
+                                <div class="row  form-group">
+                                    <label for="_opc_icon_default_path" data-toggle="popover"> 
+                                        <span class="data-content glyphicon glyphicon-question-sign" >
+                                            Path relativo donde se encuentran los archivos a partir del directorio de nuestra aplicacion.
+                                            <br/>
+                                            <strong>Importante</strong><em>La ruta de directorios se formara utilizando como separador de directorios el caracter / </em>
+                                            <br/>
+                                            <em><strong>Por defecto</strong>El raiz de nuestra aplicacion.</em>
+                                        </span>
+                                        <span class="data-title">Path Relativo (Default)</span>:</label>
+                                    <input data-path type="text" name="_opc_icon_default_path" id="_opc_icon_default_path"  class="form-control" placeholder="Path relativo donde se encuentra el icono por defecto. Por ejemplo /res/icons/default/"/>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row form-group">
                             <label >Default</label>
                             <div class="row form-control form_agrupa">
@@ -531,18 +628,18 @@
                                         <img style="width:120px;height:120px" src="../resources/imagenes/default.png" alt="Default"  id="_img_icon_default_1"/>
                                     </div>
                                     <div class="caption">
-                                            <div class="input-group col-md-12">
-                                                <span class="input-group-btn">
-                                                    <span class="btn btn-default " aria-label="Borrar" id="_bt_del_icon_default_1">
-                                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                                    </span>
-                                                    <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_default_1" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                        <input type="file" name="_opc_icon_default_1" id="_opc_icon_default_1"/>
-                                                    </span> 
+                                        <div class="input-group col-md-12">
+                                            <span class="input-group-btn">
+                                                <span class="btn btn-default " aria-label="Borrar" id="_bt_del_icon_default_1">
+                                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
-                                                <input class=" form-control" id="_text_icon_default_1" type="text"  readonly>
-                                            </div>
+                                                <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_default_1" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+                                                    <input type="file" name="_opc_icon_default_1" id="_opc_icon_default_1"/>
+                                                </span> 
+                                            </span>
+                                            <input class=" form-control" id="_text_icon_default_1" type="text"  readonly>
                                         </div>
+                                    </div>
                                 </div>                                                             
                             </div>
                         </div>

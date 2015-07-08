@@ -5,12 +5,23 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<div class="panel panel-default" id="_opciones_avanzadas" data-config="seccion">
+<div class="panel panel-danger" id="_opciones_avanzadas" data-config="seccion">
     <div class="panel-heading">
-        <h3 class="panel-title">Avanzadas</h3>
+        <h3 class="panel-title">Avanzadas&nbsp; 
+            <span class="_mostrar_info glyphicon glyphicon-question-sign" data-alert="avanzadas" data-toggle="tooltip" title="Muestra /oculta informacion adicional">&nbsp;</span></h3>
     </div>
     <div class="panel-body panel_contenido">
-        <div class="container-fluid">                       
+        <div class="container-fluid"> 
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="info_avanzadas" class="jumbotron img-rounded" >
+                        <button type="button" class="_mostrar_info close" data-alert="avanzadas"><span aria-hidden="true">&times;</span></button>
+                        <strong>General.</strong> Define aspectos generales de configuracion de nuestra aplicacion Phonegap Build.                        
+                        <br/>
+                        Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/configuring_basics.md.html#The%20Basics" class="alert-link" target="_blank">Configuring - The Basics</a>
+                    </div>
+                </div>
+            </div>
             <div id="_acc_avan_option" class="row" style="text-align: center">
                 <div class="btn-group" data-toggle="buttons">
                     <label class="btn btn-primary active">

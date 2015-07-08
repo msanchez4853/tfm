@@ -70,9 +70,30 @@ function defineEvents(){
     })
     $('[data-toggle="tooltip"]').tooltip();
     $("[required]").blur(validate_event);
+    $("[data-path]").blur(validate_path);
     
 }
 
+function validate_path(e){    
+    var _this = $(this);
+    var _path = _this.val();
+    while(_path.indexOf("\\")>=0){
+    _path = _path.replace("\\","/");
+    }
+    
+    if(_path.indexOf("/", 0)!=0){
+        _path="/"+_path        
+    }
+    
+    if(_path.lastIndexOf("/", 0)!=_path.length){
+        _path=_path+"/";
+    }
+    
+    while(_path.indexOf("//")>=0){
+     _path = _path.replace("//","/");
+    }
+    _this.val(_path)
+}
 
 function mostrarinfo(){
     var _this = $(this);
