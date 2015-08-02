@@ -29,34 +29,40 @@
             </div>
             <div id="_acc_avan_option" class="row" style="text-align: center; margin-bottom: 5px">
                 <div class="btn-group col-md-12" data-toggle="buttons">
-                    <label class="btn btn-primary active" data-toggle="popover"> 
+                    <label class="col-md-3 col-sm-6 col-xs-12 btn btn-primary active" data-toggle="popover"> 
                         <span class="data-content glyphicon glyphicon-question-sign" >
                             Muestra para la plataformas iOS disponibles actualmente las distintas resoluciones que se pueden definir. 
                         </span>                           
-                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_ios" value="_opc_icon_ios" checked> 
+                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_ios" value="_opc_icon_ios" checked  data-text="_text_icon_selec" > 
                         <span class="data-title"> iOS</span>
                     </label>
-                    <label class="btn btn-primary " data-toggle="popover"> 
+                    <label class="col-md-3 col-sm-6 col-xs-12 btn btn-primary " data-toggle="popover"> 
                         <span class="data-content glyphicon glyphicon-question-sign" >
                             Muestra para la plataforma Android disponibles actualmente las distintas resoluciones que se pueden definir. 
                         </span>   
-                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_android"  value="_opc_icon_android" >
+                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_android"  value="_opc_icon_android"  data-text="_text_icon_selec" >
                         <span class="data-title"> Android</span>
                     </label>  
-                    <label class="btn btn-primary " data-toggle="popover"> 
+                    <label class="col-md-3 col-sm-6 col-xs-12 btn btn-primary " data-toggle="popover"> 
                         <span class="data-content glyphicon glyphicon-question-sign" >
                             Muestra para la plataforma Windows Phone las distintas resoluciones que se pueden definir. 
                         </span>  
-                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_win"  value="_opc_icon_win"  > 
+                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_win"  value="_opc_icon_win"   data-text="_text_icon_selec" > 
                         <span class="data-title">Windows Phone</span>
                     </label>
-                    <label class="btn btn-primary " data-toggle="popover"> 
+                    <label class="col-md-3 col-sm-6 col-xs-12 btn btn-primary " data-toggle="popover"> 
                         <span class="data-content glyphicon glyphicon-question-sign" >
                             Permite definir el icono por defecto para nuestra aplicacion.
                         </span>  
-                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_default"  value="_opc_icon_default"  > 
+                        <input type="radio" name="_bt_icon_rad" id="_bt_icon_option_default"  value="_opc_icon_default" data-text="_text_icon_selec" > 
                         <span class="data-title">Default</span>
                     </label>
+                </div>
+
+            </div>
+            <div class='row'>
+                <div class="col-md-12 jumbotron img-rounded" style='padding-top: 18px;padding-bottom: 18px;' >
+                    <strong>Definiendo iconos para</strong>:  <span id="_text_icon_selec"></span>
                 </div>
             </div>
             <div id="_opc_icon_ios">
@@ -93,7 +99,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios6_29" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios6_29" id="_opc_icon_ios6_29"/>
+                                                    <input type="file" name="_opc_icon_ios6_29" id="_opc_icon_ios6_29" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios6_29" type="text"  readonly>
@@ -112,7 +118,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios6_50" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios6_50" id="_opc_icon_ios6_50"/>
+                                                    <input type="file" name="_opc_icon_ios6_50" id="_opc_icon_ios6_50"  data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios6_50" type="text"  readonly>
@@ -131,7 +137,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios6_57" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file"  name="_opc_icon_ios6_57" id="_opc_icon_ios6_57"/>
+                                                    <input type="file"  name="_opc_icon_ios6_57" id="_opc_icon_ios6_57" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios6_57" type="text"  readonly>
@@ -150,7 +156,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios6_58" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios6_58" id="_opc_icon_ios6_58"/>
+                                                    <input type="file" name="_opc_icon_ios6_58" id="_opc_icon_ios6_58" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios6_58" type="text"  readonly>
@@ -168,7 +174,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios6_72" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios6_72" id="_opc_icon_ios6_72"/>
+                                                    <input type="file" name="_opc_icon_ios6_72" id="_opc_icon_ios6_72" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios6_72" type="text"  readonly>
@@ -186,7 +192,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios6_100" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios6_100" id="_opc_icon_ios6_100"/>
+                                                    <input type="file" name="_opc_icon_ios6_100" id="_opc_icon_ios6_100" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios6_100" type="text"  readonly>
@@ -204,7 +210,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios6_114" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios6_114" id="_opc_icon_ios6_114"/>
+                                                    <input type="file" name="_opc_icon_ios6_114" id="_opc_icon_ios6_114" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios6_114" type="text"  readonly>
@@ -222,7 +228,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios6_144" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios6_144" id="_opc_icon_ios6_144"/>
+                                                    <input type="file" name="_opc_icon_ios6_144" id="_opc_icon_ios6_144" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios6_144" type="text"  readonly>
@@ -250,7 +256,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios7_29" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios7_29" id="_opc_icon_ios7_29"/>
+                                                    <input type="file" name="_opc_icon_ios7_29" id="_opc_icon_ios7_29" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios7_29" type="text"  readonly>
@@ -269,7 +275,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios7_40" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios7_40" id="_opc_icon_ios7_40"/>
+                                                    <input type="file" name="_opc_icon_ios7_40" id="_opc_icon_ios7_40" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios7_40" type="text"  readonly>
@@ -288,7 +294,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios7_58" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios7_58" id="_opc_icon_ios7_58"/>
+                                                    <input type="file" name="_opc_icon_ios7_58" id="_opc_icon_ios7_58" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios7_58" type="text"  readonly>
@@ -307,7 +313,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios7_60" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios7_60" id="_opc_icon_ios7_60"/>
+                                                    <input type="file" name="_opc_icon_ios7_60" id="_opc_icon_ios7_60" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios7_60" type="text"  readonly>
@@ -326,7 +332,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios7_80" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios7_80" id="_opc_icon_ios7_80"/>
+                                                    <input type="file" name="_opc_icon_ios7_80" id="_opc_icon_ios7_80" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios7_80" type="text"  readonly>
@@ -345,7 +351,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios7_76" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios7_76" id="_opc_icon_ios7_76"/>
+                                                    <input type="file" name="_opc_icon_ios7_76" id="_opc_icon_ios7_76" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios7_76" type="text"  readonly>
@@ -363,7 +369,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios7_120" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios7_120" id="_opc_icon_ios7_120"/>
+                                                    <input type="file" name="_opc_icon_ios7_120" id="_opc_icon_ios7_120" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios7_120" type="text"  readonly>
@@ -381,7 +387,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_ios7_152" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_ios7_152" id="_opc_icon_ios7_152"/>
+                                                    <input type="file" name="_opc_icon_ios7_152" id="_opc_icon_ios7_152" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_ios7_152" type="text"  readonly>
@@ -427,7 +433,7 @@
                                                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                     </span>
                                                     <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_android_ldpi" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                        <input type="file" name="_opc_icon_android_ldpi" id="_opc_icon_android_ldpi"/>
+                                                        <input type="file" name="_opc_icon_android_ldpi" id="_opc_icon_android_ldpi" data-ext="png"/>
                                                     </span> 
                                                 </span>
                                                 <input class=" form-control" id="_text_icon_android_ldpi" type="text"  readonly>
@@ -445,7 +451,7 @@
                                                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                     </span>
                                                     <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_android_mdpi" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                        <input type="file"  name="_opc_icon_android_mdpi" id="_opc_icon_android_mdpi"/>
+                                                        <input type="file"  name="_opc_icon_android_mdpi" id="_opc_icon_android_mdpi" data-ext="png"/>
                                                     </span> 
                                                 </span>
                                                 <input class=" form-control" id="_text_icon_android_mdpi" type="text"  readonly>
@@ -463,7 +469,7 @@
                                                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                     </span>
                                                     <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_android_hdpi" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                        <input type="file"  name="_opc_icon_android_hdpi" id="_opc_icon_android_hdpi"/>
+                                                        <input type="file"  name="_opc_icon_android_hdpi" id="_opc_icon_android_hdpi" data-ext="png"/>
                                                     </span> 
                                                 </span>
                                                 <input class=" form-control" id="_text_icon_android_hdpi" type="text"  readonly>
@@ -484,7 +490,7 @@
                                                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                     </span>
                                                     <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_android_xhdpi" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                        <input type="file" name="_opc_icon_android_xhdpi" id="_opc_icon_android_xhdpi"/>
+                                                        <input type="file" name="_opc_icon_android_xhdpi" id="_opc_icon_android_xhdpi" data-ext="png"/>
                                                     </span> 
                                                 </span>
                                                 <input class=" form-control" id="_text_icon_android_xhdpi" type="text"  readonly>
@@ -503,7 +509,7 @@
                                                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                     </span>
                                                     <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_android_xxhdpi" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                        <input type="file" name="_opc_icon_android_xxhdpi" id="_opc_icon_android_xxhdpi"/>
+                                                        <input type="file" name="_opc_icon_android_xxhdpi" id="_opc_icon_android_xxhdpi" data-ext="png"/>
                                                     </span> 
                                                 </span>
                                                 <input class=" form-control" id="_text_icon_android_xxhdpi" type="text"  readonly>
@@ -521,7 +527,7 @@
                                                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                     </span>
                                                     <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_android_fr-xxhdpi" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                        <input type="file" name="_opc_icon_android_fr-xxhdpi" id="_opc_icon_android_fr-xxhdpi"/>
+                                                        <input type="file" name="_opc_icon_android_fr-xxhdpi" id="_opc_icon_android_fr-xxhdpi" data-ext="png"/>
                                                     </span> 
                                                 </span>
                                                 <input class=" form-control" id="_text_icon_android_fr-xxhdpi" type="text"  readonly>
@@ -555,7 +561,7 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            
+
                             <label >WinPhone</label>
                             <div class="row form-control form_agrupa">
 
@@ -570,7 +576,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_win_role_" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_win_role_" id="_opc_icon_win_role_"/>
+                                                    <input type="file" name="_opc_icon_win_role_" id="_opc_icon_win_role_" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control"  id="_text_icon_win_role_" type="text"  readonly>
@@ -588,7 +594,7 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_win_role_background" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_win_role_background" id="_opc_icon_win_role_background"/>
+                                                    <input type="file" name="_opc_icon_win_role_background" id="_opc_icon_win_role_background" data-ext="png"/>
                                                 </span> 
                                             </span>
                                             <input class=" form-control" id="_text_icon_win_role_background" type="text"  readonly>
@@ -634,10 +640,10 @@
                                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                                 </span>
                                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_add_icon_default_1" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                                    <input type="file" name="_opc_icon_default_1" id="_opc_icon_default_1"/>
+                                                    <input type="file" name="_opc_icon_default_1" id="_opc_icon_default_1" data-ext="png"/>
                                                 </span> 
                                             </span>
-                                            <input class=" form-control" id="_text_icon_default_1" type="text"  readonly>
+                                            <input class=" form-control" id="_text_icon_default_1" type="text"  readonly >
                                         </div>
                                     </div>
                                 </div>                                                             

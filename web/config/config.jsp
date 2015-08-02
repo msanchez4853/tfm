@@ -1,20 +1,81 @@
+<%@page import="es.uned.msanchez.tfm.utilidades.Util"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Enumeration"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
-   <%--     <meta http-equiv="X-UA-Compatible" content="IE=edge">--%>
+        <%--     <meta http-equiv="X-UA-Compatible" content="IE=edge">--%>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Wizard Config.</title>
+        <link rel="stylesheet" href="../resources/jquery-easyui/themes/gray/easyui.css"/>
+        <link rel="stylesheet" href="../resources/jquery-easyui/themes/icon.css"/>
         <link rel="stylesheet" href="../resources/bootstrap/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="../resources/bootstrap/css/bootstrap-theme.min.css"/>
+
         <link rel="stylesheet" href="../resources/css/config.css"/>
 
-       <%--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>--%>
-       <script src="../resources/jquery/jquery.js"></script>
+        <%--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>--%>
+        <script src="../resources/jquery/jquery.js"></script>
+        <script src="../resources/jquery-easyui/jquery.easyui.min.js"></script>
         <script src="../resources/js/config.js"></script>
 
     </head>
+    <%
+        Map opciones_generales = new HashMap();
+        Map opciones_avanzadas = new HashMap();
+        Map opciones_iconos = new HashMap();
+        Map opciones_splash = new HashMap();
+        Map opciones_permisos = new HashMap();
+        Map opciones_desarrollo = new HashMap();
+        Map opciones_plugins = new HashMap();
+
+        String aspecto = "completo";
+        for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
+            String param = (String) e.nextElement();
+            String value = request.getParameter(param);
+System.out.println(param+": "+value);
+            if (param.indexOf("_opc_gen_") >= 0) {
+                
+                opciones_generales.put(param.replaceFirst("_opc_gen_", ""), value);
+            }
+            if (param.indexOf("_opc_avan_") >= 0) {
+                opciones_avanzadas.put(param.replaceFirst("_opc_avan_", ""), value);
+            }
+            if (param.indexOf("_opc_icon_") >= 0) {
+                opciones_iconos.put(param.replaceFirst("_opc_icon_", ""), value);
+            }
+            if (param.indexOf("_opc_splash_") >= 0) {
+                opciones_splash.put(param.replaceFirst("_opc_splash_", ""), value);
+            }
+            if (param.indexOf("_opc_perm_") >= 0) {
+                opciones_permisos.put(param.replaceFirst("_opc_perm_", ""), value);
+            }
+            if (param.indexOf("_opc_desa_") >= 0) {
+                opciones_desarrollo.put(param.replaceFirst("_opc_desa_", ""), value);
+            }
+            if (param.indexOf("_opc_plug_") >= 0) {
+                opciones_plugins.put(param.replaceFirst("_opc_plug_", ""), value);
+            }
+
+            if (param.equals("_opc_aspecto")) {
+                if (!Util.isNulo(value) && value.equalsIgnoreCase("reducido")) {
+                    aspecto = "reducido";
+                }
+            }
+
+        }
+
+        session.setAttribute("opciones_generales", opciones_generales);
+        session.setAttribute("opciones_avanzadas", opciones_avanzadas);
+        session.setAttribute("opciones_desarrollo", opciones_desarrollo);
+        session.setAttribute("opciones_iconos", opciones_iconos);
+        session.setAttribute("opciones_permisos", opciones_permisos);
+        session.setAttribute("opciones_plugins", opciones_plugins);
+        session.setAttribute("opciones_splash", opciones_splash);
+    %>
     <body>
         <section id="navegacion">
             <nav class="navbar navbar-default navbar-inverse" role="navigation">
@@ -26,9 +87,17 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="#">
-                            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+
+                        </button> 
+                        <a class="navbar-brand" href="#" data-aspecto="<%=aspecto%>" data-toggle="popover" data-toggle-pos="bottom">
+                            <span class="nav-aspecto glyphicon glyphicon-eye-open" aria-hidden="true">&nbsp;Completa&nbsp;
+                            </span>
+                            <span class="data-content" >
+                                Indica la vision (completa o reducida) del Wizard  para definir el fichero de 
+                                configuracion config.xml necesario para una aplicacion Phonegap Build.                                
+                            </span>
+
+
                         </a>
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->

@@ -15,6 +15,7 @@ section#contenido{
     overflow: hidden;
     padding: 20px;
 }
+
 label.form_etiqueta{
     background-color: #a6a6a6;
     border:1px solid white;

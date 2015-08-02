@@ -4,7 +4,13 @@
     Author     : adrastea
 --%>
 
+<%@page import="es.uned.msanchez.tfm.utilidades.Util"%>
+<%@page import="java.util.Map"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    Map<String, String> opciones = (Map<String, String>) session.getAttribute("opciones_desarrollo");
+
+%>
 <div class="panel panel-default" id="_opciones_desarrollador"  data-config="seccion">
     <div class="panel-heading">
         <h3 class="panel-title">Info. Desarrollador&nbsp; 

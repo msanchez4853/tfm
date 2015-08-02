@@ -16,20 +16,38 @@
                 <div class="col-md-12">
                     <div id="info_avanzadas" class="jumbotron img-rounded" >
                         <button type="button" class="_mostrar_info close" data-alert="avanzadas"><span aria-hidden="true">&times;</span></button>
-                        <strong>General.</strong> Define aspectos generales de configuracion de nuestra aplicacion Phonegap Build.                        
+                        <strong>Avanzadas.</strong> En esta agrupación se aglutinan propiedades de configuración o preferencias propias de cada plataforma. 
                         <br/>
-                        Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/configuring_basics.md.html#The%20Basics" class="alert-link" target="_blank">Configuring - The Basics</a>
+                        Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/3.3.0/configuring_preferences.md.html#Preferences" class="alert-link" target="_blank">Configuring - Preferences</a>
+                        <br/>Mas detalle sobre cada plataforma podemos encontrarla en Phonegap API ( 
+                        <a href="http://docs.phonegap.com/en/edge/guide_platforms_ios_config.md.html#iOS%20Configuration" class="alert-link" target="_blank">iOS Configuration</a>
+                        y para  
+                        <a href="http://docs.phonegap.com/en/edge/guide_platforms_android_config.md.html#Android%20Configuration" class="alert-link" target="_blank">Android Configuration</a>
+                        )
                     </div>
                 </div>
             </div>
             <div id="_acc_avan_option" class="row" style="text-align: center">
-                <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-primary active">
-                        <input type="radio" name="_bt_avan_rad" id="_bt_avan_option_ios" value="_opc_avan_ios" checked> iOS
+                <div class="btn-group  col-md-12 col-md-offset-2" data-toggle="buttons">
+                    <label class="col-md-3  col-sm-6 col-xs-12 btn btn-primary active" data-toggle="popover"> 
+                        <span class="data-content glyphicon glyphicon-question-sign" >
+                            Muestra para la plataforma iOS la preferencias que podemos definir para nuestra aplicacion Phonega Build. 
+                        </span> 
+                        <input type="radio" name="_bt_avan_rad" id="_bt_avan_option_ios" value="_opc_avan_ios" checked  data-text="_text_avan_selec" >
+                        <span class="data-title">iOS</span>
                     </label>
-                    <label class="btn btn-primary">
-                        <input type="radio" name="_bt_avan_rad" id="_bt_avan_option_android" value="_opc_avan_android"  > Android
+                    <label class="col-md-3 col-sm-6 col-xs-12 btn btn-primary btn btn-primary" data-toggle="popover"> 
+                        <span class="data-content glyphicon glyphicon-question-sign" >
+                            Muestra para la plataforma Android la preferencias que podemos definir para nuestra aplicacion Phonega Build. 
+                        </span> 
+                        <input type="radio" name="_bt_avan_rad" id="_bt_avan_option_android" value="_opc_avan_android" data-text="_text_avan_selec" >
+                         <span class="data-title">Android</span>
                     </label>                                    
+                </div>
+            </div>
+            <div class='row'>
+                <div class="col-md-12 jumbotron img-rounded" style='padding-top: 18px;padding-bottom: 18px;' >
+                    <strong>Definiendo preferencias para</strong>:  <span id="_text_avan_selec"></span>
                 </div>
             </div>
             <div id="_opc_avan_ios">

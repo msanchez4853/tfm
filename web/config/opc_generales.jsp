@@ -4,7 +4,13 @@
     Author     : adrastea
 --%>
 
+<%@page import="es.uned.msanchez.tfm.utilidades.Util"%>
+<%@page import="java.util.Map"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    Map<String, String> opciones = (Map<String, String>) session.getAttribute("opciones_generales");
+
+%>
 <div class="panel panel-info" id="_opciones_generales" data-config="seccion">
     <div class="panel-heading">
         <h3 class="panel-title">General &nbsp; 
@@ -33,7 +39,9 @@
                                 Especifica el nombre de la aplicaci&oacute;n, tal cual aparecer&aacute; en la pantalla de inicio del dispositivo y en las tiendas de las distintas plataformas.
                             </span>
                             <span class="data-title">Nombre App.</span>:</label>
-                        <input type="text" name="_opc_gen_name_app" id="_opc_gen_name_app"  class="form-control" placeholder="Nombre de la aplicación" required data-required='_opciones_generales'/>
+                        <input type="text" name="_opc_gen_name_app" id="_opc_gen_name_app"  class="form-control" placeholder="Nombre de la aplicación" required data-required='_opciones_generales'
+                               value="<%=Util.getValue(opciones, "name_app")%>"
+                               />
                     </div>
                 </div>
                 <div class="col-md-5 col-md-offset-2 col-sm-12">                                
@@ -43,7 +51,9 @@
                                 Descripción de nuestra aplicación, esta descripción es la que aparecerá en el  listado de aplicaciones de las tiendas de las plataformas.
                             </span>
                             <span class="data-title">Descripcion App</span>.</label>
-                        <textarea  name="_opc_gen_desc_app" id="_opc_gen_desc_app"  class="form-control" placeholder="Descripcion de la aplicacion."> </textarea>
+                        <textarea  name="_opc_gen_desc_app" id="_opc_gen_desc_app"  class="form-control" placeholder="Descripcion de la aplicacion.">
+                            <%=Util.getValue(opciones, "desc_app")%>
+                        </textarea>
                     </div>
                 </div>
             </div>
@@ -61,7 +71,7 @@
                         <div class="input-group ">
                             <span class="input-group-btn">
                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_gen_source_file" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                    <input type="file" id="_opc_gen_source_file" name="_opc_gen_source_file"/>
+                                    <input type="file" id="_opc_gen_source_file" name="_opc_gen_source_file"  data-ext="html"/>
                                 </span> 
                             </span>
                             <input class=" form-control" id="_text_gen_source_file"  name="_text_gen_source_file" type="text" placeholder="Pagina de inicio de la aplicacion. Por defecto index.html"  readonly>
@@ -134,8 +144,8 @@
                     <div class="row form-group">
                         <label for="_opc_gen_fullscreen" data-toggle="popover"> 
                             <span class="data-content glyphicon glyphicon-question-sign" >
-                               Indica si la aplicacion se va a ejecutar a pantalla completa. Haciendo que la barra de estado en la
-                               parte superior del dispositivo se oculte.
+                                Indica si la aplicacion se va a ejecutar a pantalla completa. Haciendo que la barra de estado en la
+                                parte superior del dispositivo se oculte.
                                 <br/>
                                 <em><strong>Por defecto</strong>: False (No se muestra a pantalla completa)</em>
                             </span>

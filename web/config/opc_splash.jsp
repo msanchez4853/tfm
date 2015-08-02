@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<div class="panel panel-default" id="_opciones_splash"  data-config="seccion">
+<div class="panel panel-success" id="_opciones_splash"  data-config="seccion">
     <div class="panel-heading">
         <h3 class="panel-title">Splash Screen&nbsp; 
             <span class="_mostrar_info glyphicon glyphicon-question-sign" data-alert="splash" data-toggle="tooltip" title="Muestra /oculta informacion adicional">&nbsp;</span></h3>
@@ -16,31 +16,73 @@
                 <div class="col-md-12">
                     <div id="info_splash" class="jumbotron img-rounded" >
                         <button type="button" class="_mostrar_info close" data-alert="splash"><span aria-hidden="true">&times;</span></button>
-                        <strong>General.</strong> Define aspectos generales de configuracion de nuestra aplicacion Phonegap Build.                        
+                       <strong>Splash Screen.</strong> Nos permite definir para cada una de las plataformas los splash Screen de nuestra aplicación. 
                         <br/>
-                        Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/configuring_basics.md.html#The%20Basics" class="alert-link" target="_blank">Configuring - The Basics</a>
+                        Para asegurar compatibilidad es recomendable que las imágenes utilizadas sean en formato .png o el indicado en su defecto.
+                        <br/>
+                        Por defecto las imágenes se buscaran en el raíz salvo que el campo path se especifique la ruta realativa.
+
+                        <br/>
+                        Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/configuring_icons_and_splash.md.html#Icons%20and%20Splash%20Screens" class="alert-link" target="_blank">Icons and Splash Screens</a>
                     </div>
                 </div>
             </div>
             <div id="_acc_avan_option" class="row" style="text-align: center; margin-bottom: 5px">
-                <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-primary active">
-                        <input type="radio" name="_bt_splash_rad" id="_bt_splash_option_ios" value="_opc_splash_ios" checked> iOS
+                <div class="btn-group col-md-12" data-toggle="buttons">
+                    <label class="col-md-3 col-sm-6 col-xs-12 btn btn-primary active" data-toggle="popover"> 
+                        <span class="data-content glyphicon glyphicon-question-sign" >
+                            Muestra para la plataformas iOS disponibles actualmente las distintas resoluciones que se pueden definir. 
+                        </span>  
+                        <input type="radio" name="_bt_splash_rad" id="_bt_splash_option_ios" value="_opc_splash_ios" checked  data-text="_text_splash_selec" > 
+                        <span class="data-title"> iOS</span>
                     </label>
-                    <label class="btn btn-primary ">
-                        <input type="radio" name="_bt_splash_rad" id="_bt_splash_option_android"  value="_opc_splash_android" > Android
+                    <label class="col-md-3 col-sm-6 col-xs-12 btn btn-primary " data-toggle="popover"> 
+                        <span class="data-content glyphicon glyphicon-question-sign" >
+                            Muestra para la plataforma Android disponibles actualmente las distintas resoluciones que se pueden definir. 
+                        </span> 
+                        <input type="radio" name="_bt_splash_rad" id="_bt_splash_option_android"  value="_opc_splash_android"   data-text="_text_splash_selec" >
+                        <span class="data-title"> Android</span>
                     </label>  
-                    <label class="btn btn-primary ">
-                        <input type="radio" name="_bt_splash_rad" id="_bt_splash_option_win"  value="_opc_splash_win"  > Windows Phone
+                    <label class="col-md-3 col-sm-6 col-xs-12 btn btn-primary " data-toggle="popover"> 
+                        <span class="data-content glyphicon glyphicon-question-sign" >
+                            Muestra para la plataforma Windows Phone las distintas resoluciones que se pueden definir. 
+                        </span>
+                        <input type="radio" name="_bt_splash_rad" id="_bt_splash_option_win"  value="_opc_splash_win"   data-text="_text_splash_selec" > 
+                        <span class="data-title">Windows Phone</span>
                     </label>
-                    <label class="btn btn-primary ">
-                        <input type="radio" name="_bt_splash_rad" id="_bt_splash_option_default"  value="_opc_splash_default"  > Default
+                    <label class="col-md-3 col-sm-6 col-xs-12 btn btn-primary " data-toggle="popover"> 
+                        <span class="data-content glyphicon glyphicon-question-sign" >
+                            Permite definir el icono por defecto para nuestra aplicacion.
+                        </span>  
+                        <input type="radio" name="_bt_splash_rad" id="_bt_splash_option_default"  value="_opc_splash_default" data-text="_text_splash_selec" > 
+                        <span class="data-title">Default</span>
                     </label>
+                </div>
+            </div>
+            <div class='row'>
+                <div class="col-md-12 jumbotron img-rounded" style='padding-top: 18px;padding-bottom: 18px;' >
+                    <strong>Definiendo iconos para</strong>:  <span id="_text_splash_selec"></span>
                 </div>
             </div>
             <div id="_opc_splash_ios">
                 <div class="row">
                     <div class="col-md-12"> 
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12"> 
+                                <div class="row  form-group">
+                                    <label for="_opc_splash_ios_path" data-toggle="popover"> 
+                                        <span class="data-content glyphicon glyphicon-question-sign" >
+                                            Path relativo donde se encuentran los archivos a partir del directorio de nuestra aplicacion.
+                                            <br/>
+                                            <strong>Importante</strong><em>La ruta de directorios se formara utilizando como separador de directorios el caracter / </em>
+                                            <br/>
+                                            <em><strong>Por defecto</strong>El raiz de nuestra aplicacion.</em>
+                                        </span>
+                                        <span class="data-title">Path Relativo (iOS)</span>:</label>
+                                    <input data-path type="text" name="_opc_splash_ios_path" id="_opc_splash_ios_path"  class="form-control" placeholder="Path relativo donde se encuentra los iconos para iOS. Por ejemplo /res/ios/"/>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row form-group">
                             <label >iOS - iPhone 3/4/4S </label>
                             <div class="row form-control form_agrupa">
@@ -259,6 +301,22 @@
             <div id="_opc_splash_android">
                 <div class="row">
                     <div class="col-md-12"> 
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12"> 
+                                <div class="row  form-group">
+                                    <label for="_opc_splash_android_path" data-toggle="popover"> 
+                                        <span class="data-content glyphicon glyphicon-question-sign" >
+                                            Path relativo donde se encuentran los archivos a partir del directorio de nuestra aplicacion.
+                                            <br/>
+                                            <strong>Importante</strong><em>La ruta de directorios se formara utilizando como separador de directorios el caracter / </em>
+                                            <br/>
+                                            <em><strong>Por defecto</strong>El raiz de nuestra aplicacion.</em>
+                                        </span>
+                                        <span class="data-title">Path Relativo (Android)</span>:</label>
+                                    <input data-path type="text" name="_opc_splash_android_path" id="_opc_splash_android_path"  class="form-control" placeholder="Path relativo donde se encuentra los iconos para Android. Por ejemplo /res/android/"/>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row form-group">
                             <label >Android</label>
                             <div class="row form-control form_agrupa">  
@@ -423,6 +481,22 @@
             <div id="_opc_splash_win">
                 <div class="row">
                     <div class="col-md-12"> 
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12"> 
+                                <div class="row  form-group">
+                                    <label for="_opc_splash_win_path" data-toggle="popover"> 
+                                        <span class="data-content glyphicon glyphicon-question-sign" >
+                                            Path relativo donde se encuentran los archivos a partir del directorio de nuestra aplicacion.
+                                            <br/>
+                                            <strong>Importante</strong><em>La ruta de directorios se formara utilizando como separador de directorios el caracter / </em>
+                                            <br/>
+                                            <em><strong>Por defecto</strong>El raiz de nuestra aplicacion.</em>
+                                        </span>
+                                        <span class="data-title">Path Relativo (Windows Phone)</span>:</label>
+                                    <input data-path type="text" name="_opc_splash_win_path" id="_opc_splash_win_path"  class="form-control" placeholder="Path relativo donde se encuentra los iconos para Windows Phone. Por ejemplo /res/win/"/>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row form-group">
                             <label >WinPhone</label>
                             <div class="row form-control form_agrupa">
@@ -454,6 +528,22 @@
             <div id="_opc_splash_default">
                 <div class="row">
                     <div class="col-md-12"> 
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12"> 
+                                <div class="row  form-group">
+                                    <label for="_opc_splash_default_path" data-toggle="popover"> 
+                                        <span class="data-content glyphicon glyphicon-question-sign" >
+                                            Path relativo donde se encuentran los archivos a partir del directorio de nuestra aplicacion.
+                                            <br/>
+                                            <strong>Importante</strong><em>La ruta de directorios se formara utilizando como separador de directorios el caracter / </em>
+                                            <br/>
+                                            <em><strong>Por defecto</strong>El raiz de nuestra aplicacion.</em>
+                                        </span>
+                                        <span class="data-title">Path Relativo (Default)</span>:</label>
+                                    <input data-path type="text" name="_opc_splash_default_path" id="_opc_splash_default_path"  class="form-control" placeholder="Path relativo donde se encuentra el icono por defecto. Por ejemplo /res/icons/default/"/>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row form-group">
                             <label >Default</label>
                             <div class="row form-control form_agrupa">
