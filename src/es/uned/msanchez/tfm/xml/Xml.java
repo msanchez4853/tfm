@@ -102,15 +102,24 @@ public class Xml {
         xmlOutput.output(doc, out);
     }
 
+    /**
+     * Nos permite generar las opciones generales de Phonegap Build, para una aplicacion movil.
+     * @param _opciones_generales Maps con los valores con los pares parametro valor
+     * @throws Exception 
+     */
     public void setOpcionesGenerales(Map<String, String> _opciones_generales) throws Exception {
         List platform = new ArrayList();
         for (String param : _opciones_generales.keySet()) {
-            System.out.println("Opciones Generales: " + param + " ---> " + _opciones_generales.get(param));
+           // System.out.println("Opciones Generales: " + param + " ---> " + _opciones_generales.get(param));
+            String value = _opciones_generales.get(param);
+            if(Util.isNulo(value)) continue;
+            
+            
             if (param.equals("name_app")) {
-                setNameApp(_opciones_generales.get(param));
+                setNameApp(value);
             }
             if (param.equals("desc_app")) {
-                setDescripApp(_opciones_generales.get(param));
+                setDescripApp(value);
             }
             if (param.equals("platf_android")) {
                 platform.add("android");
@@ -122,17 +131,20 @@ public class Xml {
                 platform.add("winphone");
             }
             if (param.equals("version_app")) {
-                setVersionApp(_opciones_generales.get(param));
+                setVersionApp(value);
             }
 
             if (param.equals("pgap_version")) {
-                setPreference("phonegap-version", _opciones_generales.get(param));
+                setPreference("phonegap-version", value);
             }
 
+            if (param.equals("orientation") && !value.equals("plataforma")) {
+                setPreference("orientation", value);
+            }
             if (param.equals("source_file")) {
-                setContentApp(_opciones_generales.get(param));
-
+                setContentApp(value);
             }
+            
 
         }
         if (!Util.isNulo(platform)) {
@@ -225,7 +237,7 @@ public class Xml {
         path_default = Util.isNulo(path_default) ? "" : path_default;
 
         for (String param : _opciones_splash.keySet()) {
-            System.out.println("Opciones setOpcionesSplash: " + param + " ---> " + _opciones_splash.get(param));
+            //System.out.println("Opciones setOpcionesSplash: " + param + " ---> " + _opciones_splash.get(param));
             if (param.indexOf("_path") == param.length() - 5) {
                 continue;
             }
@@ -236,24 +248,24 @@ public class Xml {
 
 
             if (param.indexOf("default_") >= 0) {
-                setSplash(value, "");
+                setSplash(path_default+value, "");
                 continue;
             }
             if (param.indexOf("ios") >= 0) {
 
                 String _width = param.substring(param.indexOf("_") + 1, param.indexOf("x"));
                 String _height = param.substring(param.indexOf("x") + 1);
-                setSplashIos(value, "ios", _width, _height);
+                setSplashIos(path_ios+value, "ios", _width, _height);
                 continue;
             }
             if (param.indexOf("win_") >= 0) {
-                setSplash(value, "winphone");
+                setSplash(path_win+value, "winphone");
                 continue;
             }
             if (param.indexOf("android_") >= 0) {
                 //System.out.println("role en icono win --->  "+param.substring(5));
                 String _qualifier = param.replace("android_", "");
-                setSplashAndroid(value, "android", _qualifier);
+                setSplashAndroid(path_android+value, "android", _qualifier);
                 continue;
             }
 

@@ -5,6 +5,7 @@
 package es.uned.msanchez.tfm.utilidades;
 
 import java.util.List;
+import java.util.Map;
 import org.jdom2.Element;
 
 /**
@@ -49,5 +50,18 @@ public class Util {
             return false; 
         } 
         
+    }
+    
+    
+    public static String getValue(Map<String,String> opciones, String opcion){
+        String valor="";
+        
+        if(opciones!=null && !opciones.isEmpty()){
+            if(opciones.containsKey(opcion)){
+                valor = Util.isNulo(opciones.get(opcion))?"":opciones.get(opcion);                
+            }
+        }
+        
+        return valor;
     }
 }
