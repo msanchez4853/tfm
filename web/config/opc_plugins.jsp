@@ -17,9 +17,9 @@
                 <div class="col-md-12">
                     <div id="info_plugins" class="jumbotron img-rounded" >
                         <button type="button" class="_mostrar_info close" data-alert="plugins"><span aria-hidden="true">&times;</span></button>
-                        <strong>General.</strong> Define aspectos generales de configuracion de nuestra aplicacion Phonegap Build.                        
+                        <strong>Plugins.</strong> Nos permite indicar que plugins desarrollados por Phonegap hemos utilizado para el desarrollo de nuestra aplicación Phonegap Build                        
                         <br/>
-                        Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/configuring_basics.md.html#The%20Basics" class="alert-link" target="_blank">Configuring - The Basics</a>
+                        Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/configuring_plugins.md.html#Plugins" class="alert-link" target="_blank">Configuring - Plugins</a>
                     </div>
                 </div>
             </div>
@@ -46,6 +46,16 @@
                                 </div>
                                 <div class="col-md-12 checkbox">
                                     <label>
+                                        <input type="checkbox"  name="_opc_plug_console" id="_opc_plug_console">&nbsp;Console
+                                    </label>
+                                </div>
+                                <div class="col-md-12 checkbox">
+                                    <label>
+                                        <input type="checkbox"  name="_opc_plug_contacts" id="_opc_plug_contacts">&nbsp;Contacts
+                                    </label>
+                                </div>
+                                <div class="col-md-12 checkbox">
+                                    <label>
                                         <input type="checkbox"  name="_opc_plug_device" id="_opc_plug_device">&nbsp;Device
                                     </label>
                                 </div>
@@ -64,14 +74,15 @@
                                         <input type="checkbox"  name="_opc_plug_file" id="_opc_plug_file">&nbsp;File
                                     </label>
                                 </div>
+                                
+
+                            </div> 
+                            <div class="col-md-5 col-md-offset-1">
                                 <div class="col-md-12 checkbox">
                                     <label>
                                         <input type="checkbox"  name="_opc_plug_file-transfer" id="_opc_plug_file-transfer">&nbsp;File transfer
                                     </label>
                                 </div>
-
-                            </div> 
-                            <div class="col-md-5 col-md-offset-1">
                                 <div class="col-md-12 checkbox">
                                     <label>
                                         <input type="checkbox"  name="_opc_plug_geolocation" id="_opc_plug_geolocation">&nbsp;GeoLocation

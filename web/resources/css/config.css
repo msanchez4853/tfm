@@ -71,8 +71,8 @@ div.panel_contenido{
 }
 
 input[readonly] {
-  background-color: white !important;
-  cursor: text !important;
+    background-color: white !important;
+    cursor: text !important;
 }
 
 .navbar-inverse{
@@ -80,5 +80,13 @@ input[readonly] {
 }
 ._mostrar_info{
     cursor:pointer; 
-    
+
+}
+
+
+.tit_seccion{
+    font-weight: bold;
+    font-size: 19px;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
 }

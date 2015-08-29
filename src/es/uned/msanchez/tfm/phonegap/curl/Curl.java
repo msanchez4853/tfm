@@ -136,8 +136,8 @@ public class Curl {
         server = rb.getString("server");
         port = rb.getString("port");
         protocol = rb.getString("protocol");
-        Integer puerto = (port!=null)?Integer.parseInt(port):80;
-        HttpHost targetHost = new HttpHost(server, puerto,protocol);
+        Integer puerto = (port != null) ? Integer.parseInt(port) : 80;
+        HttpHost targetHost = new HttpHost(server, puerto, protocol);
         credsProvider = new BasicCredentialsProvider();
 
         UsernamePasswordCredentials creds = new UsernamePasswordCredentials(user, pass);
@@ -642,7 +642,7 @@ public class Curl {
             IOUtils.copy(content, writer);
             String theString = writer.toString();
             JSONParser parser = new JSONParser();
-            System.out.println(theString);
+            System.out.println("getResponseJSON: " + theString);
             respuestaJSON = Util.isNulo(theString) ? null : (JSONObject) parser.parse(theString);
 
         } catch (ParseException ex) {
@@ -723,7 +723,7 @@ public class Curl {
 
         respuestaJSON = getResponseJSONWithDowload(response);
 
-        respuestaJSON = getResponseJSON(response);
+        //  respuestaJSON = getResponseJSON(response);
         resultado.put("status", response.getStatusLine().getStatusCode());
         resultado.put("status_text", response.getStatusLine().getReasonPhrase());
         resultado.put("respuesta", respuestaJSON);
@@ -750,14 +750,19 @@ public class Curl {
             } else {
 
                 Random ale = new Random(System.currentTimeMillis());
+                File dir_tmp = new File(System.getProperty("user.dir") + File.separator + "tmp");
+                dir_tmp.mkdirs();
 
-                File fileTmp = File.createTempFile(Math.abs(ale.nextInt()) + "", null, new File(System.getProperty("user.dir") + File.separator + "tmp"));
+
+                File fileTmp = File.createTempFile(Math.abs(ale.nextInt()) + "", null, dir_tmp);
                 FileOutputStream outFile = new FileOutputStream(fileTmp);
                 entity1.writeTo(outFile);
 
                 respuestaJSON = new JSONObject();
                 respuestaJSON.put("descargado", fileTmp.getAbsolutePath());
-                respuestaJSON.put("type", entity1.getContentType());
+                respuestaJSON.put("type", entity1.getContentType().getValue().toString());
+                respuestaJSON.put("name", fileTmp.getName());
+
             }
             //respuestaJSON = (JSONObject) obj;
 

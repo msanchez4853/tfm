@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="panel panel-default" id="_opciones_permisos"  data-config="seccion">
     <div class="panel-heading">
-        <h3 class="panel-title">Permisos&nbsp; 
+        <h3 class="panel-title">Permisos/Accesos&nbsp; 
             <span class="_mostrar_info glyphicon glyphicon-question-sign" data-alert="permisos" data-toggle="tooltip" title="Muestra /oculta informacion adicional">&nbsp;</span></h3>
     </div>
     <div class="panel-body panel_contenido">
@@ -17,13 +17,23 @@
                 <div class="col-md-12">
                     <div id="info_permisos" class="jumbotron img-rounded" >
                         <button type="button" class="_mostrar_info close" data-alert="permisos"><span aria-hidden="true">&times;</span></button>
-                        <strong>General.</strong> Define aspectos generales de configuracion de nuestra aplicacion Phonegap Build.                        
+                        <strong>Permisos/Acceso.</strong> Define para la aplicación que estamos construyendo las características o permisos que son necesarios solicitar en el dispositivo donde se instale nuestra aplicación. Además de definir los permisos de acceso a determinados dominios.                        
                         <br/>
-                        Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/configuring_basics.md.html#The%20Basics" class="alert-link" target="_blank">Configuring - The Basics</a>
+                        Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/configuring_features.md.html#Features" class="alert-link" target="_blank">Configuring - Features</a>
+                        <span  data-agr="avanzada"> y en <a href="http://docs.build.phonegap.com/en_US/configuring_access_elements.md.html#Access%20Elements" class="alert-link" target="_blank">Configuring - Access Elements</a> </span>
                     </div>
                 </div>
             </div>
             <div class="row">
+               <label  data-toggle="popover"> 
+                    <span class="data-content glyphicon glyphicon-question-sign" >
+                        Los permisos pueden utilizarse para especificar qué caracteristicas está utilizando nuestra aplicación.
+                    </span>
+                    <span class="data-title tit_seccion">Permisos</span>:
+                </label> 
+            </div>
+            <div class="row">
+
                 <div class="col-md-5 col-sm-12">                                
                     <div class="row form-group">
                         <label  class="">Permisos para Android</label>
@@ -103,7 +113,7 @@
                             </div>
                             <div class="col-md-12 checkbox">
                                 <label>
-                                    <input type="checkbox"  name="_opc_perm_win_identity" id="_opc_perm_win_identity">&nbsp;Identity
+                                    <input type="checkbox"  name="_opc_perm_win_device" id="_opc_perm_win_identity">&nbsp;Device
                                 </label>
                             </div>
                         </div>
@@ -111,7 +121,16 @@
                 </div>
 
             </div>
-            <div class="row">
+            <div class="row" data-agr="avanzada">
+                <label  data-toggle="popover"> 
+                    <span class="data-content glyphicon glyphicon-question-sign" >
+                        El elemento access proporciona a la aplicación el acceso a recursos en otros ámbitos - en particular, permite su aplicación para cargar páginas de dominios externos que pueden hacerse cargo de toda su webview
+                    </span>
+                    <span class="data-title tit_seccion">Accesos</span>:
+                </label> 
+
+            </div>
+            <div class="row" data-agr="avanzada">
                 <div class="row col-md-12">
                     <table id='_tb_perm_access' class="col-md-12 table table-hover table-striped">
                         <thead>
@@ -140,22 +159,22 @@
                             <input type="checkbox"  name="_opc_perm_defacc_external" id="_opc_perm_defacc_external">&nbsp;Permitir Aplicación Externa
                         </label>
                     </div>
-                
+
                     <div class="row col-md-12 text-right">
-                    <span class="input-group-btn">
-                        <span class="btn btn-default " aria-label="Añadir" id="_bt_perm_add_acc">
-                            <span class="glyphicon glyphicon-plus-sign" aria-hidden="false">&nbsp;Añadir</span>
+                        <span class="input-group-btn">
+                            <span class="btn btn-default " aria-label="Añadir" id="_bt_perm_add_acc">
+                                <span class="glyphicon glyphicon-plus-sign" aria-hidden="false">&nbsp;Añadir</span>
+                            </span>
+                            <span class="btn btn-default " aria-label="Eliminar" id="_bt_perm_del_acc">
+                                <span class="glyphicon glyphicon-remove-sign" aria-hidden="true">&nbsp;Eliminar</span>
+                            </span>
+                            <span class="btn btn-default " aria-label="Editar" id="_bt_perm_mod_acc">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true">&nbsp;Editar</span>
+                            </span>
                         </span>
-                        <span class="btn btn-default " aria-label="Eliminar" id="_bt_perm_del_acc">
-                            <span class="glyphicon glyphicon-remove-sign" aria-hidden="true">&nbsp;Eliminar</span>
-                        </span>
-                        <span class="btn btn-default " aria-label="Editar" id="_bt_perm_mod_acc">
-                            <span class="glyphicon glyphicon-pencil" aria-hidden="true">&nbsp;Editar</span>
-                        </span>
-                    </span>
+                    </div>
                 </div>
-                </div>
-                
+
             </div>
         </div>
     </div>
