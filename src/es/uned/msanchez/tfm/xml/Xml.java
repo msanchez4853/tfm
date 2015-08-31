@@ -134,6 +134,11 @@ public class Xml {
                 setVersionApp(value);
             }
 
+            if (param.equals("package_app")) {
+                setIdApp(value);
+            }
+            
+            
             if (param.equals("pgap_version")) {
                 setPreference("phonegap-version", value);
             }
@@ -361,7 +366,8 @@ public class Xml {
         this.widget = new Element("widget");
         widget.setAttribute(new Attribute("xmls", "http://www.w3.org.ns/widgets"));
         widget.addNamespaceDeclaration(Namespace.getNamespace("gap", "http://phonegap.com/ns/1.0"));
-
+         widget.setAttribute(new Attribute("id", "uned.phonegap.example"));
+         widget.setAttribute(new Attribute("version", "1.0.0"));
         return widget;
     }
 
@@ -376,7 +382,7 @@ public class Xml {
         this.widget = new Element("widget");
         widget.setAttribute(new Attribute("xmls", "http://www.w3.org.ns/widgets"));
         widget.addNamespaceDeclaration(Namespace.getNamespace("gap", "http://phonegap.com/ns/1.0"));
-        String id = Util.isNulo(_id) ? "uned.example" : _id;
+        String id = Util.isNulo(_id) ? "uned.phonegap.example" : _id;
 
         widget.setAttribute(new Attribute("id", id));
         if (!Util.isNulo(_versionCode)) {
@@ -394,6 +400,14 @@ public class Xml {
         }
         String version = Util.isNulo(_versionApp) ? "1.0.0" : _versionApp;
         widget.setAttribute(new Attribute("version", version));
+    }
+    
+   private void setIdApp(String _idApp) throws Exception {
+        if (Util.isNulo(this.widget)) {
+            throw new Exception();
+        }
+        String version = Util.isNulo(_idApp) ? "uned.phonegap.example" : _idApp;
+        widget.setAttribute(new Attribute("id", version));
     }
 
     private void setVersionCode(String _versionCode) throws Exception {

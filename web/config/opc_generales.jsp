@@ -208,6 +208,22 @@
                 </div>
 
             </div>
+
+            <div class="row">
+                <div  data-agr="avanzada" class="col-md-5  col-sm-12">                                
+                    <div class="row  form-group">
+                        <label for="_opc_gen_package_app" data-toggle="popover"> 
+                            <span class="data-content glyphicon glyphicon-question-sign" >
+                                Identificador de paquetes de nuestra aplicacion.
+                                <br/>
+                                <em><strong>Por defecto</strong>: uned.phonegap.example</em>
+                            </span>
+                            <span class="data-title">Package App.</span>:</label>
+                        <input type="text" name="_opc_gen_package_app" id="_opc_gen_package_app"  class="form-control" placeholder="Identificador de paquetes de su aplicacion.  Por defecto uned.phonegap.example"/>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
