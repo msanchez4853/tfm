@@ -107,8 +107,8 @@ System.out.println(param+": "+value);
                             <li data-agr="avanzada"><a href="#_opciones_avanzadas">Avanzadas</a></li>
                             <li ><a href="#_opciones_iconos">Iconos</a></li>
                             <li ><a href="#_opciones_splash">Splash Screen</a></li>
-                            <li><a href="#_opciones_permisos">Permisos</a></li>
-                            <li><a href="#_opciones_desarrollador">Info. Desarrolador</a></li>
+                            <li><a href="#_opciones_permisos">Permisos/Acceso</a></li>
+                            <li><a href="#_opciones_desarrollador">Info. Desarrollador</a></li>
                             <li><a href="#_opciones_plugins">Plugins</a></li>
                             <li><a id="_opciones_guardar" href="#"><span class="glyphicon glyphicon-floppy-disk">&nbsp;Guardar</span></a></li>                    
                         </ul>

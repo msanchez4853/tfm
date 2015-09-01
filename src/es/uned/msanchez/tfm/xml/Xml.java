@@ -144,6 +144,9 @@ public class Xml {
             if (param.equals("source_file")) {
                 setContentApp(value);
             }
+            if (param.equals("ErrorUrl_file")) {
+                setPreference("ErrorUrl",value);
+            }
             
 
         }
@@ -155,7 +158,7 @@ public class Xml {
 
     public void setOpcionesAvanzadas(Map<String, String> _opciones_avanzadas) throws Exception {
         for (String param : _opciones_avanzadas.keySet()) {
-            System.out.println("Opciones Avanzadas: " + param + " ---> " + _opciones_avanzadas.get(param));
+          //  System.out.println("Opciones Avanzadas: " + param + " ---> " + _opciones_avanzadas.get(param));
             String value = _opciones_avanzadas.get(param);
 
             if (param.indexOf("CKB") >= 0) {
@@ -192,7 +195,7 @@ public class Xml {
         String path_default = _opciones_icons.get("default_path");
         path_default = Util.isNulo(path_default) ? "" : path_default;
         for (String param : _opciones_icons.keySet()) {
-            System.out.println("Opciones setOpcionesIcons: " + param + " ---> " + _opciones_icons.get(param));
+          //  System.out.println("Opciones setOpcionesIcons: " + param + " ---> " + _opciones_icons.get(param));
             if (param.indexOf("_path") == param.length() - 5) {
                 continue;
             }
@@ -276,7 +279,7 @@ public class Xml {
         HashMap<Integer, HashMap<String, String>> accesos = new HashMap<Integer, HashMap<String, String>>();
 
         for (String param : _opciones_permisos.keySet()) {
-            System.out.println("Opciones setOpcionesPermisos: " + param + " ---> " + _opciones_permisos.get(param));
+           // System.out.println("Opciones setOpcionesPermisos: " + param + " ---> " + _opciones_permisos.get(param));
             String value = _opciones_permisos.get(param);
 
             if (param.indexOf("acceso_") >= 0) {

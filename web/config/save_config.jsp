@@ -9,7 +9,7 @@
 <%@page import="es.uned.msanchez.tfm.xml.Xml"%>
 <%@page contentType="text/xml" pageEncoding="UTF-8" autoFlush="false"%>
 <%
-//response.setHeader("Content-Disposition","attachment;filename=config.xml");
+response.setHeader("Content-Disposition","attachment;filename=config.xml");
 
 Xml xml = new Xml();
 Map opciones_generales = new HashMap();

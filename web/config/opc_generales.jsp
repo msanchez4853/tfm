@@ -185,6 +185,28 @@
                         </select>
                     </div>
                 </div>
+                <div data-agr="avanzada" class="col-md-5 col-md-offset-2 col-sm-12">  
+                    <div class="row form-group">
+                        <label for="_opc_gen_ErrorUrl_file"  data-toggle="popover"> 
+                            <span class="data-content glyphicon glyphicon-question-sign" >
+                                Define la pagina de error de la aplicación debe estar en el directorio raíz de la aplicación.
+                                <br/>                                
+                                <br/>
+                                Sino se establece un valor se mostrara el diagolo de error de aplicacion por defecto.
+                            </span>
+                            <span class="data-title">Pagina error</span>:
+                        </label>                       
+                        <div class="input-group ">
+                            <span class="input-group-btn">
+                                <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_gen_ErrorUrl_file" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+                                    <input type="file" id="_opc_gen_ErrorUrl_file" name="_opc_gen_ErrorUrl_file"  data-ext="html"/>
+                                </span> 
+                            </span>
+                            <input class=" form-control" id="_text_gen_ErrorUrl"  name="_text_gen_ErrorUrl" type="text" placeholder="Pagina de eror de la aplicacion."  readonly>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

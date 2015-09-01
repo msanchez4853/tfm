@@ -113,10 +113,10 @@
                 <div id="platform_download">
                     Descargar
                 </div>
-                 <div id="platform_gestkeys">
+               <%--  <div id="platform_gestkeys">
                      <span> Gestion de las Keys</span>
                      <div><span>Delete Keys</span></div>
-                </div>
+                </div>--%>
             </div>
         </section>        
         <section id="pie">
@@ -126,5 +126,21 @@
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="../resources/bootstrap/js/bootstrap.min.js"></script>
 
+        
+        <div id="_dd_ff_addApp">
+            <form id="_ff_addApp">
+                <span id="_ff_addApp_men" class="_error_form">&nbsp;</span><br/>
+                <input type="hidden" id="_ff_addApp_method" name="method" value="remote_repo"/>
+                <label class="form_etiqueta" for="_ff_addApp_title"> Titulo: </label>
+                <input type="text" id="_ff_addApp_title" name ="title"/><br/>
+                <label class="form_etiqueta" for="_ff_addApp_url"> Url: </label>
+                <input type="text" id="_ff_addApp_url" name ="url" />
+            </form>
+        </div>
+        <div id="_dd_ff_downApp">
+            <form id="_ff_downApp" target="download" enctype="multipart/form-data" action="get">                
+                <input type="hidden" id="_ff_downApp_name" name="name" value="default"/>                
+            </form>
+        </div>
     </body>
 </html>

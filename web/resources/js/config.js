@@ -101,7 +101,7 @@ function establecerAspectoIni(_this){
 function cambiarAspecto(){
     _this = $(this);
     _span_title =  _this.children("span.nav-aspecto");
-   // console.log(_span_title.length)
+    // console.log(_span_title.length)
     if(_this.attr("data-aspecto")=='completo'){
         $("[data-agr='avanzada']").hide();
         _this.attr("data-aspecto",'reducido');
@@ -193,7 +193,15 @@ function generarXml(){
         
     }
    
-    if(validate) $("#form_guardar").submit();
+    if(validate){ 
+        $.messager.confirm('Wizard Config', 'Por favor!!\n\
+            , aseg&uacute;rese de guardar el archivo config.xml en el nivel superior de su aplicacion (el mismo nivel que el archivo index.html). <br/>\n\
+            De lo contrario al generar la aplicacion con Phonegap build no se crear&aacute; correctamente.<br/>  Desea continuar?', function(r){
+            
+            if (r){$("#form_guardar").submit();
+            }
+            });
+    }
 }
 
 function accederOpciones(e){
@@ -413,7 +421,7 @@ function seleccionarAcceso(){
     $("#_bt_perm_mod_acc").removeClass('disabled');
     $("#_bt_perm_add_acc").prop('disabled',true);
     $("#_bt_perm_add_acc").addClass('disabled');
-//  console.log('fin seleccionarAcceso indice --> '+_indice)
+    //  console.log('fin seleccionarAcceso indice --> '+_indice)
 }
 
 
