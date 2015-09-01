@@ -70,8 +70,8 @@ div.panel_contenido{
 }
 
 input[readonly] {
-  background-color: white !important;
-  cursor: text !important;
+    background-color: white !important;
+    cursor: text !important;
 }
 
 .navbar-inverse{
@@ -105,4 +105,25 @@ input[readonly] {
 ._error_form{
     color : red;
     font-weight: bold;
+}
+
+div#_dd_ff_infoApp table caption{
+    background-color: lightgray;
+}
+
+div#_dd_ff_infoApp table td.etiqueta_info{
+    background-color: #E6E6FA;
+    color: #808080;
+    width: 150px;
+    text-align: right;
+    padding-right: 10px;
+    border-right: 1px solid lightgray;
+    font-weight: bold;
+}
+
+div#_dd_ff_infoApp table td.valor_info{
+
+    font-size: 13px;
+    padding-left: 10px;
+    padding-right: 10px;
 }

@@ -75,6 +75,8 @@ public class Phonegap {
                 System.out.println(appJSON);
                 JSONObject _o_app = new JSONObject();
                 _o_app.put("title", (String) appJSON.get("title"));
+                _o_app.put("desc", (String) appJSON.get("description"));
+                _o_app.put("version", (String) appJSON.get("version"));
                 _o_app.put("id", (Long) appJSON.get("id"));
                 _o_app.put("package", (String) appJSON.get("package"));
                 _o_app.put("phonegap_version", (String) appJSON.get("phonegap_version"));

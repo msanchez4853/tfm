@@ -142,5 +142,17 @@
                 <input type="hidden" id="_ff_downApp_name" name="name" value="default"/>                
             </form>
         </div>
+        
+        <div id="_dd_ff_infoApp">
+            <table>
+              <%--  <caption>Informacion sobre la aplicacion <span id="_info_name_apli">&nbsp;</span></caption>--%>
+                
+                <tr><td class="etiqueta_info"> Version Aplicacion</td><td class="valor_info" id="_info_vapp_apli"> 1.0.0 </td></tr>
+                <tr><td class="etiqueta_info"> Version Phonegap</td><td class="valor_info" id="_info_vphonegap_apli"> 1.0.0 </td></tr>
+                <tr><td class="etiqueta_info"> Descripcion</td><td class="valor_info" id="_info_desc_apli"> 1.0.0 </td></tr>
+                <tr><td class="etiqueta_info"> Url repositorio</td><td class="valor_info" id="_info_repo_apli"> 1.0.0 </td></tr>
+                
+            </table>                
+        </div>
     </body>
 </html>

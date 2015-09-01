@@ -29,17 +29,26 @@ $(window).ready(function(){
 
         {
             field:'title',
-            title:'Aplicacion'
+            title:'Aplicacion',
+            formatter:formatTitle
         },
-
+        {
+            field:'version',
+            title:'Ver. Apli'
+        },
+        {
+            field:'phonegap_version',
+            title:'Ver. Phonegap'
+        },
         {
             field:'package',
-            title:'Paqckage'
+            title:'Package'
         },
 
         {
             field:'install_url',
-            title:'Donwload'
+            title:'Donwload',
+            hidden:true
         },
         {
             field:'status_android',
@@ -97,7 +106,7 @@ $(window).ready(function(){
     }
     );
     //Obtner las aplicaciones al entrar en la aplicacion.
-    //  mitoken = getAuthorization('apps','GET',{},gestionRespuesta,gestionError);    
+      mitoken = getAuthorization('apps','GET',{},gestionRespuestaNoReload,gestionError);    
 
     $("#_dd_ff_addApp").dialog({
         title:'A&ntilde;adir aplicacion.',
@@ -110,6 +119,19 @@ $(window).ready(function(){
             text:'Cerrar',
             handler:function(){
                 $("#_dd_ff_addApp").dialog('close');
+            }
+        }],
+        width:400
+    });
+    
+    $("#_dd_ff_infoApp").dialog({
+        title:'Informaci&oacute;n de ',
+        closed:true,
+        modal:true,
+        buttons:[{
+            text:'Cerrar',
+            handler:function(){
+                $("#_dd_ff_infoApp").dialog('close');
             }
         }],
         width:400
@@ -242,6 +264,19 @@ function editApp(e){
     }
 }
 
+function muestraDetalleApp(id,index){
+    $('#apps_phonegap').datagrid('selectRow',index);
+    var row=$('#apps_phonegap').datagrid('getSelected');
+        
+        $('#_info_vapp_apli').html(row.version);
+        $('#_info_vphonegap_apli').html(row.phonegap_version);
+        $('#_info_desc_apli').html(row.desc);
+        $('#_info_repo_apli').html(row.repo);
+        
+        $("#_dd_ff_infoApp").dialog({title:'Informaci&oacute;n de '+row.title})
+        .dialog("open");
+}
+
 function addApp(e){
     
     $('#_ff_addApp').form('clear');
@@ -304,6 +339,12 @@ function formatPlatformWin(val,row,index){
     return salida;
 }
 
+
+function formatTitle(val,row,index){
+    salida = '<a href="#" id="_mas_info_'+row.id+'" onclick="muestraDetalleApp('+row.id+','+index+');return false;" >'+val+'</span>';
+
+    return salida;
+}
 
 function formatPlatform(id,platform, estado, download,error){
     var salida = '<a  href="#" data-platform="'+platform+'" data-apli="'+id+'"'; 
