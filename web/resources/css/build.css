@@ -116,6 +116,9 @@ div#_dd_ff_infoApp table td.etiqueta_info{
     color: #808080;
     width: 150px;
     text-align: right;
+    border: 1px solid white;
+    padding: 3px;
+    vertical-align: text-top;
     padding-right: 10px;
     border-right: 1px solid lightgray;
     font-weight: bold;
@@ -126,4 +129,8 @@ div#_dd_ff_infoApp table td.valor_info{
     font-size: 13px;
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.datagrid-row-selected a._mas_info{
+    color:white;
 }

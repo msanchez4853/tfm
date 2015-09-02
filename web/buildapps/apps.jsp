@@ -42,13 +42,12 @@
                         <a class="navbar-brand" href="#">
                             <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
                         </a>
-                    </div>
-                    <!-- Collect the nav links, forms, and other content for toggling -->                    
+                    </div>                                  
                 </div>
             </nav>
         </section>
         <section id="contenido">
-            <table id="apps_phonegap" title="Aplicaciones con Phonegap Build">
+            <table id="apps_phonegap" title="Aplicaciones con Phonegap Build" width="100%">
                     <thead> 
                       <tr>
                           <th>Id</th>
@@ -60,45 +59,8 @@
                           <th>Install</th>
                       </tr>
                   </thead>
-                      <%--
-                            Curl curl = new Curl();
-                            JSONObject misdatos = curl.getApps();
-                          //  out.println(misdatos);
-                            if (((Integer) misdatos.get("status"))==200) {
-                                JSONObject respuesta = (JSONObject) misdatos.get("respuesta");
-                              //  JSONObject infoApps = (JSONObject) respuesta.get("apps");
-                                JSONArray appsJSON = (JSONArray) respuesta.get("apps");
-                                
-                                for(int app=0; app < appsJSON.size();app++){
-                                    JSONObject appJSON = (JSONObject) appsJSON.get(app);
-                                    //out.println(appJSON);
-                                    String _titleApp = (String) appJSON.get("title");
-                                    Long _idApp = (Long) appJSON.get("id");
-                                    String _packageApp = (String) appJSON.get("package");
-                                    JSONObject _statusApp = (JSONObject)appJSON.get("status");
-                                    String _urlInstApp = (String)appJSON.get("install_url");
-                                    %>
-                                    <tr>
-                                        <td><%=_idApp%></td>
-                                        <td><%=_titleApp%></td>
-                                        <td><%=_packageApp%></td>
-                                        <td><%=_statusApp.get("android")%></td>
-                                        <td><%=_statusApp.get("ios")%></td>
-                                        <td><%=_statusApp.get("winphone")%></td>
-                                        <td><%=_urlInstApp%></td>
-                                    </tr>
-                                    <%
-                                }
-                            }
-                            
-                        --%> 
+
             </table>
-            <div id="ft" style="padding:2px 5px;">
-                <a href="#" class="tool_button icon-add"  name="add"></a>
-                <a href="#" class="tool_button icon-edit"  name="edit"></a>
-                <a href="#" class="tool_button icon-remove" name="del"></a>
-                <a href="#" class="tool_button icon-reload" name="reload"></a>
-            </div>
             <div id="tb" style="padding:2px 5px;">
                 <a href="#" class="tool_button icon-add"  name="add"></a>
                 <a href="#" class="tool_button icon-edit"  name="edit"></a>
@@ -113,10 +75,6 @@
                 <div id="platform_download">
                     Descargar
                 </div>
-               <%--  <div id="platform_gestkeys">
-                     <span> Gestion de las Keys</span>
-                     <div><span>Delete Keys</span></div>
-                </div>--%>
             </div>
         </section>        
         <section id="pie">
@@ -147,10 +105,10 @@
             <table>
               <%--  <caption>Informacion sobre la aplicacion <span id="_info_name_apli">&nbsp;</span></caption>--%>
                 
-                <tr><td class="etiqueta_info"> Version Aplicacion</td><td class="valor_info" id="_info_vapp_apli"> 1.0.0 </td></tr>
-                <tr><td class="etiqueta_info"> Version Phonegap</td><td class="valor_info" id="_info_vphonegap_apli"> 1.0.0 </td></tr>
-                <tr><td class="etiqueta_info"> Descripcion</td><td class="valor_info" id="_info_desc_apli"> 1.0.0 </td></tr>
-                <tr><td class="etiqueta_info"> Url repositorio</td><td class="valor_info" id="_info_repo_apli"> 1.0.0 </td></tr>
+                <tr><td class="etiqueta_info"> Version Aplicacion</td><td class="valor_info" id="_info_vapp_apli"> --- </td></tr>
+                <tr><td class="etiqueta_info"> Version Phonegap</td><td class="valor_info" id="_info_vphonegap_apli"> --- </td></tr>
+                <tr><td class="etiqueta_info"> Descripcion</td><td class="valor_info" id="_info_desc_apli"> --- </td></tr>
+                <tr><td class="etiqueta_info"> Url repositorio</td><td class="valor_info" id="_info_repo_apli"> --- </td></tr>
                 
             </table>                
         </div>

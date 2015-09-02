@@ -81,6 +81,7 @@ public class Phonegap {
                 _o_app.put("package", (String) appJSON.get("package"));
                 _o_app.put("phonegap_version", (String) appJSON.get("phonegap_version"));
                 _o_app.put("last_build", (String) appJSON.get("last_build"));
+                _o_app.put("repo", (String) appJSON.get("repo"));
                 JSONObject _statusApp = (JSONObject) appJSON.get("status");
                 _o_app.put("status_android", _statusApp.get("android"));
                 _o_app.put("status_win", _statusApp.get("winphone"));

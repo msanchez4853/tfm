@@ -20,82 +20,68 @@ $(window).ready(function(){
         columns:[[
         {
             field:'ck',
-            checkbox:true
+            checkbox:true,
+            resizable:false
         },
         {
             field:'id',
-            title:'Id.'
+            title:'Id.',
+            resizable:false,
+            width:'10%'
         },
 
         {
             field:'title',
             title:'Aplicacion',
-            formatter:formatTitle
+            formatter:formatTitle,
+            resizable:false,
+            width:'34%'
         },
         {
             field:'version',
-            title:'Ver. Apli'
+            title:'Apli',
+            resizable:false,
+            width:'5%'
         },
         {
             field:'phonegap_version',
-            title:'Ver. Phonegap'
+            title:'Pho.',
+            resizable:false,
+            width:'5%'
         },
         {
             field:'package',
-            title:'Package'
-        },
-
-        {
-            field:'install_url',
-            title:'Donwload',
-            hidden:true
+            title:'Package',
+            resizable:false,
+            width:'30%'
         },
         {
             field:'status_android',
-            title:'Android',
-            formatter:formatPlatformAndroid
+            title:'And.',
+            formatter:formatPlatformAndroid,
+            resizable:false,
+            width:'5%'
         },
         {
             field:'status_ios',
             title:'iOS',
-            formatter:formatPlatformIOS
+            formatter:formatPlatformIOS,
+            resizable:false,
+            width:'5%'
         },
         {
             field:'status_win',
-            title:'WinPhone',
-            formatter:formatPlatformWin
+            title:'Win',
+            formatter:formatPlatformWin,
+            resizable:false,
+            width:'5%'
         }
-        /*   ,
-        {
-            field:'download_android',
-            hidden:false
-        },
-        {
-            field:'download_ios',
-            hidden:false
-        },
-        {
-            field:'download_win',
-            hidden:false
-        }
-        ,
-        {
-            field:'error_android',
-            hidden:false
-        },
-        {
-            field:'error_ios',
-            hidden:false
-        },
-        {
-            field:'error_win',
-            hidden:false
-        }*/
+
         ]],
         checkOnSelect:true,
         selectOnCheck:true,
         toolbar:'#tb',
-        footer:'#ft',
+        // footer:'#ft',
         onLoadSuccess:eventsAccionesApp,
         loadMsg: 'Obteniendo Informacion. Espere Por favor!!'
     });
@@ -106,7 +92,7 @@ $(window).ready(function(){
     }
     );
     //Obtner las aplicaciones al entrar en la aplicacion.
-      mitoken = getAuthorization('apps','GET',{},gestionRespuestaNoReload,gestionError);    
+    mitoken = getAuthorization('apps','GET',{},gestionRespuestaNoReload,gestionError);    
 
     $("#_dd_ff_addApp").dialog({
         title:'A&ntilde;adir aplicacion.',
@@ -202,7 +188,7 @@ function gestionError(jqXHR, textStatus, errorThrown){
 }
 
 function gestionRespuestaWithReload(_data,  textStatus,  jqXHR){
-     console.log(_data)
+    console.log(_data)
     console.log(textStatus)
     $.messager.show(
     {
@@ -224,8 +210,8 @@ function gestionRespuestaWithReload(_data,  textStatus,  jqXHR){
 
 function gestionRespuestaNoReload(_data,  textStatus,  jqXHR){
     
-    console.log(_data)
-    console.log(textStatus)
+   // console.log(_data)
+   // console.log(textStatus)
     $.messager.show(
     {
         title:'Mis Apps',
@@ -249,7 +235,7 @@ function reloadApp(e){
 }
 
 function editApp(e){
-   var row = $('#apps_phonegap').datagrid('getSelected');
+    var row = $('#apps_phonegap').datagrid('getSelected');
     if (row){        
         
         $.messager.confirm('Mis Apps', 'Va a volver a generar la aplicacion para todas las plataformas?', function(r){
@@ -268,13 +254,15 @@ function muestraDetalleApp(id,index){
     $('#apps_phonegap').datagrid('selectRow',index);
     var row=$('#apps_phonegap').datagrid('getSelected');
         
-        $('#_info_vapp_apli').html(row.version);
-        $('#_info_vphonegap_apli').html(row.phonegap_version);
-        $('#_info_desc_apli').html(row.desc);
-        $('#_info_repo_apli').html(row.repo);
+    $('#_info_vapp_apli').html(row.version);
+    $('#_info_vphonegap_apli').html(row.phonegap_version);
+    $('#_info_desc_apli').html(row.desc);
+    $('#_info_repo_apli').html(row.repo);
         
-        $("#_dd_ff_infoApp").dialog({title:'Informaci&oacute;n de '+row.title})
-        .dialog("open");
+    $("#_dd_ff_infoApp").dialog({
+        title:'Informaci&oacute;n de '+row.title
+        })
+    .dialog("open");
 }
 
 function addApp(e){
@@ -308,7 +296,7 @@ function validarAddApp(){
   
         _data = {};
         _data.datos = JSON.stringify(_info);
-        console.log(_data);
+       // console.log(_data);
         mitoken = getAuthorization('apps','POST',_data,gestionRespuestaWithReload,gestionError);
         $("#_dd_ff_addApp").dialog("close");
     }else{
@@ -341,7 +329,7 @@ function formatPlatformWin(val,row,index){
 
 
 function formatTitle(val,row,index){
-    salida = '<a href="#" id="_mas_info_'+row.id+'" onclick="muestraDetalleApp('+row.id+','+index+');return false;" >'+val+'</span>';
+    salida = '<a href="#" class="_mas_info" id="_mas_info_'+row.id+'" onclick="muestraDetalleApp('+row.id+','+index+');return false;" >'+val+'</span>';
 
     return salida;
 }
@@ -379,33 +367,7 @@ function getOpcApp(e){
     _idMenuMo = id;
     var platf = $(this).attr('data-platform');
     _platfMenuMo = platf;
-    /*  $("#getApli").window({
-        title:'Inf. Apli'+id,
-        modal:true,
-        toolbar:[{
-            text:'Build',
-            iconCls:'icon-edit',
-            handler:function(){
-                alert('build')
-            }
-        },{
-            text:'Help',
-            iconCls:'icon-help',
-            handler:function(){
-                alert('help')
-            }
-        }],
-        buttons:[{
-            text:'Cerrar',
-            handler:function(){
-                $("#getApli").window('close')
-            }
-        }],
-        onResize:function(){
-            $(this).window('hcenter');
-        }
-    });*/
-    
+     
     $("#menuPlatform").menu('show',{
         left: e.pageX,
         top: e.pageY
@@ -414,10 +376,9 @@ function getOpcApp(e){
 
 
 function handlerMenu(item){
-    console.log(item.id);
-    console.log(item.text);
+
     if(item.text=='Build') buildApp();
-     if(item.text=='Descargar') downloadApp();
+    if(item.text=='Descargar') downloadApp();
 }
 
 function buildApp(e){
@@ -450,10 +411,7 @@ function downloadApp(e){
                 $("#_ff_downApp").attr("target","download_"+row.id);
                 $("#_ff_downApp").attr("action",serverRest+'apps/'+row.id+'/'+_platfMenuMo);
                 $("#_ff_downApp").submit();
-               /* mitoken = getAuthorization('apps/'+row.id+'/'+_platfMenuMo,'GET',{
-                    platform:_platfMenuMo
-                },gestionRespuestaWithReload,gestionError);    
-            */
+               
             }
         });
     }else{
