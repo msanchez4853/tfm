@@ -20,7 +20,7 @@
                         <br/>
                         Para asegurar compatibilidad es recomendable que las imágenes utilizadas sean en formato .png o el indicado en su defecto.
                         <br/>
-                        Por defecto las imágenes se buscaran en el raíz salvo que el campo path recurso se especifique la ruta realativa.
+                        Por defecto las imágenes se buscaran en el raíz salvo que el campo path recurso se especifique la ruta relativa.
 
                         <br/>
                         Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/configuring_icons_and_splash.md.html#Icons%20and%20Splash%20Screens" class="alert-link" target="_blank">Icons and Splash Screens</a>

@@ -23,7 +23,8 @@
                 <div class="col-md-12">
                     <div id="info_desarrollador" class="jumbotron img-rounded" >
                         <button type="button" class="_mostrar_info close" data-alert="desarrollador"><span aria-hidden="true">&times;</span></button>
-                        <strong>Info. Desarrollador.</strong> Permite definir características referidas a la información sobre el desarrollador de la aplicación que será accesible.
+                        <strong>Info. Desarrollador.</strong> Permite definir características referidas al desarrollador de la aplicación,
+                        esta informacion sera accesible desde la tiendas de las plataformas.
                         <br/>
                         Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/configuring_basics.md.html#The%20Basics" class="alert-link" target="_blank">Configuring - The Basics</a>
                     </div>

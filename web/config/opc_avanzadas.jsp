@@ -378,7 +378,7 @@
                                         <a href="http://developer.android.com/guide/topics/manifest/uses-sdk-element.html">http://developer.android.com/guide/topics/manifest/uses-sdk-element.html</a> ) </em><br/>
                                     <em><strong>Por defecto</strong>: 7 (Android 2.1) </em>
                                 </span>
-                                <span class="data-title">Min Version SDK</span>:</label>
+                                <span class="data-title">Min SDK Version </span>:</label>
                             <select name="_opc_avan_android-minSdkVersion" id="_opc_avan_android-minSdkVersion" class="form-control" >
                                 <option value="7" selected="selected" >7 (Android 2.1.x)</option>
                                 <option value="8" >8 (Android 2.2.x)</option>
@@ -408,7 +408,7 @@
                                         <a href="http://developer.android.com/guide/topics/manifest/uses-sdk-element.html">http://developer.android.com/guide/topics/manifest/uses-sdk-element.html</a> ) </em><br/>
 
                                 </span>
-                                <span class="data-title">Max Version SDK</span>:</label>
+                                <span class="data-title">Max SDK Version</span>:</label>
                             <select name="_opc_avan_android-maxSdkVersion" id="_opc_avan_android-maxSdkVersion" class="form-control" >
                                 <option value="7" selected="selected" >7 (Android 2.1.x)</option>
                                 <option value="8" >8 (Android 2.2.x)</option>
@@ -440,7 +440,7 @@
                                         <a href="http://developer.android.com/guide/topics/manifest/uses-sdk-element.html">http://developer.android.com/guide/topics/manifest/uses-sdk-element.html</a> ) </em><br/>
 
                                 </span>
-                                <span class="data-title">Target Version SDK</span>:</label>
+                                <span class="data-title">Target SDK Version</span>:</label>
                             <select name="_opc_avan_android-targetSdkVersion" id="_opc_avan_android-targetSdkVersion" class="form-control" >
                                 <option value="7" selected="selected" >7 (Android 2.1.x)</option>
                                 <option value="8" >8 (Android 2.2.x)</option>

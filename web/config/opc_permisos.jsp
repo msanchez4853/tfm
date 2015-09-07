@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="panel panel-default" id="_opciones_permisos"  data-config="seccion">
     <div class="panel-heading">
-        <h3 class="panel-title">Permisos/Accesos&nbsp; 
+        <h3 class="panel-title">Caracteristicas y Permisos/Accesos&nbsp; 
             <span class="_mostrar_info glyphicon glyphicon-question-sign" data-alert="permisos" data-toggle="tooltip" title="Muestra /oculta informacion adicional">&nbsp;</span></h3>
     </div>
     <div class="panel-body panel_contenido">
@@ -17,7 +17,8 @@
                 <div class="col-md-12">
                     <div id="info_permisos" class="jumbotron img-rounded" >
                         <button type="button" class="_mostrar_info close" data-alert="permisos"><span aria-hidden="true">&times;</span></button>
-                        <strong>Permisos/Acceso.</strong> Define para la aplicación que estamos construyendo las características o permisos que son necesarios solicitar en el dispositivo donde se instale nuestra aplicación. Además de definir los permisos de acceso a determinados dominios.                        
+                        <strong>Caracteristicas y Permisos/Accesos&nbsp;.</strong> Define para la aplicación que estamos construyendo las características de Phonegap Build que va a utilizar la aplicacion
+                         y los permisos/accesos que son necesarios para acceder a determinados dominios.                        
                         <br/>
                         Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/configuring_features.md.html#Features" class="alert-link" target="_blank">Configuring - Features</a>
                         <span  data-agr="avanzada"> y en <a href="http://docs.build.phonegap.com/en_US/configuring_access_elements.md.html#Access%20Elements" class="alert-link" target="_blank">Configuring - Access Elements</a> </span>
@@ -27,16 +28,16 @@
             <div class="row">
                <label  data-toggle="popover"> 
                     <span class="data-content glyphicon glyphicon-question-sign" >
-                        Los permisos pueden utilizarse para especificar qué caracteristicas está utilizando nuestra aplicación.
+                        Las caracteristicas o APIs de Phonegap Build que nuestra aplicacion va a utilizar.
                     </span>
-                    <span class="data-title tit_seccion">Permisos</span>:
+                    <span class="data-title tit_seccion">Caracteristicas</span>:
                 </label> 
             </div>
             <div class="row">
 
                 <div class="col-md-5 col-sm-12">                                
                     <div class="row form-group">
-                        <label  class="">Permisos para Android</label>
+                        <label  class="">Caracteristicas para Android</label>
                         <div class="row form-control form_agrupa">
                             <div class="col-md-12 checkbox">
                                 <label>
@@ -83,7 +84,7 @@
                 </div>
                 <div class="col-md-5 col-sm-12 col-md-offset-1">                                
                     <div class="row form-group">
-                        <label  class="">Permisos para Windows Phone</label>
+                        <label  class="">Caracteristicas para Windows Phone</label>
                         <div class="row form-control form_agrupa">                            
                             <div class="col-md-12 checkbox">
                                 <label>
@@ -126,7 +127,7 @@
                     <span class="data-content glyphicon glyphicon-question-sign" >
                         El elemento access proporciona a la aplicación el acceso a recursos en otros ámbitos - en particular, permite su aplicación para cargar páginas de dominios externos que pueden hacerse cargo de toda su webview
                     </span>
-                    <span class="data-title tit_seccion">Accesos</span>:
+                    <span class="data-title tit_seccion">Permisos/Accesos</span>:
                 </label> 
 
             </div>
