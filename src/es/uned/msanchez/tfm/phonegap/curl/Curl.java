@@ -450,7 +450,7 @@ public class Curl {
     private JSONObject createApp(JSONObject _data, String _url) throws CurlException {
 
         JSONObject respuestaJSON = null;
-
+      //  _data.put("private", false);
         _data.put("repo", _url);
 
         StringBody data_p = new StringBody(_data.toJSONString(), ContentType.TEXT_PLAIN);

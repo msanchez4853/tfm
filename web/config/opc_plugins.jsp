@@ -31,7 +31,7 @@
                             <div class="col-md-6">                                
                                 <div class="col-md-12 checkbox">
                                     <label>
-                                        <input type="checkbox"  name="_opc_plug_battery-status" id="_opc_plug_battery-status">&nbsp;Battery
+                                        <input data-select-to="related" type="checkbox"  name="_opc_plug_battery-status" id="_opc_plug_battery-status">&nbsp;Battery
                                     </label>
                                 </div>
                                 <div class="col-md-12 checkbox">

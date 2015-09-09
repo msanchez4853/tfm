@@ -36,9 +36,9 @@
         for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
             String param = (String) e.nextElement();
             String value = request.getParameter(param);
-System.out.println(param+": "+value);
+            System.out.println(param + ": " + value);
             if (param.indexOf("_opc_gen_") >= 0) {
-                
+
                 opciones_generales.put(param.replaceFirst("_opc_gen_", ""), value);
             }
             if (param.indexOf("_opc_avan_") >= 0) {
@@ -68,6 +68,28 @@ System.out.println(param+": "+value);
 
         }
 
+        //Peticion realizada desde RELATED.
+        String lab_id = request.getParameter("lab_id");
+        String lab_experiment_id = request.getParameter("lab_experiment_id");
+        if (!Util.isNulo(lab_id)) {
+            String pag_inicio = "mobile.html";
+            aspecto = "related";
+            if (opciones_generales.containsKey("source_file")) {
+                pag_inicio = (String) opciones_generales.get("source_file");
+                opciones_generales.remove("source_file");
+            }
+
+            if (!pag_inicio.contains("?")) {
+                pag_inicio = pag_inicio + "?ale=" + Math.random();
+            }
+            pag_inicio = pag_inicio + "&lab_id=" + lab_id;
+            pag_inicio = pag_inicio + (Util.isNulo(lab_experiment_id) ? "" : "&lab_experiment_id=" + lab_experiment_id);
+            opciones_generales.put("source_file", pag_inicio);
+
+
+        }
+
+
         session.setAttribute("opciones_generales", opciones_generales);
         session.setAttribute("opciones_avanzadas", opciones_avanzadas);
         session.setAttribute("opciones_desarrollo", opciones_desarrollo);
@@ -75,6 +97,9 @@ System.out.println(param+": "+value);
         session.setAttribute("opciones_permisos", opciones_permisos);
         session.setAttribute("opciones_plugins", opciones_plugins);
         session.setAttribute("opciones_splash", opciones_splash);
+
+
+
     %>
     <body>
         <section id="navegacion">
@@ -90,13 +115,21 @@ System.out.println(param+": "+value);
 
                         </button> 
                         <a class="navbar-brand" href="#" data-aspecto="<%=aspecto%>" data-toggle="popover" data-toggle-pos="bottom">
+                            <%if (aspecto.equalsIgnoreCase("related")) {%>
+                            <span class="nav-aspecto glyphicon glyphicon-eye-open" aria-hidden="true">&nbsp;Related&nbsp;
+                            </span>
+                            <%} else {
+                            %>
+
                             <span class="nav-aspecto glyphicon glyphicon-eye-open" aria-hidden="true">&nbsp;Completa&nbsp;
                             </span>
                             <span class="data-content" >
                                 Indica la vision (completa o reducida) del Wizard  para definir el fichero de 
                                 configuracion config.xml necesario para una aplicacion Phonegap Build.                                
-                            </span>
-
+                            </span>        
+                            <%                               
+                            }
+        %>
 
                         </a>
                     </div>
@@ -104,11 +137,11 @@ System.out.println(param+": "+value);
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
                             <li class="active"><a href="#_opciones_generales">General <span class="sr-only">(current)</span></a></li>
-                            <li data-agr="avanzada"><a href="#_opciones_avanzadas">Avanzadas</a></li>
-                            <li ><a href="#_opciones_iconos">Iconos</a></li>
-                            <li ><a href="#_opciones_splash">Splash Screen</a></li>
-                            <li><a href="#_opciones_permisos">Caract. y Permisos</a></li>
-                            <li><a href="#_opciones_desarrollador">Info. Desarrollador</a></li>
+                            <li data-ex-apli="related" data-agr="avanzada"><a href="#_opciones_avanzadas">Avanzadas</a></li>
+                            <li data-ex-apli="related" ><a href="#_opciones_iconos">Iconos</a></li>
+                            <li data-ex-apli="related" ><a href="#_opciones_splash">Splash Screen</a></li>
+                            <li data-ex-apli="related" ><a href="#_opciones_permisos">Caract. y Permisos</a></li>
+                            <li ><a href="#_opciones_desarrollador">Info. Desarrollador</a></li>
                             <li><a href="#_opciones_plugins">Plugins</a></li>
                             <li><a id="_opciones_guardar" href="#"><span class="glyphicon glyphicon-floppy-disk">&nbsp;Guardar</span></a></li>                    
                         </ul>

@@ -78,6 +78,8 @@ function defineEvents(){
     $("a.navbar-brand").click(cambiarAspecto);
     
     establecerAspectoIni($("a.navbar-brand"));
+   
+
 }
 
 function establecerAspectoIni(_this){
@@ -90,11 +92,17 @@ function establecerAspectoIni(_this){
         _span_title.addClass("glyphicon-eye-close");
          
     }else{
-        $("[data-agr='avanzada']").show();
-        _this.attr("data-aspecto",'completo');
-        _span_title.html("&nbsp;Completa&nbsp;");
-        _span_title.removeClass("glyphicon-eye-close");
-        _span_title.addClass("glyphicon-eye-open");
+        if(_this.attr("data-aspecto")=='completo'){
+            $("[data-agr='avanzada']").show();
+            _this.attr("data-aspecto",'completo');
+            _span_title.html("&nbsp;Completa&nbsp;");
+            _span_title.removeClass("glyphicon-eye-close");
+            _span_title.addClass("glyphicon-eye-open");
+        }else{
+            $("[data-ex-apli='"+_this.attr("data-aspecto")+"']").hide();
+            $("[data-select-to='"+_this.attr("data-aspecto")+"']").prop( "checked", true );
+         //   $("[data-select-to='"+_this.attr("data-aspecto")+"']").prop('readonly', true);
+        }
     }
 }
 
@@ -110,11 +118,13 @@ function cambiarAspecto(){
         _span_title.addClass("glyphicon-eye-close");
          
     }else{
-        $("[data-agr='avanzada']").show();
-        _this.attr("data-aspecto",'completo');
-        _span_title.html("&nbsp;Completa&nbsp;");
-        _span_title.removeClass("glyphicon-eye-close");
-        _span_title.addClass("glyphicon-eye-open");
+        if(_this.attr("data-aspecto")=='reducido'){
+            $("[data-agr='avanzada']").show();
+            _this.attr("data-aspecto",'completo');
+            _span_title.html("&nbsp;Completa&nbsp;");
+            _span_title.removeClass("glyphicon-eye-close");
+            _span_title.addClass("glyphicon-eye-open");
+        }
     }
         
 }
@@ -198,9 +208,10 @@ function generarXml(){
             , aseg&uacute;rese de guardar el archivo config.xml en el nivel superior de su aplicacion (el mismo nivel que el archivo index.html). <br/>\n\
             De lo contrario al generar la aplicacion con Phonegap build no se crear&aacute; correctamente.<br/>  Desea continuar?', function(r){
             
-            if (r){$("#form_guardar").submit();
+            if (r){
+                $("#form_guardar").submit();
             }
-            });
+        });
     }
 }
 
@@ -421,7 +432,7 @@ function seleccionarAcceso(){
     $("#_bt_perm_mod_acc").removeClass('disabled');
     $("#_bt_perm_add_acc").prop('disabled',true);
     $("#_bt_perm_add_acc").addClass('disabled');
-    //  console.log('fin seleccionarAcceso indice --> '+_indice)
+//  console.log('fin seleccionarAcceso indice --> '+_indice)
 }
 
 

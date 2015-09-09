@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-5 col-sm-12"> 
+                <div  class="col-md-5 col-sm-12"> 
                     <div class="row form-group">
                         <label for="_opc_gen_source_file"  data-toggle="popover"> 
                             <span class="data-content glyphicon glyphicon-question-sign" >
@@ -69,12 +69,27 @@
                             <span class="data-title">Pagina inicio</span>:
                         </label>                       
                         <div class="input-group ">
+                            <%
+                                if (Util.isNulo(Util.getValue(opciones, "source_file"))) {
+                            %>
                             <span class="input-group-btn">
                                 <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_gen_source_file" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                    <input type="file" id="_opc_gen_source_file" name="_opc_gen_source_file"  data-ext="html"/>
+                                    <input type="file" id="_opc_gen_source_file" name="_opc_gen_source_file"  data-ext="html"/> 
                                 </span> 
                             </span>
-                            <input class=" form-control" id="_text_gen_source_file"  name="_text_gen_source_file" type="text" placeholder="Pagina de inicio de la aplicacion. Por defecto index.html"  readonly>
+                            <input class=" form-control" id="_text_gen_source_file"  name="_text_gen_source_file" type="text" placeholder="Pagina de inicio de la aplicacion. Por defecto index.html"  readonly />
+                            <%
+                            } else {
+                            %>
+                            <span class="input-group-btn">
+                                <span  class="  btn btn-default   btn-file" aria-label="Seleccionar" id="_bt_gen_source_file" >&nbsp;<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+                                    <input type="hidden" id="_opc_gen_source_file"  name="_opc_gen_source_file" value="<%=Util.getValue(opciones, "source_file")%>"/>
+                                </span> 
+                            </span><input class=" form-control" id="_text_gen_source_file"  name="_text_gen_source_file" type="text" placeholder="Pagina de inicio de la aplicacion. Por defecto index.html"  readonly value="<%=(Util.getValue(opciones, "source_file"))%>"/>
+                            
+                            <%
+                                }
+                            %>
                         </div>
                     </div>
                 </div>
@@ -161,7 +176,7 @@
                 </div>
             </div>
             <div class="row">
-                <div  data-agr="avanzada" class="col-md-5  col-sm-12">                                
+                <div data-ex-apli="related" data-agr="avanzada" class="col-md-5  col-sm-12">                                
                     <div class="row  form-group">
                         <label for="_opc_gen_pgap_version"  data-toggle="popover"> 
                             <span class="data-content glyphicon glyphicon-question-sign" >
@@ -185,7 +200,7 @@
                         </select>
                     </div>
                 </div>
-                <div data-agr="avanzada" class="col-md-5 col-md-offset-2 col-sm-12">  
+                <div data-ex-apli="related" data-agr="avanzada" class="col-md-5 col-md-offset-2 col-sm-12">  
                     <div class="row form-group">
                         <label for="_opc_gen_ErrorUrl_file"  data-toggle="popover"> 
                             <span class="data-content glyphicon glyphicon-question-sign" >
@@ -210,7 +225,7 @@
             </div>
 
             <div class="row">
-                <div  data-agr="avanzada" class="col-md-5  col-sm-12">                                
+                <div data-ex-apli="related" data-agr="avanzada" class="col-md-5  col-sm-12">                                
                     <div class="row  form-group">
                         <label for="_opc_gen_package_app" data-toggle="popover"> 
                             <span class="data-content glyphicon glyphicon-question-sign" >
