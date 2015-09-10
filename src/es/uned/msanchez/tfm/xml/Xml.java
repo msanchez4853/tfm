@@ -101,6 +101,7 @@ public class Xml {
         xmlOutput.setFormat(Format.getPrettyFormat());
         xmlOutput.output(doc, out);
     }
+    
 
     /**
      * Nos permite generar las opciones generales de Phonegap Build, para una aplicacion movil.
@@ -470,7 +471,8 @@ public class Xml {
 
         String descripcion = Util.isNulo(_content) ? "index.html" : _content;
 
-        e_cont.addContent(descripcion);
+       // e_cont.addContent(descripcion);
+        e_cont.setAttribute("src", descripcion);
     }
 
     public void setAuthorApp(String _author, String _href, String _email) throws Exception {

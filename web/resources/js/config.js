@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
+var dialogGuardar = null;
 
 $(window).ready(function(){
     
@@ -25,6 +25,49 @@ $(window).ready(function(){
     
     //$("#_alert_apli").addClass("alert alert-danger alert-dismissible");
     //$("#_alert_apli").alert('close');
+    if( $('span.nav-aspecto').attr("data-aspecto")!='completo'
+        && $('span.nav-aspecto').attr("data-aspecto")!='reducida'){
+        dialogGuardar=  $("#_dd_guardar").dialog({
+            title:'Wizard Config - Generar config.xml',
+            closed:true,
+            modal:true,
+            buttons:[{
+                text:'Guardar',
+                handler:guardarXML
+            },{
+                text:'Mostrar',
+                handler:mostrarXML
+            },{
+                text:'Generar',
+                handler:generarApli
+            },{
+                text:'Cerrar',
+                handler:function(){
+                    $("#_dd_ff_addApp").dialog('close');
+                }
+            }],
+            width:400
+        });
+    }else{
+        dialogGuardar=  $("#_dd_guardar").dialog({
+            title:'Wizard Config - Generar config.xml',
+            closed:true,
+            modal:true,
+            buttons:[{
+                text:'Guardar',
+                handler:guardarXML
+            },{
+                text:'Mostrar',
+                handler:mostrarXML
+            },{
+                text:'Cerrar',
+                handler:function(){
+                    $("#_dd_ff_addApp").dialog('close');
+                }
+            }],
+            width:400
+        });
+    }
     reiniciarFormAcceso();
 }
 );
@@ -71,7 +114,7 @@ function defineEvents(){
             placement:place
         });
         s_pop_cont.html('&nbsp;');
-    })
+    });
     $('[data-toggle="tooltip"]').tooltip();
     $("[required]").blur(validate_event);
     $("[data-path]").blur(validate_path);
@@ -101,7 +144,7 @@ function establecerAspectoIni(_this){
         }else{
             $("[data-ex-apli='"+_this.attr("data-aspecto")+"']").hide();
             $("[data-select-to='"+_this.attr("data-aspecto")+"']").prop( "checked", true );
-         //   $("[data-select-to='"+_this.attr("data-aspecto")+"']").prop('readonly', true);
+        //   $("[data-select-to='"+_this.attr("data-aspecto")+"']").prop('readonly', true);
         }
     }
 }
@@ -190,6 +233,8 @@ function validate_element(_this){
         return true;
     }
 }
+
+
 function generarXml(){
    
     var validate = true;
@@ -204,15 +249,28 @@ function generarXml(){
     }
    
     if(validate){ 
-        $.messager.confirm('Wizard Config', 'Por favor!!\n\
-            , aseg&uacute;rese de guardar el archivo config.xml en el nivel superior de su aplicacion (el mismo nivel que el archivo index.html). <br/>\n\
-            De lo contrario al generar la aplicacion con Phonegap build no se crear&aacute; correctamente.<br/>  Desea continuar?', function(r){
-            
-            if (r){
-                $("#form_guardar").submit();
-            }
-        });
+        dialogGuardar.dialog("open");
     }
+}
+
+
+function guardarXML(){
+    enviarPet('guardar');
+}
+
+function mostrarXML(){
+    enviarPet('mostrar');
+}
+
+function generarApli(){
+    enviarPet('generar');
+}
+
+
+function enviarPet(opcion){
+    $("#form_guardar > input#option").val(opcion);
+    dialogGuardar.dialog("close");
+    $("#form_guardar").submit();
 }
 
 function accederOpciones(e){

@@ -5,6 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+String aspecto = request.getParameter("aspecto");
+%>
 <div class="panel panel-default" id="_opciones_permisos"  data-config="seccion">
     <div class="panel-heading">
         <h3 class="panel-title">Caracteristicas y Permisos/Accesos&nbsp; 
@@ -18,7 +21,7 @@
                     <div id="info_permisos" class="jumbotron img-rounded" >
                         <button type="button" class="_mostrar_info close" data-alert="permisos"><span aria-hidden="true">&times;</span></button>
                         <strong>Caracteristicas y Permisos/Accesos&nbsp;.</strong> Define para la aplicación que estamos construyendo las características de Phonegap Build que va a utilizar la aplicacion
-                         y los permisos/accesos que son necesarios para acceder a determinados dominios.                        
+                        y los permisos/accesos que son necesarios para acceder a determinados dominios.                        
                         <br/>
                         Mas informacion en Phonegap build:  <a href="http://docs.build.phonegap.com/en_US/configuring_features.md.html#Features" class="alert-link" target="_blank">Configuring - Features</a>
                         <span  data-agr="avanzada"> y en <a href="http://docs.build.phonegap.com/en_US/configuring_access_elements.md.html#Access%20Elements" class="alert-link" target="_blank">Configuring - Access Elements</a> </span>
@@ -26,7 +29,7 @@
                 </div>
             </div>
             <div class="row">
-               <label  data-toggle="popover"> 
+                <label  data-toggle="popover"> 
                     <span class="data-content glyphicon glyphicon-question-sign" >
                         Las caracteristicas o APIs de Phonegap Build que nuestra aplicacion va a utilizar.
                     </span>
@@ -138,7 +141,25 @@
                             <tr><th>url</th><th>SubDomain</th><th>Aplicacion Externa</th></tr>
                         </thead>
                         <tbody>
+                            
+                            <%
+                                if (aspecto.equals("related")) {
+                            %>
+                            <tr id="_opc_perm_fila_acceso_1" data-i="1">
+                                <td name="url">*</td>
+                                <td name="subdomains">false</td>
+                                <td name="external">
+                                    <span>false</span>
+
+                                    <input id="_opc_perm_acceso_1_url" name="_opc_perm_acceso_1_url" value="*" type="hidden"/>
+                                    <input id="_opc_perm_acceso_1_subdomains" name="_opc_perm_acceso_1_subdomains" value="false" type="hidden"/>
+                                    <input id="_opc_perm_acceso_1_external" name="_opc_perm_acceso_1_external" value="false" type="hidden"/>
+                                </td>
+                            </tr>
+                            <%    }else{
+                            %>
                             <tr id="_perm_sin_accesos" ><td colspan="3">No se han especificado accesos.</td></tr>
+                            <%}%>
                         </tbody>
                     </table>
                 </div>
