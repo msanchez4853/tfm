@@ -25,8 +25,9 @@ $(window).ready(function(){
     
     //$("#_alert_apli").addClass("alert alert-danger alert-dismissible");
     //$("#_alert_apli").alert('close');
-    if( $('span.nav-aspecto').attr("data-aspecto")!='completo'
-        && $('span.nav-aspecto').attr("data-aspecto")!='reducida'){
+    console.log($("a.navbar-brand").attr("data-aspecto"));
+    if( $("a.navbar-brand").attr("data-aspecto")!='completo'
+        && $("a.navbar-brand").attr("data-aspecto")!='reducida'){
         dialogGuardar=  $("#_dd_guardar").dialog({
             title:'Wizard Config - Generar config.xml',
             closed:true,
@@ -43,7 +44,7 @@ $(window).ready(function(){
             },{
                 text:'Cerrar',
                 handler:function(){
-                    $("#_dd_ff_addApp").dialog('close');
+                    $("#_dd_guardar").dialog('close');
                 }
             }],
             width:400
@@ -62,7 +63,7 @@ $(window).ready(function(){
             },{
                 text:'Cerrar',
                 handler:function(){
-                    $("#_dd_ff_addApp").dialog('close');
+                    $("#_dd_guardar").dialog('close');
                 }
             }],
             width:400

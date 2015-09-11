@@ -1,3 +1,4 @@
+
 <%@page import="es.uned.msanchez.tfm.utilidades.Util"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
@@ -70,6 +71,11 @@
         //Peticion realizada desde RELATED.
         String lab_id = request.getParameter("lab_id");
         String lab_experiment_id = request.getParameter("lab_experiment_id");
+        lab_experiment_id = Util.isNulo(lab_experiment_id) ? "" : lab_experiment_id;
+
+        String login = request.getParameter("login");
+        login = Util.isNulo(login) ? "N" : login;
+
         boolean _onlyLabApp = true;
         if (!Util.isNulo(lab_id)) {
             String pag_inicio = "mobile.html";
@@ -90,9 +96,7 @@
             }
             opciones_generales.put("source_file", pag_inicio);
 
-
         }
-
 
         session.setAttribute("opciones_generales", opciones_generales);
         session.setAttribute("opciones_avanzadas", opciones_avanzadas);
@@ -101,7 +105,6 @@
         session.setAttribute("opciones_permisos", opciones_permisos);
         session.setAttribute("opciones_plugins", opciones_plugins);
         session.setAttribute("opciones_splash", opciones_splash);
-
 
 
     %>
@@ -116,7 +119,6 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
-
                         </button> 
                         <a class="navbar-brand" href="#" data-aspecto="<%=aspecto%>" data-toggle="popover" data-toggle-pos="bottom">
                             <%if (aspecto.equalsIgnoreCase("related")) {%>
@@ -147,7 +149,7 @@
                             <li ><a href="#_opciones_desarrollador">Info. Desarrollador</a></li>
                             <li><a href="#_opciones_plugins">Plugins</a></li>
                             <li><a id="_opciones_guardar" href="#"><span class="glyphicon glyphicon-floppy-disk">&nbsp;Guardar</span></a></li>                    
-                            <%if (aspecto.equalsIgnoreCase("related")) {%>
+                                <%if (aspecto.equalsIgnoreCase("related")) {%>
                             <li><a href="#">User: <span id="user">None</span></a></li>
                             <li><!-- Button trigger modal -->
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#labsSelectionModalDialog">
@@ -182,7 +184,7 @@
             </form>
         </section>        
         <%
-            if (aspecto.equalsIgnoreCase("related") && 1==2) {
+            if (aspecto.equalsIgnoreCase("related") && login.equals("S")) {
         %>
         <section id="loginInfo">
             <p class="alert alert-info" role="alert">Opening login window...</p>
@@ -241,24 +243,24 @@
         <script src="http://lab-services.scc.uned.es/html5/related/webclientv3/js/rlab_services_systems.js"></script>
 
         <script>
-            $(document).ready(function(){
+            $(document).ready(function () {
                 // Hide main sections !!!
                 $('#navegacion').addClass("hidden");
                 $('#contenido').addClass("hidden");
                 $('#pie').addClass("hidden");
                 // Init auth
-                RLAB.SERVICES.AUTH_HTML.initAuth(onInfoMessageReceived); 
-                RLAB.SERVICES.AUTH_HTML.openLoginWindow(onLoginWindowOpenned); 
-                
-                $('#btnSelectLabExp').on('click', function (){
+                RLAB.SERVICES.AUTH_HTML.initAuth(onInfoMessageReceived);
+                RLAB.SERVICES.AUTH_HTML.openLoginWindow(onLoginWindowOpenned);
+
+                $('#btnSelectLabExp').on('click', function () {
                     // Get info from modal
                     var _onlyLabApp = <%=_onlyLabApp%>//$("#cbxOnlyLabApp").is(':checked');
-                    $('#selectedLab').text( $('#labs :selected').text() );
+                    $('#selectedLab').text($('#labs :selected').text());
                     ///$('#selectedLabId').val($('#labs :selected').val())
                     $('#selectedLabId').val('<%=lab_id%>');
-                    $('#selectedExp').text( "NONE" );
-                    if (!_onlyLabApp){
-                        $('#selectedExp').text( $('#experiments :selected').text() );
+                    $('#selectedExp').text("NONE");
+                    if (!_onlyLabApp) {
+                        $('#selectedExp').text($('#experiments :selected').text());
                         //$('#selectedExpId').val($('#experiments :selected').val())
                         $('#selectedExpId').val('<%=lab_experiment_id%>');
                     }
@@ -266,10 +268,10 @@
                     // NOTA: Se usan campos escondidos como prueba, pero lo suyo es usar variables javascript
                     // o en su defecto un bean de sesion para el control de acceso/info de los labs
                 });
-                
+
             });
-            
-            function onInfoMessageReceived(userInfo){
+
+            function onInfoMessageReceived(userInfo) {
                 // Hide main sections !!!
                 $('#loginInfo').addClass("hidden");
                 // Add the customized content
@@ -283,37 +285,37 @@
                 var count = 0;
                 // Sort by name
                 userInfo.labs.sort(sortLabsByName);
-                $(userInfo.labs).each(function() {
-                    sel.append($("<option>").attr('value',this.ID).text(this.name));
+                $(userInfo.labs).each(function () {
+                    sel.append($("<option>").attr('value', this.ID).text(this.name));
                     count++;
                 });
-                if (count>0){
+                if (count > 0) {
                     // Add the event to select
-                    $("#labs").change(function() {
+                    $("#labs").change(function () {
                         var _lab_id = this.value;
                         // Load experiments to the experiments "select"
                         var experiments = RLAB.SERVICES.SYSTEMS.getExperiments(_lab_id);
-                        if (typeof experiments != "undefined"){
-                            if (!(experiments instanceof Array) && (typeof experiments == "object") ){
+                        if (typeof experiments != "undefined") {
+                            if (!(experiments instanceof Array) && (typeof experiments == "object")) {
                                 experiments = [experiments];
                             }
                             var sel2 = $('#experiments');
                             sel2.find("option").remove();
-                            $(experiments).each(function() {
-                                sel2.append($("<option>").attr('value',this.id).text(this.experiment_name));
+                            $(experiments).each(function () {
+                                sel2.append($("<option>").attr('value', this.id).text(this.experiment_name));
                             });
                         }
                     });
                 }
             }
-            
-            function onLoginWindowOpenned(){
+
+            function onLoginWindowOpenned() {
                 $('#loginWindowOpenned').removeClass("hidden");
             }
-            
-            function sortLabsByName(a, b){
+
+            function sortLabsByName(a, b) {
                 var aName = a.name.toLowerCase();
-                var bName = b.name.toLowerCase(); 
+                var bName = b.name.toLowerCase();
                 return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
             }
 
@@ -333,7 +335,13 @@
             <ul>
                 <li><strong>Guardar</strong>: Guarda en su pc el fichero generado. </li>
                 <li><strong>Mostrar</strong>: Muestra en el navegador el fichero generado. </li>
+                    <%
+            if (aspecto.equalsIgnoreCase("related")) {
+                    %>
                 <li><strong>Generar</strong>: Genera el laboratorio con el fichero generado. </li>
+                    <%
+                    }
+                    %>
                 <li><strong>Cancelar</strong>: No genera el documento. </li>
             </ul>
         </div>
