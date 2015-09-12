@@ -428,8 +428,10 @@ public class Curl {
         StringBody data_p = new StringBody(_data.toJSONString(), ContentType.TEXT_PLAIN);
 
         Map<String, Object> params = new HashMap<String, Object>();
+         _data.put("private", false);
         params.put("data", data_p);
         params.put("file", file);
+        
 
         respuestaJSON = postMethodPhonegap("/api/v1/apps/", params);
 

@@ -16,7 +16,7 @@ import java.util.zip.ZipOutputStream;
  *
  * @author adrastea
  */
-public class zip {
+public class Zip {
 
     public enum Extension {
 
@@ -34,7 +34,7 @@ public class zip {
         }
     }
 
-// Crea un zip desde un archivo.
+// Crea un Zip desde un archivo.
     public static void crearZip(String origen, String destino, Extension extension) throws IOException {
         FileInputStream in = new FileInputStream(origen);
         GZIPOutputStream out =
@@ -48,7 +48,7 @@ public class zip {
         out.close();
     }
 
-// Crea un zip desde un directorio.
+// Crea un Zip desde un directorio.
     public static void zipDirectorio(String dir, String destino, Extension extension)
             throws IOException, IllegalArgumentException {
 // Revisa que el directorio sea direcorio y lee sus archivos.
@@ -67,7 +67,37 @@ public class zip {
             }
             FileInputStream in = new FileInputStream(f);
 
-            ZipEntry entry = new ZipEntry(f.getPath()); //Crea una entrada zip para cada archivo,
+            ZipEntry entry = new ZipEntry(f.getPath()); //Crea una entrada Zip para cada archivo,
+            out.putNextEntry(entry);
+
+            while ((bytesRead = in.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+            in.close();
+        }
+        out.close();
+    }
+    
+    public static void zipDirectorio(File source, File dest,String name, Extension extension )
+            throws IOException, IllegalArgumentException {
+// Revisa que el directorio sea direcorio y lee sus archivos.
+        File d = source;
+        if (!d.isDirectory()) {
+            throw new IllegalArgumentException("No es un directorio.");
+        }
+        String[] entries = d.list();
+        byte[] buffer = new byte[4096]; // Crea un buffer para copiar
+        int bytesRead;
+        dest.mkdirs();
+        ZipOutputStream out = new ZipOutputStream(new FileOutputStream(new File(dest,name+extension.getValue())));
+        for (int i = 0; i < entries.length; i++) {
+            File f = new File(d, entries[i]);
+            if (f.isDirectory()) {
+                continue; //Ignora el directorio
+            }
+            FileInputStream in = new FileInputStream(f);
+
+            ZipEntry entry = new ZipEntry(f.getPath()); //Crea una entrada Zip para cada archivo,
             out.putNextEntry(entry);
 
             while ((bytesRead = in.read(buffer)) != -1) {

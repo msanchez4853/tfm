@@ -7,7 +7,9 @@ package es.uned.msanchez.tfm.phonegap.curl.service;
 import es.uned.msanchez.tfm.phonegap.curl.exception.CurlException;
 import es.uned.msanchez.tfm.phonegap.curl.Curl;
 import es.uned.msanchez.tfm.utilidades.Util;
+import es.uned.msanchez.tfm.utilidades.Zip;
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletRequest;
@@ -32,6 +34,7 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import javax.ws.rs.ext.Providers;
+import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpHeaders;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -293,4 +296,139 @@ public class Phonegap {
         }
 
     }
+
+    /**
+     * Obtiene la informacion de la aplicacion indicada que se encuentra en
+     * Phonega Build.
+     *
+     * @param idapli
+     * @return
+     * @throws CurlException
+     */
+    @GET
+    @Path("/check/{lab}/{lab_experiment}")
+    @Produces("application/json")
+    public String checkConfig(@Context HttpServletRequest request, @PathParam("lab") String lab_id, @PathParam("lab_experiment") String lab_experiment_id) throws CurlException {
+
+        String ip = request.getRemoteAddr();
+        System.out.println("MI IP --- " + ip);
+
+
+        File f_config = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "www/config.xml");
+
+        JSONObject resul = new JSONObject();
+        resul.put("lab_id", lab_id);
+        resul.put("lab_experiment_id", lab_experiment_id);
+        if (f_config.exists()) {
+            resul.put("status", "ok");
+        } else {
+            resul.put("status", "error");
+        }
+
+
+
+        //  resul.put("rows", _rows);
+
+
+        return resul.toJSONString();
+    }
+
+    
+    
+    @GET
+    @Path("/pkg/{lab}/{lab_experiment}")
+    @Produces("application/json")
+    public String pkgLab(@Context HttpServletRequest request, @PathParam("lab") String lab_id, @PathParam("lab_experiment") String lab_experiment_id) throws CurlException {
+
+        String ip = request.getRemoteAddr();
+        System.out.println("MI IP --- " + ip);
+
+        File source = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "git" + File.separator + "memory" + File.separator + "www");
+        File dest = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "tmp");
+        //dest.mkdirs();
+JSONObject resul = new JSONObject();
+        resul.put("lab_id", lab_id);
+        resul.put("lab_experiment_id", lab_experiment_id);
+        
+
+        try {
+            FileUtils.copyDirectory(source, dest);
+        } catch (IOException ex) {
+            Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+                resul.put("status", "error");
+            return resul.toJSONString();
+        }
+
+
+        File f_config = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "www/config.xml");
+        try {
+            FileUtils.copyFileToDirectory(f_config, dest);
+        } catch (IOException ex) {
+            Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+                resul.put("status", "error");
+            return resul.toJSONString();
+        }
+        
+        
+        File dest_zip = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "zip");
+        try {
+            Zip.zipDirectorio(dest, dest_zip,"lab",Zip.Extension.ZIP);
+        } catch (IOException ex) {
+            Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+                resul.put("status", "error");
+            return resul.toJSONString();
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+                resul.put("status", "error");
+            return resul.toJSONString();
+        }
+        
+        
+            resul.put("status", "ok");            
+            return resul.toJSONString();
+    }
+    
+    
+        /**
+     * Obtiene la informacion de la aplicacion indicada que se encuentra en
+     * Phonega Build.
+     *
+     * @param idapli
+     * @return
+     * @throws CurlException
+     */
+    @GET
+    @Path("/build/{lab}/{lab_experiment}")
+    @Produces("application/json")
+    public String buildLab(@Context HttpServletRequest request, @PathParam("lab") String lab_id, @PathParam("lab_experiment") String lab_experiment_id) throws CurlException {
+
+        String ip = request.getRemoteAddr();
+        System.out.println("MI IP --- " + ip);
+
+        File lab_zip = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "zip"+File.separator+"lab"+".zip");
+        
+
+        JSONObject resul = new JSONObject();
+        resul.put("lab_id", lab_id);
+        resul.put("lab_experiment_id", lab_experiment_id);
+        
+        System.out.println(lab_zip.getAbsolutePath());
+        if (lab_zip.exists()) {
+            
+            Curl phonegap = new Curl();
+            JSONObject misdatos = phonegap.createApp(lab_id, "file", lab_zip, "", null);
+            resul.put("info_apli", misdatos.toJSONString());
+            resul.put("status", "ok");
+        } else {
+            resul.put("status", "error");
+        }
+
+
+
+        //  resul.put("rows", _rows);
+
+
+        return resul.toJSONString();
+    }
+
 }

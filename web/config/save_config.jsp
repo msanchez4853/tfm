@@ -84,8 +84,11 @@
         FileOutputStream fo = new FileOutputStream(f_config);
         xml.generarXml(fo);
         fo.close();
-        String nextJSP = "/buildapps/apps.jsp";
+        String nextJSP = "/buildapps/buildlab.jsp";
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+        request.setAttribute("lab_id", lab_id);
+        request.setAttribute("lab_experiment_id", lab_experiment_id);
+        request.setAttribute("apli_ext", "related");
         dispatcher.forward(request, response);
     }
 

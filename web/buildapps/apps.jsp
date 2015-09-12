@@ -18,7 +18,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Wizard Config.</title>
+        <title>Build Apps</title>
         <link rel="stylesheet" href="../resources/bootstrap/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="../resources/bootstrap/css/bootstrap-theme.min.css"/>
         <link rel="stylesheet" href="../resources/jquery-easyui/themes/gray/easyui.css"/>
