@@ -7,6 +7,7 @@ var mitoken=null;
 var _pasActivo=null
 var lab_id;
 var lab_experiment_id;
+var nPlatform = 0;
 $(window).ready(function(){
     
 
@@ -14,8 +15,8 @@ $(window).ready(function(){
     ajustartam();
     defineEvents();  
     
-     lab_id= $("#_ff_lab_id").val();
-     lab_experiment_id= $("#_ff_lab_experiment_id").val();
+    lab_id= $("#_ff_lab_id").val();
+    lab_experiment_id= $("#_ff_lab_experiment_id").val();
         
     $("#_dd_ff_infoApp").hide();
     iniciaGeneracionApp(lab_id,lab_experiment_id);
@@ -40,11 +41,7 @@ function ajustartam(){
 }
 
 function defineEvents(){
-    
-    $("a[name='del']").click(delApp); 
-    $("a[name='add']").click(addApp); 
-    $("a[name='edit']").click(editApp); 
-  
+         
 }
 
 function iniciaGeneracionApp(lab_id,lab_experiment_id){
@@ -66,7 +63,7 @@ function gestionRespuestaPaso1(_data,  textStatus,  jqXHR){
         tr_paso.addClass("success");
         pasoActivo ="p_p_2";
         //Iniciamos el paso 2
-          mitoken = getAuthorization('apps/pkg/'+lab_id+'/'+lab_experiment_id,'GET',{},gestionRespuestaPaso2,gestionError);       
+        mitoken = getAuthorization('apps/pkg/'+lab_id+'/'+lab_experiment_id,'GET',{},gestionRespuestaPaso2,gestionError);       
     }else{
         //No se ha encontrado el fichero config.xml.
         tr_paso.addClass("warning");
@@ -84,7 +81,7 @@ function gestionRespuestaPaso2(_data,  textStatus,  jqXHR){
         tr_paso.addClass("success");
         pasoActivo ="p_p_3";
         //Iniciamos el paso 3
-          mitoken = getAuthorization('apps/build/'+lab_id+'/'+lab_experiment_id,'GET',{},gestionRespuestaPaso3,gestionError);       
+        mitoken = getAuthorization('apps/build/'+lab_id+'/'+lab_experiment_id,'GET',{},gestionRespuestaPaso3,gestionError);       
     }else{
         //No se ha encontrado el fichero config.xml.
         tr_paso.addClass("warning");
@@ -98,8 +95,9 @@ function gestionRespuestaPaso3(_data,  textStatus,  jqXHR){
     tr_paso = $('#'+$('#'+pasoActivo).attr('data-paso'));
     pasoActivo=null; //parar barra de progreso
     console.log('gestionRespuestaPaso3');
-    if(_data.status=='ok'){
+    if(_data.status=='ok'){        
         tr_paso.addClass("success");        
+        mostrarLab(_data.info_apli);
     }else{
         //No se ha encontrado el fichero config.xml.
         tr_paso.addClass("warning");
@@ -107,14 +105,76 @@ function gestionRespuestaPaso3(_data,  textStatus,  jqXHR){
 }
 
 
+function mostrarLab(infoLab){
+     
+    console.log('mostrarLab')
+    console.log(infoLab)
+     
+     
+    if(infoLab.status==201){
+        nPlatform=0;
+        //Se ha creado correctamente
+        var respuesta = infoLab.respuesta;
+        $("#_info_name_apli").html(respuesta.title);
+        $("#_info_vapp_apli").html(respuesta.version);
+        $("#_info_vphonegap_apli").html(respuesta.phonegap_version);
+        $("#_info_package_apli").html(respuesta.package);
+        //respuesta.private
+        $("#_info_idphonegap_apli").html(respuesta.id);
+        $("#_info_desc_apli").html(respuesta.descripcion);
+        var idApli = respuesta.id;
+        var status = respuesta.status;
+        var error = respuesta.error;
+        comprobarInfoPlatform(idApli,'android',status.android, error.android);
+        comprobarInfoPlatform(idApli,'ios',status.ios, error.ios);
+        comprobarInfoPlatform(idApli,'winphone',status.winphone, error.winphone);
+        
+         
+    }else{
+    //No se ha creado correctamente
+    }
+     
+    $("#_dd_ff_infoApp").show();
+     
+}
+
+function comprobarInfoPlatform(idApli,platform,status, error){
+
+    if(status=='pending'){
+        nPlatform++;
+        comprobarEstado(idApli,platform);
+    }
+    if(status=='error'){
+        $("#_info_"+platform+"_apli").html("No se ha podido generar la aplicacion. Motivo: "+error);
+    }
+    if(status=='complete'){
+        nPlatform++;
+        obtenerApli(idApli,platform);        
+    }
+
+}
+
+function comprobarEstado(idApli,platform){
+    mitoken = getAuthorization('apps/download/'+lab_id+'/'+lab_experiment_id+'/'+idApli+'/'+platform,'GET',{
+        name:$("#_info_name_apli")
+    },gestionComprobarEstado,gestionError); 
+    
+}
+
+function obtenerApli(idApli,platform){
+        mitoken = getAuthorization('apps/download/'+lab_id+'/'+lab_experiment_id+'/'+idApli+'/'+platform,'GET',{
+        name:$("#_info_name_apli")
+    },gestionObtenerApli,gestionError); 
+}
+
 function startPaso(){
     
     if(pasoActivo!=null){
-        console.log(pasoActivo)
+        
         var value = $('#'+pasoActivo).progressbar('getValue');
-        var aumento = (value <50)?10:(value>50 && value < 70 ? 5:3 );
+        var aumento = (value <50)?8:(value>50 && value < 70 ? 4:2 );
         var tmp = (value < 50)?300:(value >50 && value < 70 ? 400:500 );
-        console.log(aumento+'  ' +tmp);
+        
         if (value < 100){
             value += Math.floor(Math.random() * aumento);
             $('#'+pasoActivo).progressbar('setValue', value);
@@ -124,23 +184,7 @@ function startPaso(){
     
 };
      
-function delApp(e){
-     
-    var row = $('#apps_phonegap').datagrid('getSelected');
-    if (row){        
-        
-        $.messager.confirm('Mis Apps', 'Esta seguro de eliminar la aplicacion seleccionada?', function(r){
-            if (r){
-                mitoken = getAuthorization('apps/'+row.id,'DELETE',{
-                    idApp:''+row.id
-                },gestionRespuestaWithReload,gestionError);    
-            
-            }
-        });
-    }else{
-        $.messager.alert('Mis Apps','Debe seleccionar una aplicacion','error')
-    }
-}
+
 
 
 function gestionError(jqXHR, textStatus, errorThrown){
@@ -151,252 +195,12 @@ function gestionError(jqXHR, textStatus, errorThrown){
     $.messager.alert('Mis Apps','Se ha generado un error al realizar la operacion','error');
 }
 
-function gestionRespuestaWithReload(_data,  textStatus,  jqXHR){
-    console.log(_data)
-    console.log(textStatus)
-    $.messager.show(
-    {
-        title:'Mis Apps',
-        msg:'Operacion realizada con exito',
-        showType:'show',
-        style:{
-            right:'',
-            top:document.body.scrollTop+document.documentElement.scrollTop,
-            bottom:''
-        }
-    });
 
-    closeProgress();
- 
-    reloadApp();
     
-}
 
-function gestionRespuestaNoReload(_data,  textStatus,  jqXHR){
-    
-    // console.log(_data)
-    // console.log(textStatus)
-    $.messager.show(
-    {
-        title:'Mis Apps',
-        msg:'Operacion realizada con exito',
-        showType:'show',
-        style:{
-            right:'',
-            top:document.body.scrollTop+document.documentElement.scrollTop,
-            bottom:''
-        }
-    });
-
-    closeProgress();
- 
-    $('#apps_phonegap').datagrid('loadData',  _data);
-    
-}
-
-function reloadApp(e){
-    mitoken = getAuthorization('apps','GET',{},gestionRespuestaNoReload,gestionError);  
-}
-
-function editApp(e){
-    var row = $('#apps_phonegap').datagrid('getSelected');
-    if (row){        
-        
-        $.messager.confirm('Mis Apps', 'Va a volver a generar la aplicacion para todas las plataformas?', function(r){
-            if (r){
-                mitoken = getAuthorization('apps/'+row.id+'/build/','POST',
-                {},gestionRespuestaWithReload,gestionError);    
-            
-            }
-        });
-    }else{
-        $.messager.alert('Mis Apps','Debe seleccionar una aplicacion','error')
-    }
-}
-
-function muestraDetalleApp(id,index){
-    $('#apps_phonegap').datagrid('selectRow',index);
-    var row=$('#apps_phonegap').datagrid('getSelected');
-        
-    $('#_info_vapp_apli').html(row.version);
-    $('#_info_vphonegap_apli').html(row.phonegap_version);
-    $('#_info_desc_apli').html(row.desc);
-    $('#_info_repo_apli').html(row.repo);
-        
-    $("#_dd_ff_infoApp").dialog({
-        title:'Informaci&oacute;n de '+row.title
-    })
-    .dialog("open");
-}
-
-function addApp(e){
-    
-    $('#_ff_addApp').form('clear');
-    $("#_ff_addApp_men").html('');
-    $("#_dd_ff_addApp").dialog("open");
-    
-/*initProgress();
-    getAuthorization(url,method,data, gestionRespuesta, gestionError)
-    $.ajax({
-        url:'addApp.jsp',
-        data:{
-            idApp:''
-        },
-        datatype:'json',
-        method:'POST',
-        success:gestionRespuesta,
-        error:gestionError
-    })*/
-}
-
-function validarAddApp(){
-   
-    if( $("#_ff_addApp_title").val()!='' &&  $("#_ff_addApp_url").val()!=''){
-    
-        _info={};
-        _info.title = $("#_ff_addApp_title").val();
-        _info.method = "remote_repo";//$("#_ff_addApp_method").val();
-        _info.url = $("#_ff_addApp_url").val();//"https://github.com/msanchez4853/memory.git";
-  
-        _data = {};
-        _data.datos = JSON.stringify(_info);
-        // console.log(_data);
-        mitoken = getAuthorization('apps','POST',_data,gestionRespuestaWithReload,gestionError);
-        $("#_dd_ff_addApp").dialog("close");
-    }else{
-        $("#_ff_addApp_men").html('Error en los parametros introducidos. Compruebe los valores de los campos.');
-        $("#_dd_ff_addApp").dialog("open");
-    }
-}
-
-function formatPlatformAndroid(val,row,index){
-    var platform = 'android';
-      
-    salida = formatPlatform(row.id, platform, val, row.download_android, row.error_android);
-   
-    return salida;
-}
-
-function formatPlatformIOS(val,row,index){
-    var platform = 'ios';
-    salida = formatPlatform(row.id, platform, val, row.download_ios, row.error_ios);
-
-    return salida;
-}
-
-function formatPlatformWin(val,row,index){
-    var platform = 'winphone';
-    salida = formatPlatform(row.id, platform, val, row.download_win, row.error_win);
-
-    return salida;
-}
-
-
-function formatTitle(val,row,index){
-    salida = '<a href="#" class="_mas_info" id="_mas_info_'+row.id+'" onclick="muestraDetalleApp('+row.id+','+index+');return false;" >'+val+'</span>';
-
-    return salida;
-}
-
-function formatPlatform(id,platform, estado, download,error){
-    var salida = '<a  href="#" data-platform="'+platform+'" data-apli="'+id+'"'; 
-    if(estado=='pending'){
-        salida+='class="tool_button icon-help" name="getInfo"'
-    }
-    
-    if(estado=='complete'){
-        salida+='class="tool_button icon-ok"  name="getOpc" data-download="'+download+'"'
-    }
-    
-    if(estado=='error'){
-        salida+='class="tool_button icon-no"  name="getError" data-error="'+error+'"'
-    }
-    salida+='></a>';    
-    return salida 
-}
-
-
-function getInfoApp(e){
-    var platf = $(this).attr('data-platform');
-    _platfMenuMo = platf;
-    $.messager.alert('Mis Apps','No se ha terminado de generar la aplicacion para la plataforma '+_platfMenuMo,'info')
-}
-function getErrorApp(e){
-    
-}
-function getOpcApp(e){
-    //La aplicacion se encuentra pending
-    // alert('aqui')
-    var id = $(this).attr('data-apli');
-    _idMenuMo = id;
-    var platf = $(this).attr('data-platform');
-    _platfMenuMo = platf;
-     
-    $("#menuPlatform").menu('show',{
-        left: e.pageX,
-        top: e.pageY
-    });
-}
-
-
-function handlerMenu(item){
-
-    if(item.text=='Build') buildApp();
-    if(item.text=='Descargar') downloadApp();
-}
-
-function buildApp(e){
-     
-    var row = $('#apps_phonegap').datagrid('getSelected');
-    if (row){        
-        
-        $.messager.confirm('Mis Apps', 'Va a volver a generar la aplicacion para la plataforma'+_platfMenuMo+'?', function(r){
-            if (r){
-                mitoken = getAuthorization('apps/'+row.id+'/build/'+_platfMenuMo,'POST',
-                {},gestionRespuestaWithReload,gestionError);    
-            
-            }
-        });
-    }else{
-        $.messager.alert('Mis Apps','Debe seleccionar una aplicacion','error')
-    }
-}
-
-
-function downloadApp(e){
-     
-    var row = $('#apps_phonegap').datagrid('getSelected');
-    if (row){        
-        
-        $.messager.confirm('Mis Apps', 'Va a descargar la aplicacion para la plataforma '+_platfMenuMo+'?', function(r){
-            if (r){
-                //window.open(serverRest+'apps/'+row.id+'/'+_platfMenuMo+'?name='+row.title, "download", "");
-                $("#_ff_downApp_name").val(row.title);
-                $("#_ff_downApp").attr("target","download_"+row.id);
-                $("#_ff_downApp").attr("action",serverRest+'apps/'+row.id+'/'+_platfMenuMo);
-                $("#_ff_downApp").submit();
-               
-            }
-        });
-    }else{
-        $.messager.alert('Mis Apps','Debe seleccionar una aplicacion','error')
-    }
-}
-
-function initProgress(){
-    var win = $.messager.progress({
-        title:'Realizando Operacion ',
-        msg:'Espere por favor!!!'
-    });
-
-}
-
-function closeProgress(){
-    $.messager.progress('close');
-}
 
 function getAuthorization(_url,_method,_data, _gestionRespuesta, _gestionError){
-   // initProgress();
+    // initProgress();
     if($.support.cors){
         $.ajax({        
             //url:'http://localhost:8084/tfm/webservices/'+_url,

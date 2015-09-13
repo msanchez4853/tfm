@@ -90,7 +90,7 @@
             }
             pag_inicio = pag_inicio + "&lab_id=" + lab_id;
 
-            if (Util.isNulo(lab_experiment_id)) {
+            if (!Util.isNulo(lab_experiment_id)) {
                 pag_inicio = pag_inicio + "&lab_experiment_id=" + lab_experiment_id;
                 _onlyLabApp = false;
             }

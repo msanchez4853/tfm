@@ -73,13 +73,15 @@
                 <div class="col-md-12 table-responsive" >
                     <table class="table table-striped table-hover">
                         <caption>Informacion sobre la aplicacion <span id="_info_name_apli">&nbsp;</span></caption>
-                        <tr><td class="etiqueta_info"> Version Aplicacion</td><td class="valor_info" id="_info_vapp_apli"> --- </td></tr>
-                        <tr><td class="etiqueta_info"> Version Phonegap</td><td class="valor_info" id="_info_vphonegap_apli"> --- </td></tr>
                         <tr><td class="etiqueta_info"> Descripcion</td><td class="valor_info" id="_info_desc_apli"> --- </td></tr>
-                        <tr><td class="etiqueta_info"> Url repositorio</td><td class="valor_info" id="_info_repo_apli"> --- </td></tr>
+                        <tr><td class="etiqueta_info"> Version Aplicacion</td><td class="valor_info" id="_info_vapp_apli"> --- </td></tr>
+                        <tr><td class="etiqueta_info"> Package Aplicacion</td><td class="valor_info" id="_info_package_apli"> --- </td></tr>
+                        <tr><td class="etiqueta_info"> Version Phonegap</td><td class="valor_info" id="_info_vphonegap_apli"> --- </td></tr>
+                        <tr><td class="etiqueta_info"> Id Phonegap</td><td class="valor_info" id="_info_idphonegap_apli"> --- </td></tr>
+                        <%--<tr><td class="etiqueta_info"> Url repositorio</td><td class="valor_info" id="_info_repo_apli"> --- </td></tr>--%>
                         <tr><td class="etiqueta_info"> Android</td><td class="valor_info" id="_info_android_apli"> --- </td></tr>
                         <tr><td class="etiqueta_info"> iOS</td><td class="valor_info" id="_info_ios_apli"> --- </td></tr>
-                        <tr><td class="etiqueta_info"> WinPhone</td><td class="valor_info" id="_info_win_apli"> --- </td></tr>
+                        <tr><td class="etiqueta_info"> WinPhone</td><td class="valor_info" id="_info_winphone_apli"> --- </td></tr>
                     </table>                
                 </div>
             </div>

@@ -4,12 +4,20 @@
  */
 package es.uned.msanchez.tfm.phonegap.curl.service;
 
+import com.sun.jersey.spi.resource.Singleton;
 import es.uned.msanchez.tfm.phonegap.curl.exception.CurlException;
 import es.uned.msanchez.tfm.phonegap.curl.Curl;
 import es.uned.msanchez.tfm.utilidades.Util;
 import es.uned.msanchez.tfm.utilidades.Zip;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletRequest;
@@ -46,6 +54,7 @@ import org.json.simple.parser.ParseException;
  * @author adrastea
  */
 @Path("/apps")
+@Singleton
 public class Phonegap {
 
     /**
@@ -333,8 +342,6 @@ public class Phonegap {
         return resul.toJSONString();
     }
 
-    
-    
     @GET
     @Path("/pkg/{lab}/{lab_experiment}")
     @Produces("application/json")
@@ -346,16 +353,16 @@ public class Phonegap {
         File source = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "git" + File.separator + "memory" + File.separator + "www");
         File dest = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "tmp");
         //dest.mkdirs();
-JSONObject resul = new JSONObject();
+        JSONObject resul = new JSONObject();
         resul.put("lab_id", lab_id);
         resul.put("lab_experiment_id", lab_experiment_id);
-        
+
 
         try {
             FileUtils.copyDirectory(source, dest);
         } catch (IOException ex) {
             Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
-                resul.put("status", "error");
+            resul.put("status", "error");
             return resul.toJSONString();
         }
 
@@ -365,31 +372,30 @@ JSONObject resul = new JSONObject();
             FileUtils.copyFileToDirectory(f_config, dest);
         } catch (IOException ex) {
             Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
-                resul.put("status", "error");
+            resul.put("status", "error");
             return resul.toJSONString();
         }
-        
-        
+
+
         File dest_zip = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "zip");
         try {
-            Zip.zipDirectorio(dest, dest_zip,"lab",Zip.Extension.ZIP);
+            Zip.zipDirectorio(dest, dest_zip, "lab", Zip.Extension.ZIP);
         } catch (IOException ex) {
             Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
-                resul.put("status", "error");
+            resul.put("status", "error");
             return resul.toJSONString();
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
-                resul.put("status", "error");
+            resul.put("status", "error");
             return resul.toJSONString();
         }
-        
-        
-            resul.put("status", "ok");            
-            return resul.toJSONString();
+
+
+        resul.put("status", "ok");
+        return resul.toJSONString();
     }
-    
-    
-        /**
+
+    /**
      * Obtiene la informacion de la aplicacion indicada que se encuentra en
      * Phonega Build.
      *
@@ -400,35 +406,211 @@ JSONObject resul = new JSONObject();
     @GET
     @Path("/build/{lab}/{lab_experiment}")
     @Produces("application/json")
-    public String buildLab(@Context HttpServletRequest request, @PathParam("lab") String lab_id, @PathParam("lab_experiment") String lab_experiment_id) throws CurlException {
+    public synchronized String buildLab(@Context HttpServletRequest request, @PathParam("lab") String lab_id, @PathParam("lab_experiment") String lab_experiment_id) throws CurlException {
 
         String ip = request.getRemoteAddr();
         System.out.println("MI IP --- " + ip);
+        Curl phonegap = new Curl();
 
-        File lab_zip = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "zip"+File.separator+"lab"+".zip");
-        
+        // Comprobamos si existe otra aplicacion en Phonegap privada.
+        JSONObject info_apps = phonegap.getApps();
+        JSONObject apliPrivada = null;
+        System.out.println(info_apps);
+        if (((Integer) info_apps.get("status")) == 200) {
+            JSONObject respuesta = (JSONObject) info_apps.get("respuesta");
+            JSONArray apps = (JSONArray) respuesta.get("apps");
+            for (int i = 0; i < apps.size(); i++) {
+                JSONObject apli = (JSONObject) apps.get(i);
+                if (((Boolean) apli.get("private")) == true) {
+                    apliPrivada = apli;
+                    break;
+                }
+            }
+        }
 
         JSONObject resul = new JSONObject();
+
+        if (apliPrivada != null) {
+            //existe aplicacion privada
+            //Gestionamos si podemos eliminarla.
+            //Comprobamos que la aplicacion no este en proceso de creacion para una plataforma.
+            JSONObject info_status = (JSONObject) apliPrivada.get("status");
+            Collection c = info_status.values();
+            for (Iterator i = c.iterator(); i.hasNext();) {
+                String value = (String) i.next();
+                if (value.contains("pending")) {
+                    //existe una aplicacion pendiente de ejecutar.
+                    resul.put("error", "Existe una aplicacion privada. La aplicacion esta pendiente de crearse para una plataforma.");
+                    resul.put("status", "error");
+                    return resul.toJSONString();
+                }
+            }
+            //Comprobamos si se ha realizado el download de la aplicacion privada
+            Long idApliPho = (Long) apliPrivada.get("id");
+            File dir_back = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "backup" + File.separator + idApliPho);
+            if (dir_back.exists() && dir_back.isDirectory()) {
+                //La aplicacion privada no se ha realizado download
+                //Leemos los datos del laboratorio.
+                File f_labId = new File(dir_back, "idLab");
+                File f_labExperimentId = new File(dir_back, "idLabExperiment");
+                String antLabId = null;
+                String antLabExpId = null;
+                try {
+                    FileReader fr_labId = new FileReader(f_labId);
+                    BufferedReader re_labId = new BufferedReader(fr_labId);
+                    antLabId = re_labId.readLine();
+                    re_labId.close();
+                    fr_labId.close();
+                    FileReader fr_labExpId = new FileReader(f_labExperimentId);
+                    BufferedReader re_labExpId = new BufferedReader(fr_labExpId);
+                    antLabExpId = re_labExpId.readLine();
+                    re_labExpId.close();
+                    fr_labExpId.close();
+
+                    System.out.println(antLabId + " -- " + antLabExpId);
+
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+                    resul.put("error", "Existe una aplicacion privada. No se ha podido identificar la aplicacion privada.");
+                    resul.put("status", "error");
+                    return resul.toJSONString();
+                } catch (IOException ex) {
+                    Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+                    resul.put("error", "Existe una aplicacion privada. No se ha podido identificar la aplicacion privada.");
+                    resul.put("status", "error");
+                    return resul.toJSONString();
+                }
+
+                //descargamos la aplicaciones para las distintas plataformas.
+                Set platfs = info_status.keySet();
+                System.out.println("info_status ---> "+ info_status);
+                for (Iterator i = platfs.iterator(); i.hasNext();) {
+                    String platform = (String) i.next();
+                    if (((String) info_status.get(platform)).equals("complete")) {
+                        //descargamos la aplicacion
+
+                        JSONObject info_des = phonegap.getPlatform(idApliPho, platform);
+                        System.out.println("info_des -->"+info_des);
+                        if (!Util.isNulo(info_des) && info_des.containsKey("status_text") && ((String) info_des.get("status_text")).equals("OK")) {
+                            JSONObject datosFile = (JSONObject) info_des.get("respuesta");
+
+                            File file = new File((String) datosFile.get("descargado"));
+                            File dir_down = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + antLabId + File.separator + antLabExpId + File.separator + "download" + File.separator + platform);
+                            try {
+                                FileUtils.deleteDirectory(dir_down);
+                            } catch (IOException ex) {
+                                Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            dir_down.mkdirs();
+
+                            String name_file = (String) apliPrivada.get("title");
+                            name_file = name_file.replaceAll(" ", "");
+                            try {
+                                
+                                if (platform.equals("android")) {
+                                    FileUtils.moveFile(file, new File(dir_down, name_file + ".apk"));
+                                }
+                                if (platform.equals("winphone")) {
+                                    FileUtils.moveFile(file, new File(dir_down, name_file + ".xap"));
+                                }
+                                if (platform.equals("ios")) {
+                                    FileUtils.moveFile(file, new File(dir_down, name_file + ".ipa"));
+                                }
+                            } catch (IOException ex) {
+                                Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+                                resul.put("error", "Existe una aplicacion privada. No se ha podido realizar el backup");
+                                resul.put("status", "error");
+                                return resul.toJSONString();
+                            }
+
+                        }
+                    }
+                }
+                try {
+                    //Eliminamos el backup
+                    FileUtils.deleteDirectory(dir_back);
+                    dir_back.delete();
+                } catch (IOException ex) {
+                    Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);                    
+                                resul.put("error", "Existe una aplicacion privada. No se ha podido eliminar el bloqueo de la api");
+                                resul.put("status", "error");
+                                return resul.toJSONString();
+                }
+                
+                
+            }
+
+            //Eliminamos la aplicacion privada.
+            JSONObject del_app = phonegap.deleteApp(idApliPho);
+            if (((Integer) info_apps.get("status")) != 200) {
+                //se ha generado un error al eliminar la aplicacion
+                resul.put("error", "Existe una aplicacion privada. No se ha podido eliminar correctamente");
+                resul.put("status", "error");
+                return resul.toJSONString();
+            }
+        }
+
+        File lab_zip = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "zip" + File.separator + "lab" + ".zip");
+
+
         resul.put("lab_id", lab_id);
         resul.put("lab_experiment_id", lab_experiment_id);
-        
+
         System.out.println(lab_zip.getAbsolutePath());
+        JSONObject misdatos = null;
+        JSONObject respuesta = null;
         if (lab_zip.exists()) {
-            
-            Curl phonegap = new Curl();
-            JSONObject misdatos = phonegap.createApp(lab_id, "file", lab_zip, "", null);
-            resul.put("info_apli", misdatos.toJSONString());
-            resul.put("status", "ok");
+            misdatos = phonegap.createApp(lab_id, "file", lab_zip, "", null);
+
+            System.out.println("Respuesta Crear --> " + misdatos);
+            respuesta = (JSONObject) misdatos.get("respuesta");
+            if (((Integer) misdatos.get("status")) == 201) {
+                //respuesta satisfactoria
+                resul.put("info_apli", misdatos);
+                resul.put("status", "ok");
+            } else {
+                //respuesta erronea.                
+                resul.put("error", respuesta.get("error"));
+                return resul.toJSONString();
+            }
+
+
         } else {
+            resul.put("error", "No se ha encontrado el empaquetado del proyecto");
             resul.put("status", "error");
+            return resul.toJSONString();
         }
 
 
 
-        //  resul.put("rows", _rows);
+        //Establecemos que la aplicacion esta en proceso de creacion y download
+        System.out.println("respuesta ---> " + respuesta);
+        Long idPhonegap = (Long) respuesta.get("id");
+
+        File dir_back = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "backup" + File.separator + idPhonegap);
+        dir_back.mkdirs();
+        File f_labId = new File(dir_back, "idLab");
+        File f_labExperimentId = new File(dir_back, "idLabExperiment");
+
+
+        try {
+            FileWriter fw_labId = new FileWriter(f_labId);
+            FileWriter fw_labExperimentId = new FileWriter(f_labExperimentId);
+            fw_labId.write(lab_id);
+            fw_labExperimentId.write(lab_experiment_id);
+            fw_labId.close();
+            fw_labExperimentId.close();
+
+
+        } catch (IOException ex) {
+            Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+            resul.put("error", "Se ha creado la aplicacion. Pero no se ha podido proteger");
+            resul.put("status", "error");
+            return resul.toJSONString();
+        }
+
 
 
         return resul.toJSONString();
     }
-
 }
