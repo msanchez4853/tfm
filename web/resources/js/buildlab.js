@@ -141,11 +141,15 @@ function mostrarLab(infoLab){
 function comprobarInfoPlatform(idApli,platform,status, error){
 
     if(status=='pending'){
-        nPlatform++;
-        comprobarEstado(idApli,platform);
+        nPlatform++;        
+        $("#_info_"+platform+"_apli").html("Construyendose ...");
+        $("#_info_"+platform+"_apli").addClass('warning');
+        setTimeout(comprobarEstado(idApli,platform), 2500);
     }
     if(status=='error'){
         $("#_info_"+platform+"_apli").html("No se ha podido generar la aplicacion. Motivo: "+error);
+         
+        $("#_info_"+platform+"_apli").addClass('danger');
     }
     if(status=='complete'){
         nPlatform++;
@@ -156,16 +160,58 @@ function comprobarInfoPlatform(idApli,platform,status, error){
 
 function comprobarEstado(idApli,platform){
     mitoken = getAuthorization('apps/download/'+lab_id+'/'+lab_experiment_id+'/'+idApli+'/'+platform,'GET',{
-        name:$("#_info_name_apli")
-    },gestionComprobarEstado,gestionError); 
-    
+        name:$("#_info_name_apli").html()
+    },gestionComprobarEstado,gestionError);     
 }
 
+
+function gestionComprobarEstado(_data,  textStatus,  jqXHR){
+    
+    if(_data.status=='ok'){
+        //se ha descargado.
+        $("#_info_"+_data.platform+"_apli").html("Generada. &nbsp;");
+        mostrarEnlaceDescarga(_data);
+    }else{
+        console.log(_data.respuesta);
+        $("#_info_"+_data.platform+"_apli").append(".");
+        setTimeout(comprobarEstado(_data.idApli,_data.platform), 1000);
+    }
+}
+
+
+
+
 function obtenerApli(idApli,platform){
-        mitoken = getAuthorization('apps/download/'+lab_id+'/'+lab_experiment_id+'/'+idApli+'/'+platform,'GET',{
-        name:$("#_info_name_apli")
+    mitoken = getAuthorization('apps/download/'+lab_id+'/'+lab_experiment_id+'/'+idApli+'/'+platform,'GET',{
+        name:$("#_info_name_apli").html()
     },gestionObtenerApli,gestionError); 
 }
+
+function gestionObtenerApli(_data,  textStatus,  jqXHR){
+    if(_data.status=='ok'){
+        $("#_info_"+_data.platform+"_apli").html("Generada");
+        mostrarEnlaceDescarga(_data);
+    }else{
+        //mostrar mensaje de error.
+        $("#_info_"+_data.platform+"_apli").html("No se puede acceder a la aplicacion generada.");
+        $("#_info_"+_data.platform+"_apli").removeClass('warning');
+        $("#_info_"+_data.platform+"_apli").addClass('danger');
+    }
+}
+
+function  mostrarEnlaceDescarga(_data){
+    $("#_info_"+_data.platform+"_apli").append("<a href='"+downloadPlat+"?lab_id="+lab_id+"&lab_experiment_id="+lab_experiment_id+"&platform="+_data.platform+"&name="+$("#_info_name_apli").html()+"' target='_down_"+_data.platform+"'> Descargar</a>");
+    $("#_info_"+_data.platform+"_apli").removeClass('warning');
+    $("#_info_"+_data.platform+"_apli").addClass('success');
+    nPlatform--;
+    if(nPlatform==0) quitarBloqueoLab(_data);
+}
+
+
+function quitarBloqueoLab(_data){
+    mitoken = getAuthorization('apps/desbloquea/'+_data.idApli,'GET',{},function(){},function(){}); 
+}
+
 
 function startPaso(){
     

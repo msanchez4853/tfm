@@ -12,6 +12,9 @@
 <%
     ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.phonegap.curl.resources.config");
     String serverRestFull = rb.getString("serverRESTFUL").trim();
+    ResourceBundle rb_w = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.wizard");
+    
+    String url_download = rb_w.getString("url_download_lab");
     
     String lab_id= Util.isNulo(request.getAttribute("lab_id"))?"default":(String)request.getAttribute("lab_id");
     String lab_experiment_id= Util.isNulo(request.getAttribute("lab_experiment_id"))?"default":(String)request.getAttribute("lab_experiment_id");
@@ -33,6 +36,7 @@
         <script src="../resources/jquery-easyui/jquery.easyui.min.js"></script>
         <script type="text/javascript">
             var serverRest= '<%=serverRestFull%>';
+            var downloadPlat ='<%=url_download%>';
         </script>
         <script src="../resources/js/buildlab.js"></script>
 
@@ -73,15 +77,15 @@
                 <div class="col-md-12 table-responsive" >
                     <table class="table table-striped table-hover">
                         <caption>Informacion sobre la aplicacion <span id="_info_name_apli">&nbsp;</span></caption>
-                        <tr><td class="etiqueta_info"> Descripcion</td><td class="valor_info" id="_info_desc_apli"> --- </td></tr>
-                        <tr><td class="etiqueta_info"> Version Aplicacion</td><td class="valor_info" id="_info_vapp_apli"> --- </td></tr>
-                        <tr><td class="etiqueta_info"> Package Aplicacion</td><td class="valor_info" id="_info_package_apli"> --- </td></tr>
-                        <tr><td class="etiqueta_info"> Version Phonegap</td><td class="valor_info" id="_info_vphonegap_apli"> --- </td></tr>
-                        <tr><td class="etiqueta_info"> Id Phonegap</td><td class="valor_info" id="_info_idphonegap_apli"> --- </td></tr>
+                        <tr><td class="etiqueta_info_lab"> Descripcion</td><td class="valor_info" id="_info_desc_apli"> --- </td></tr>
+                        <tr><td class="etiqueta_info_lab"> Version Aplicacion</td><td class="valor_info" id="_info_vapp_apli"> --- </td></tr>
+                        <tr><td class="etiqueta_info_lab"> Package Aplicacion</td><td class="valor_info" id="_info_package_apli"> --- </td></tr>
+                        <tr><td class="etiqueta_info_lab"> Version Phonegap</td><td class="valor_info" id="_info_vphonegap_apli"> --- </td></tr>
+                        <tr><td class="etiqueta_info_lab"> Id Phonegap</td><td class="valor_info" id="_info_idphonegap_apli"> --- </td></tr>
                         <%--<tr><td class="etiqueta_info"> Url repositorio</td><td class="valor_info" id="_info_repo_apli"> --- </td></tr>--%>
-                        <tr><td class="etiqueta_info"> Android</td><td class="valor_info" id="_info_android_apli"> --- </td></tr>
-                        <tr><td class="etiqueta_info"> iOS</td><td class="valor_info" id="_info_ios_apli"> --- </td></tr>
-                        <tr><td class="etiqueta_info"> WinPhone</td><td class="valor_info" id="_info_winphone_apli"> --- </td></tr>
+                        <tr><td class="etiqueta_info_lab"> Android</td><td class="valor_info" id="_info_android_apli"> --- </td></tr>
+                        <tr><td class="etiqueta_info_lab"> iOS</td><td class="valor_info" id="_info_ios_apli"> --- </td></tr>
+                        <tr><td class="etiqueta_info_lab"> WinPhone</td><td class="valor_info" id="_info_winphone_apli"> --- </td></tr>
                     </table>                
                 </div>
             </div>

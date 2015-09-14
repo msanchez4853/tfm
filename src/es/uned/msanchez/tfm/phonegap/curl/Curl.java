@@ -312,6 +312,7 @@ public class Curl {
     public JSONObject getPlatform(Long _idApp, String _platform) throws CurlException {
 
         JSONObject respuestaJSON = getMethodPhonegapWithDowload("/api/v1/apps/" + _idApp.toString() + "/" + _platform);
+        System.out.println("getPlatForm-->"+respuestaJSON);
         return respuestaJSON;
 
     }

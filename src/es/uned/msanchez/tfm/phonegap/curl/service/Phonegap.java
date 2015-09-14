@@ -483,14 +483,14 @@ public class Phonegap {
 
                 //descargamos la aplicaciones para las distintas plataformas.
                 Set platfs = info_status.keySet();
-                System.out.println("info_status ---> "+ info_status);
+                System.out.println("info_status ---> " + info_status);
                 for (Iterator i = platfs.iterator(); i.hasNext();) {
                     String platform = (String) i.next();
                     if (((String) info_status.get(platform)).equals("complete")) {
                         //descargamos la aplicacion
 
                         JSONObject info_des = phonegap.getPlatform(idApliPho, platform);
-                        System.out.println("info_des -->"+info_des);
+                        System.out.println("info_des -->" + info_des);
                         if (!Util.isNulo(info_des) && info_des.containsKey("status_text") && ((String) info_des.get("status_text")).equals("OK")) {
                             JSONObject datosFile = (JSONObject) info_des.get("respuesta");
 
@@ -506,7 +506,7 @@ public class Phonegap {
                             String name_file = (String) apliPrivada.get("title");
                             name_file = name_file.replaceAll(" ", "");
                             try {
-                                
+
                                 if (platform.equals("android")) {
                                     FileUtils.moveFile(file, new File(dir_down, name_file + ".apk"));
                                 }
@@ -531,13 +531,13 @@ public class Phonegap {
                     FileUtils.deleteDirectory(dir_back);
                     dir_back.delete();
                 } catch (IOException ex) {
-                    Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);                    
-                                resul.put("error", "Existe una aplicacion privada. No se ha podido eliminar el bloqueo de la api");
-                                resul.put("status", "error");
-                                return resul.toJSONString();
+                    Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+                    resul.put("error", "Existe una aplicacion privada. No se ha podido eliminar el bloqueo de la api");
+                    resul.put("status", "error");
+                    return resul.toJSONString();
                 }
-                
-                
+
+
             }
 
             //Eliminamos la aplicacion privada.
@@ -609,6 +609,108 @@ public class Phonegap {
             return resul.toJSONString();
         }
 
+
+
+        return resul.toJSONString();
+    }
+
+    /**
+     *
+     * @param request
+     * @param idapli
+     * @param platform
+     * @param name_apli
+     * @return
+     * @throws CurlException
+     */
+    @GET
+    @Path("/download/{lab}/{lab_experiment}/{idapli}/{platform}")
+    @Produces("application/json")
+    public String downloadLab(@Context HttpServletRequest request,
+            @PathParam("lab") String lab_id, @PathParam("lab_experiment") String lab_experiment_id,
+            @PathParam("idapli") Long idapli, @PathParam("platform") String platform,
+            @QueryParam("name") String name_apli) throws CurlException {
+
+        String ip = request.getRemoteAddr();
+        System.out.println("MI IP --- " + ip);
+        Curl phonegap = new Curl();
+        JSONObject resul = new JSONObject();
+        resul.put("platform", platform);
+        resul.put("idApli", idapli);
+        resul.put("lab_id", lab_id);
+        resul.put("lab_experiment_id", lab_experiment_id);
+        JSONObject info_down = phonegap.getPlatform(idapli, platform);
+        if (!Util.isNulo(info_down) && info_down.containsKey("status_text") && ((String) info_down.get("status_text")).equals("OK")) {
+            JSONObject datosFile = (JSONObject) info_down.get("respuesta");
+
+            File file = new File((String) datosFile.get("descargado"));
+            File dir_down = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "download" + File.separator + platform);
+            dir_down.mkdirs();
+            String name_file = Util.isNulo(name_apli) ? platform : name_apli.toString();
+            name_file = name_file.replaceAll(" ", "");
+            try {
+
+                if (platform.equals("android")) {
+                    FileUtils.copyFile(file, new File(dir_down, name_file + ".apk"));
+                }
+                if (platform.equals("winphone")) {
+                    FileUtils.copyFile(file, new File(dir_down, name_file + ".xap"));
+                }
+                if (platform.equals("ios")) {
+                    FileUtils.copyFile(file, new File(dir_down, name_file + ".ipa"));
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+                resul.put("error", "Existe una aplicacion privada. No se ha podido realizar el backup");
+                resul.put("status", "error");
+                return resul.toJSONString();
+            }
+            
+             file.delete();
+
+
+            resul.put("status", "ok");
+
+
+        } else {
+            resul.put("info_down", info_down);
+            resul.put("error", "Error en la descarga.");
+            resul.put("status", "error");
+
+        }
+
+        return resul.toJSONString();
+    }
+
+    /**
+     *
+     * @param request
+     * @param idapli
+     * @param platform
+     * @param name_apli
+     * @return
+     * @throws CurlException
+     */
+    @GET
+    @Path("/desbloquea/{idapli}")
+    @Produces("application/json")
+    public String desbloqueaLab(@Context HttpServletRequest request, @PathParam("idapli") Long idapli) {
+
+        String ip = request.getRemoteAddr();
+        System.out.println("MI IP --- " + ip);
+
+        JSONObject resul = new JSONObject();
+        resul.put("idApli", idapli);
+        File dir_back = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "backup" + File.separator + idapli);
+        try {
+            FileUtils.deleteDirectory(dir_back);
+        } catch (IOException ex) {
+            Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+            resul.put("status", "error");
+        }
+        dir_back.delete();
+
+        resul.put("status", "ok");
 
 
         return resul.toJSONString();

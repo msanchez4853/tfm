@@ -3,6 +3,7 @@
     Created on : 12-may-2015, 19:50:16
     Author     : adrastea
 --%>
+<%@page import="java.util.ResourceBundle"%>
 <%@page import="java.io.FileOutputStream"%>
 <%@page import="java.io.File"%>
 <%@page import="es.uned.msanchez.tfm.utilidades.Util"%>
@@ -12,6 +13,9 @@
 <%@page import="es.uned.msanchez.tfm.xml.Xml"%>
 <%@page contentType="text/xml" pageEncoding="UTF-8" autoFlush="false"%>
 <%
+    ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.wizard");
+    String path_build = rb.getString("path_build_lab").trim();
+    
     String option = request.getParameter("option");
     option = Util.isNulo(option) ? "default" : option;
 
@@ -84,7 +88,7 @@
         FileOutputStream fo = new FileOutputStream(f_config);
         xml.generarXml(fo);
         fo.close();
-        String nextJSP = "/buildapps/buildlab.jsp";
+        String nextJSP = path_build;
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
         request.setAttribute("lab_id", lab_id);
         request.setAttribute("lab_experiment_id", lab_experiment_id);

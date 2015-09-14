@@ -24,6 +24,8 @@
 
     </head>
     <%
+    
+     
         Map opciones_generales = new HashMap();
         Map opciones_avanzadas = new HashMap();
         Map opciones_iconos = new HashMap();

@@ -134,3 +134,13 @@ div#_dd_ff_infoApp table td.valor_info{
 .datagrid-row-selected a._mas_info{
     color:white;
 }
+
+div#_dd_ff_infoApp table td.etiqueta_info_lab{
+    text-align: right;
+    
+    padding: 3px;
+    vertical-align: text-top;
+    padding-right: 10px;
+    
+    font-weight: bold;
+}
