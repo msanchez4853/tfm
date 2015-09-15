@@ -9,7 +9,8 @@ package es.uned.msanchez.tfm.git;
 
 import java.io.File;
 import java.io.IOException;
-//import org.eclipse.jgit.api.errors.GitAPIException;
+import java.util.ResourceBundle;
+import org.eclipse.jgit.api.errors.GitAPIException;
 
 /**
  * 
@@ -19,9 +20,12 @@ import java.io.IOException;
 
 public class Test {
     
-   /*  public static void main(String[] args) throws IOException, GitAPIException {
+     public static void main(String[] args) throws IOException, GitAPIException {
      
-        String localPath = System.getProperty("user.dir") + File.separator + "tmp"+ File.separator +"git"+ File.separator +"origen";
+          ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.wizard");
+        String path_base_tmp = rb.getString("path_tmp").trim();
+        String localPath = path_base_tmp + File.separator + "tmp"+ File.separator +"git"+ File.separator +"origen";
+        System.out.println(localPath);
         String remotePath = "https://github.com/msanchez4853/memory.git";
         GitControl gc = new GitControl(localPath, remotePath);
         //Clone repository
@@ -34,6 +38,6 @@ public class Test {
      //   gc.pushToRepo();
         //Pull
         gc.pullFromRepo();
-    }*/
+    }
     
 }

@@ -5,6 +5,7 @@
 package es.uned.msanchez.tfm.phonegap.curl.service;
 
 import com.sun.jersey.spi.resource.Singleton;
+import es.uned.msanchez.tfm.git.GitControl;
 import es.uned.msanchez.tfm.phonegap.curl.exception.CurlException;
 import es.uned.msanchez.tfm.phonegap.curl.Curl;
 import es.uned.msanchez.tfm.utilidades.Util;
@@ -17,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +46,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpHeaders;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -57,6 +60,13 @@ import org.json.simple.parser.ParseException;
 @Singleton
 public class Phonegap {
 
+    private static String path_base_tmp;
+    private static String remotePath;
+    static{
+        ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.wizard");
+        path_base_tmp = rb.getString("path_tmp").trim();
+        remotePath = rb.getString("related_ori").trim();
+    }
     /**
      * Obtiene la informacion de las aplicaciones registradas en Phonega Build.
      *
@@ -323,7 +333,7 @@ public class Phonegap {
         System.out.println("MI IP --- " + ip);
 
 
-        File f_config = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "www/config.xml");
+        File f_config = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "www/config.xml");
 
         JSONObject resul = new JSONObject();
         resul.put("lab_id", lab_id);
@@ -349,13 +359,31 @@ public class Phonegap {
 
         String ip = request.getRemoteAddr();
         System.out.println("MI IP --- " + ip);
-
-        File source = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "git" + File.separator + "memory" + File.separator + "www");
-        File dest = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "tmp");
-        //dest.mkdirs();
         JSONObject resul = new JSONObject();
         resul.put("lab_id", lab_id);
         resul.put("lab_experiment_id", lab_experiment_id);
+        
+        File source = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "git" + File.separator + "origen" + File.separator + "www");
+        if(!source.exists()){
+            GitControl gc; 
+            try {
+                gc = new GitControl(source, remotePath);
+                gc.cloneRepo();
+                gc.pullFromRepo();
+            } catch (IOException ex) {
+                Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+                resul.put("status", "error");
+            return resul.toJSONString();
+            } catch (GitAPIException ex) {
+                Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+                resul.put("status", "error");
+            return resul.toJSONString();
+            }
+        }
+        
+        File dest = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "tmp");
+        //dest.mkdirs();
+      
 
 
         try {
@@ -367,7 +395,7 @@ public class Phonegap {
         }
 
 
-        File f_config = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "www/config.xml");
+        File f_config = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "www/config.xml");
         try {
             FileUtils.copyFileToDirectory(f_config, dest);
         } catch (IOException ex) {
@@ -377,7 +405,7 @@ public class Phonegap {
         }
 
 
-        File dest_zip = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "zip");
+        File dest_zip = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "zip");
         try {
             Zip.zipDirectorio(dest, dest_zip, "lab", Zip.Extension.ZIP);
         } catch (IOException ex) {
@@ -447,7 +475,7 @@ public class Phonegap {
             }
             //Comprobamos si se ha realizado el download de la aplicacion privada
             Long idApliPho = (Long) apliPrivada.get("id");
-            File dir_back = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "backup" + File.separator + idApliPho);
+            File dir_back = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "backup" + File.separator + idApliPho);
             if (dir_back.exists() && dir_back.isDirectory()) {
                 //La aplicacion privada no se ha realizado download
                 //Leemos los datos del laboratorio.
@@ -495,7 +523,7 @@ public class Phonegap {
                             JSONObject datosFile = (JSONObject) info_des.get("respuesta");
 
                             File file = new File((String) datosFile.get("descargado"));
-                            File dir_down = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + antLabId + File.separator + antLabExpId + File.separator + "download" + File.separator + platform);
+                            File dir_down = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + antLabId + File.separator + antLabExpId + File.separator + "download" + File.separator + platform);
                             try {
                                 FileUtils.deleteDirectory(dir_down);
                             } catch (IOException ex) {
@@ -550,7 +578,7 @@ public class Phonegap {
             }
         }
 
-        File lab_zip = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "zip" + File.separator + "lab" + ".zip");
+        File lab_zip = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "zip" + File.separator + "lab" + ".zip");
 
 
         resul.put("lab_id", lab_id);
@@ -587,7 +615,7 @@ public class Phonegap {
         System.out.println("respuesta ---> " + respuesta);
         Long idPhonegap = (Long) respuesta.get("id");
 
-        File dir_back = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "backup" + File.separator + idPhonegap);
+        File dir_back = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "backup" + File.separator + idPhonegap);
         dir_back.mkdirs();
         File f_labId = new File(dir_back, "idLab");
         File f_labExperimentId = new File(dir_back, "idLabExperiment");
@@ -644,7 +672,7 @@ public class Phonegap {
             JSONObject datosFile = (JSONObject) info_down.get("respuesta");
 
             File file = new File((String) datosFile.get("descargado"));
-            File dir_down = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "download" + File.separator + platform);
+            File dir_down = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "download" + File.separator + platform);
             dir_down.mkdirs();
             String name_file = Util.isNulo(name_apli) ? platform : name_apli.toString();
             name_file = name_file.replaceAll(" ", "");
@@ -701,7 +729,7 @@ public class Phonegap {
 
         JSONObject resul = new JSONObject();
         resul.put("idApli", idapli);
-        File dir_back = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "backup" + File.separator + idapli);
+        File dir_back = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "backup" + File.separator + idapli);
         try {
             FileUtils.deleteDirectory(dir_back);
         } catch (IOException ex) {
@@ -715,4 +743,6 @@ public class Phonegap {
 
         return resul.toJSONString();
     }
+    
+    
 }

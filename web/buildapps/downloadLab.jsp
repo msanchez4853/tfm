@@ -4,6 +4,7 @@
     Author     : adrastea
 --%>
 
+<%@page import="java.util.ResourceBundle"%>
 <%@page import="java.io.FileInputStream"%>
 <%@page import="java.io.DataInputStream"%>
 <%@page import="java.io.DataOutputStream"%>
@@ -13,6 +14,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
+    ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.wizard");
+
+    String path_base_tmp = rb.getString("path_tmp").trim();
+
     String lab_id = Util.isNulo(request.getParameter("lab_id")) ? "default" : (String) request.getParameter("lab_id");
     String lab_experiment_id = Util.isNulo(request.getParameter("lab_experiment_id")) ? "default" : (String) request.getParameter("lab_experiment_id");
     String platform = Util.isNulo(request.getParameter("platform")) ? null : (String) request.getParameter("platform");
@@ -25,7 +30,6 @@
 
     name_file = name_file.replaceAll(" ", "");
 
-
     if (platform.equals("android")) {
         name_file = name_file + ".apk";
     }
@@ -36,7 +40,7 @@
         name_file = name_file + ".ipa";
     }
 
-    File file = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id
+    File file = new File(path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id
             + File.separator + "download" + File.separator + platform + File.separator + name_file);
 
     if (file.exists() && file.isFile()) {

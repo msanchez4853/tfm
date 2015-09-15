@@ -60,6 +60,12 @@ public class Curl {
     private RequestConfig localConfig;
     private HttpClient httpclient;
 
+     private static String path_base_tmp;
+    static{
+        ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.wizard");
+        path_base_tmp = rb.getString("path_tmp").trim();
+    }
+    
     public static void main(String[] args) throws Exception {
         Curl curl = new Curl();
 
@@ -754,7 +760,7 @@ public class Curl {
             } else {
 
                 Random ale = new Random(System.currentTimeMillis());
-                File dir_tmp = new File(System.getProperty("user.dir") + File.separator + "tmp");
+                File dir_tmp = new File(Curl.path_base_tmp + File.separator + "tmp");
                 dir_tmp.mkdirs();
 
 

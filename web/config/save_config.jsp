@@ -15,6 +15,7 @@
 <%
     ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.wizard");
     String path_build = rb.getString("path_build_lab").trim();
+    String path_base_tmp = rb.getString("path_tmp").trim();
     
     String option = request.getParameter("option");
     option = Util.isNulo(option) ? "default" : option;
@@ -81,7 +82,7 @@
 
     if (option.equals("generar")) {
         out.println("Generando");
-        File dir_tmp = new File(System.getProperty("user.dir") + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "www");
+        File dir_tmp = new File(path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "www");
         dir_tmp.mkdirs();
 
         File f_config = new File(dir_tmp, "config.xml");
