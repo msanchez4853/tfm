@@ -1,4 +1,5 @@
 
+<%@page import="java.util.ResourceBundle"%>
 <%@page import="es.uned.msanchez.tfm.utilidades.Util"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
@@ -24,8 +25,7 @@
 
     </head>
     <%
-    
-     
+
         Map opciones_generales = new HashMap();
         Map opciones_avanzadas = new HashMap();
         Map opciones_iconos = new HashMap();
@@ -71,33 +71,42 @@
         }
 
         //Peticion realizada desde RELATED.
+        String apli_ext = request.getParameter("apli");
         String lab_id = request.getParameter("lab_id");
         String lab_experiment_id = request.getParameter("lab_experiment_id");
         lab_experiment_id = Util.isNulo(lab_experiment_id) ? "" : lab_experiment_id;
 
         String login = request.getParameter("login");
-        login = Util.isNulo(login) ? "N" : login;
+        login = Util.isNulo(login) ? "S" : login;
 
         boolean _onlyLabApp = true;
-        if (!Util.isNulo(lab_id)) {
-            String pag_inicio = "mobile.html";
+        if (!Util.isNulo(apli_ext) && apli_ext.equalsIgnoreCase("related")) {
             aspecto = "related";
-            if (opciones_generales.containsKey("source_file")) {
-                pag_inicio = (String) opciones_generales.get("source_file");
-                opciones_generales.remove("source_file");
-            }
+            ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.related");
+            String s_plugins =rb.getString("plugins");
+            String[] plugins = s_plugins.split(",");
+            System.out.println(plugins[2]);
+            String pag_inicio = rb.getString("pag_inicio").trim();
+           // if (!Util.isNulo(lab_id)) {
+           // String pag_inicio = "mobile.html";
 
-            if (!pag_inicio.contains("?")) {
-                pag_inicio = pag_inicio + "?ale=" + Math.random();
-            }
-            pag_inicio = pag_inicio + "&lab_id=" + lab_id;
+             /*   if (opciones_generales.containsKey("source_file")) {
+                    pag_inicio = (String) opciones_generales.get("source_file");
+                    opciones_generales.remove("source_file");
+                }
 
-            if (!Util.isNulo(lab_experiment_id)) {
-                pag_inicio = pag_inicio + "&lab_experiment_id=" + lab_experiment_id;
-                _onlyLabApp = false;
-            }
-            opciones_generales.put("source_file", pag_inicio);
+                if (!pag_inicio.contains("?")) {
+                    pag_inicio = pag_inicio + "?lab_id=" + lab_id;
+                }
+                pag_inicio = pag_inicio + "&lab_id=" + lab_id;
 
+                if (!Util.isNulo(lab_experiment_id)) {
+                    pag_inicio = pag_inicio + "&lab_experiment_id=" + lab_experiment_id;
+                    _onlyLabApp = false;
+                }*/
+                opciones_generales.put("source_file", pag_inicio);
+
+            //}
         }
 
         session.setAttribute("opciones_generales", opciones_generales);
@@ -188,6 +197,13 @@
         <%
             if (aspecto.equalsIgnoreCase("related") && login.equals("S")) {
         %>
+
+        <section id="mensajeSeleccion">
+            <div> 
+                Debe seleccionar un laboratorio. 
+                <br/> Pulse sobre Lab/Experiment del menu superior.
+            </div>
+        </section>       
         <section id="loginInfo">
             <p class="alert alert-info" role="alert">Opening login window...</p>
             <p class="alert alert-info hidden" role="alert" id="loginWindowOpenned">Waiting for login data...</p>
@@ -258,17 +274,24 @@
                     // Get info from modal
                     var _onlyLabApp = <%=_onlyLabApp%>//$("#cbxOnlyLabApp").is(':checked');
                     $('#selectedLab').text($('#labs :selected').text());
-                    ///$('#selectedLabId').val($('#labs :selected').val())
-                    $('#selectedLabId').val('<%=lab_id%>');
+                    $('#selectedLabId').val($('#labs :selected').val())
+
                     $('#selectedExp').text("NONE");
                     if (!_onlyLabApp) {
                         $('#selectedExp').text($('#experiments :selected').text());
-                        //$('#selectedExpId').val($('#experiments :selected').val())
-                        $('#selectedExpId').val('<%=lab_experiment_id%>');
+                        $('#selectedExpId').val($('#experiments :selected').val())
                     }
                     $('#labsSelectionModalDialog').modal('hide');
                     // NOTA: Se usan campos escondidos como prueba, pero lo suyo es usar variables javascript
                     // o en su defecto un bean de sesion para el control de acceso/info de los labs
+                    console.log("precarga para prueba de lab_id y lab_id");
+
+                    $('#selectedLabId').val("Mi Laboratorio");
+                    $('#selectedExpId').val("Experimento");
+
+                    //Preparar entorno al laboratorio selecionado.
+                    $("#form_guardar input[id='id_lab']").val($('#selectedLabId').val());
+                    $("#form_guardar input[id='id_experiment_lab']").val($('#selectedExpId').val());
                 });
 
             });
@@ -286,28 +309,32 @@
                 var sel = $('#labs');
                 var count = 0;
                 // Sort by name
-                userInfo.labs.sort(sortLabsByName);
-                $(userInfo.labs).each(function () {
-                    sel.append($("<option>").attr('value', this.ID).text(this.name));
-                    count++;
-                });
-                if (count > 0) {
-                    // Add the event to select
-                    $("#labs").change(function () {
-                        var _lab_id = this.value;
-                        // Load experiments to the experiments "select"
-                        var experiments = RLAB.SERVICES.SYSTEMS.getExperiments(_lab_id);
-                        if (typeof experiments != "undefined") {
-                            if (!(experiments instanceof Array) && (typeof experiments == "object")) {
-                                experiments = [experiments];
-                            }
-                            var sel2 = $('#experiments');
-                            sel2.find("option").remove();
-                            $(experiments).each(function () {
-                                sel2.append($("<option>").attr('value', this.id).text(this.experiment_name));
-                            });
-                        }
+                console.log(userInfo);
+                console.log(userInfo.labs);
+                if (userInfo.labs != undefined) {
+                    userInfo.labs.sort(sortLabsByName);
+                    $(userInfo.labs).each(function () {
+                        sel.append($("<option>").attr('value', this.ID).text(this.name));
+                        count++;
                     });
+                    if (count > 0) {
+                        // Add the event to select
+                        $("#labs").change(function () {
+                            var _lab_id = this.value;
+                            // Load experiments to the experiments "select"
+                            var experiments = RLAB.SERVICES.SYSTEMS.getExperiments(_lab_id);
+                            if (typeof experiments != "undefined") {
+                                if (!(experiments instanceof Array) && (typeof experiments == "object")) {
+                                    experiments = [experiments];
+                                }
+                                var sel2 = $('#experiments');
+                                sel2.find("option").remove();
+                                $(experiments).each(function () {
+                                    sel2.append($("<option>").attr('value', this.id).text(this.experiment_name));
+                                });
+                            }
+                        });
+                    }
                 }
             }
 
@@ -338,11 +365,11 @@
                 <li><strong>Guardar</strong>: Guarda en su pc el fichero generado. </li>
                 <li><strong>Mostrar</strong>: Muestra en el navegador el fichero generado. </li>
                     <%
-            if (aspecto.equalsIgnoreCase("related")) {
+                        if (aspecto.equalsIgnoreCase("related")) {
                     %>
                 <li><strong>Generar</strong>: Genera el laboratorio con el fichero generado. </li>
                     <%
-                    }
+                        }
                     %>
                 <li><strong>Cancelar</strong>: No genera el documento. </li>
             </ul>

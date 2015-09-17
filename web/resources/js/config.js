@@ -5,6 +5,11 @@
 var dialogGuardar = null;
 
 $(window).ready(function(){
+    $("#mensajeSeleccion").hide();
+  /*  if($("a.navbar-brand").attr("data-aspecto")=='related'){
+        $("#contenido").hide();
+        $("#mensajeSeleccion").show();
+    }*/
     
     ajustartam();
     defineEvents();  
