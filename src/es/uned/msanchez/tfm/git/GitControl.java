@@ -10,7 +10,7 @@ package es.uned.msanchez.tfm.git;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
-import org.eclipse.jgit.api.AddCommand;
+/*import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.errors.CanceledException;
@@ -30,7 +30,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
-
+*/
 /**
  *
  * @author Mario Pérez Esteso
@@ -38,7 +38,7 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
  */
 public class GitControl {
 
-    private String localPath, remotePath;
+  /*  private String localPath, remotePath;
     private Repository localRepo;
     private Git git;
     private CredentialsProvider cp;
@@ -105,5 +105,5 @@ public class GitControl {
             NoHeadException, GitAPIException {
         git.pull().call();
     }
-
+*/
 }

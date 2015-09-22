@@ -5,10 +5,16 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
- * @author miguesr
+ * Clases para realizar test de la clase Curl.java
+ * @author Miguel Sanchez Roman.
  */
 public class Test {
+    /**
+     * Main de la clase Test que nos permite realizar diferentes pruebas de los
+     * metodos implementados en Curl.java
+     * @param args
+     * @throws Exception 
+     */
         public static void main(String[] args) throws Exception {
         Curl curl = new Curl();
 

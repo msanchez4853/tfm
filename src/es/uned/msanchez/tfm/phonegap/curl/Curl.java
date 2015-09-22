@@ -202,7 +202,7 @@ public class Curl {
      * Phonegap Build.
      *
      * @param _idApp Identificador de la aplicacion en phonegap
-     * @returnUna representacion en JSON con la informacion de la aplicacion del
+     * @return Una representacion en JSON con la informacion de la aplicacion del
      * usuario
      * @see
      * http://docs.build.phonegap.com/en_US/developer_api_read.md.html#_get_https_build_phonegap_com_api_v1_apps_id
@@ -464,6 +464,17 @@ public class Curl {
 
     }
 
+    /**     
+     * Establece el icono de la apliacion al recibido como parametro.
+     *
+     * @param _idApli Identificador de la aplicacion.
+     * @param _icon Objeto File con el icono de la aplicacion
+     * @return Representacion JSON
+     * @see
+     * http://docs.build.phonegap.com/en_US/developer_api_write.md.html#_post_https_build_phonegap_com_api_v1_apps_id_icon
+     * @throws CurlException
+     */
+     
     public JSONObject setIcon(Long _idApli, File _icon) throws CurlException {
         JSONObject respuestaJSON = null;
 
@@ -483,6 +494,16 @@ public class Curl {
 
     }
 
+    /**     
+     * Añade un colaborador al equipo de desarrollo de la aplicacion..
+     *
+     * @param _idApli Identificador de la aplicacion.
+     * @param _data Los parametros necesarios para la definicion del colaborador.
+     * @return Representacion JSON
+     * @see
+     * http://docs.build.phonegap.com/en_US/developer_api_write.md.html#_post_https_build_phonegap_com_api_v1_apps_id_collaborators
+     * @throws CurlException
+     */   
     public JSONObject addCollab(Long _idApli, JSONObject _data) throws CurlException {
         JSONObject respuestaJSON = null;
 
@@ -498,6 +519,17 @@ public class Curl {
 
     }
 
+    /**     
+     * Modifica el rol de un colaborador al equipo de desarrollo de la aplicacion..
+     *
+     * @param _idApli Identificador de la aplicacion.
+     * @param _idCollab Identificador del colaborador.
+     * @param _data Los parametros necesarios para la definicion del nuevo rol.
+     * @return Representacion JSON
+     * @see
+     * http://docs.build.phonegap.com/en_US/developer_api_write.md.html#_post_https_build_phonegap_com_api_v1_apps_id_collaborators
+     * @throws CurlException
+     */   
     public JSONObject setRoleCollab(Long _idApli, Long _idCollab, JSONObject _data) throws CurlException {
         JSONObject respuestaJSON = null;
 
@@ -513,8 +545,20 @@ public class Curl {
 
     }
 
+    /**     
+     * Actualiza el codigo fuente de una aplicacion en Phonegap, a partir de un fichero zip
+     * con el codigo fuente de la aplicacion.     
+     * @param _idApli Identificador de la aplicacion.
+     * @param _data Los parametros necesarios la actualizacion.
+     * @param _proyecto Fichero zip con el nuevo codigo fuente de la aplicacion.
+     * @return Representacion JSON
+     * @see
+     * http://docs.build.phonegap.com/en_US/developer_api_write.md.html#_put_https_build_phonegap_com_api_v1_apps_id
+     * @throws CurlException
+     */   
+   
     public JSONObject updateApp(Long _idApli, JSONObject _data, File _proyecto) throws CurlException {
-        //  HttpGet httpget = new HttpGet()
+        
         JSONObject respuestaJSON = null;
         FileBody file = new FileBody(_proyecto);
         StringBody data_p = new StringBody(_data.toJSONString(), ContentType.TEXT_PLAIN);
@@ -529,6 +573,14 @@ public class Curl {
 
     }
 
+    /**     
+     * Elimina la aplicacion del repositorio de Phonegap Build    
+     * @param _idApli Identificador de la aplicacion.
+     * @return Representacion JSON
+     * @see
+     * http://docs.build.phonegap.com/en_US/developer_api_write.md.html#_delete_https_build_phonegap_com_api_v1_apps_id
+     * @throws CurlException
+     */  
     public JSONObject deleteApp(Long _idApli) throws CurlException {
         //  HttpGet httpget = new HttpGet()
         JSONObject respuestaJSON = deleteMethodPhonegap("/api/v1/apps/" + _idApli);
@@ -538,6 +590,15 @@ public class Curl {
 
     }
 
+    /**     
+     * Elimina un colaborador del equipo de una aplicacion.
+     * @param _idApli Identificador de la aplicacion.
+     * @param _idCollab Identificador del Colaborador
+     * @return Representacion JSON
+     * @see
+     * http://docs.build.phonegap.com/en_US/developer_api_write.md.html#_delete_https_build_phonegap_com_api_v1_apps_id_collaborators_id
+     * @throws CurlException
+     */     
     public JSONObject deleteCollab(Long _idApli, Long _idCollab) throws CurlException {
         //  HttpGet httpget = new HttpGet()
         JSONObject respuestaJSON = deleteMethodPhonegap("/api/v1/apps/" + _idApli + "/collaborators/" + _idCollab);
@@ -545,6 +606,15 @@ public class Curl {
 
     }
 
+    /**     
+     * Elimina la key especificada como parametro de la plataforma indicada.
+     * @param _platform  Identificador de la plataforma.
+     * @param _idKey Identificador de la Key
+     * @return Representacion JSON
+     * @see
+     * http://docs.build.phonegap.com/en_US/developer_api_write.md.html#_delete_https_build_phonegap_com_api_v1_keys_platform_id
+     * @throws CurlException
+     */     
     public JSONObject deleteKeyPlatform(String _platform, Long _idKey) throws CurlException {
         //  HttpGet httpget = new HttpGet()
         JSONObject respuestaJSON = deleteMethodPhonegap("/api/v1/keys/" + _platform + "/" + _idKey);
@@ -594,8 +664,7 @@ public class Curl {
             StringWriter writer = new StringWriter();
             IOUtils.copy(content, writer);
             String theString = writer.toString();
-            JSONParser parser = new JSONParser();
-            System.out.println("getResponseJSON: " + theString);
+            JSONParser parser = new JSONParser();           
             respuestaJSON = Util.isNulo(theString) ? null : (JSONObject) parser.parse(theString);
 
         } catch (ParseException ex) {
@@ -775,7 +844,7 @@ public class Curl {
         resultado.put("status", response.getStatusLine().getStatusCode());
         resultado.put("status_text", response.getStatusLine().getReasonPhrase());
         resultado.put("respuesta", respuestaJSON);
-
+        
         return resultado;
     }
 

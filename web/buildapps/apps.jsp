@@ -112,7 +112,7 @@
                 <tr><td class="etiqueta_info"> Version Aplicacion</td><td class="valor_info" id="_info_vapp_apli"> --- </td></tr>
                 <tr><td class="etiqueta_info"> Version Phonegap</td><td class="valor_info" id="_info_vphonegap_apli"> --- </td></tr>
                 <tr><td class="etiqueta_info"> Descripcion</td><td class="valor_info" id="_info_desc_apli"> --- </td></tr>
-                <tr><td class="etiqueta_info"> Url repositorio</td><td class="valor_info" id="_info_repo_apli"> --- </td></tr>
+                
                 
             </table>                
         </div>

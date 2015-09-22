@@ -14,7 +14,7 @@ import java.util.zip.ZipOutputStream;
 
 /**
  *
- * @author adrastea
+ * @author Miguel Sánchez Román
  */
 public class Zip {
 

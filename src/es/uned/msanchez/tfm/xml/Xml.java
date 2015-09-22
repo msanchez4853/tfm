@@ -24,7 +24,7 @@ import org.jdom2.output.XMLOutputter;
 
 /**
  *
- * @author adrastea
+ * @author Miguel Sánchez Román
  */
 public class Xml {
 

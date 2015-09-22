@@ -10,7 +10,7 @@ package es.uned.msanchez.tfm.git;
 import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
-import org.eclipse.jgit.api.errors.GitAPIException;
+//import org.eclipse.jgit.api.errors.GitAPIException;
 
 /**
  * 
@@ -20,7 +20,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 
 public class Test {
     
-     public static void main(String[] args) throws IOException, GitAPIException {
+   /*  public static void main(String[] args) throws IOException, GitAPIException {
      
           ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.wizard");
         String path_base_tmp = rb.getString("path_tmp").trim();
@@ -38,6 +38,6 @@ public class Test {
      //   gc.pushToRepo();
         //Pull
         gc.pullFromRepo();
-    }
+    }*/
     
 }

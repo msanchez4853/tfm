@@ -5,7 +5,7 @@
 package es.uned.msanchez.tfm.phonegap.curl.service;
 
 import com.sun.jersey.spi.resource.Singleton;
-import es.uned.msanchez.tfm.git.GitControl;
+//import es.uned.msanchez.tfm.git.GitControl;
 import es.uned.msanchez.tfm.phonegap.curl.exception.CurlException;
 import es.uned.msanchez.tfm.phonegap.curl.Curl;
 import es.uned.msanchez.tfm.utilidades.Util;
@@ -46,7 +46,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpHeaders;
-import org.eclipse.jgit.api.errors.GitAPIException;
+//import org.eclipse.jgit.api.errors.GitAPIException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -54,7 +54,7 @@ import org.json.simple.parser.ParseException;
 
 /**
  *
- * @author adrastea
+ * @author Miguel Sánchez Román
  */
 @Path("/apps")
 @Singleton
@@ -62,11 +62,13 @@ public class Phonegap {
 
     private static String path_base_tmp;
     private static String remotePath;
-    static{
+
+    static {
         ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.wizard");
         path_base_tmp = rb.getString("path_tmp").trim();
         remotePath = rb.getString("related_ori").trim();
     }
+
     /**
      * Obtiene la informacion de las aplicaciones registradas en Phonega Build.
      *
@@ -78,10 +80,12 @@ public class Phonegap {
     public String getMeApps(@Context HttpServletRequest request) throws CurlException {
 
         String ip = request.getRemoteAddr();
-        System.out.println("MI IP --- " + ip);
+        // System.out.println("MI IP --- " + ip);
         Curl phonegap = new Curl();
         JSONObject misdatos = phonegap.getApps();
+        //  System.out.println("getMEapps --> "+misdatos);
         JSONObject resul = new JSONObject();
+        JSONObject salida = new JSONObject();
 
         if (((Integer) misdatos.get("status")) == 200) {
 
@@ -121,9 +125,12 @@ public class Phonegap {
 
             }
             resul.put("rows", _rows);
-
+            salida.put("status", 200);
+            salida.put("respuesta", resul);
+        } else {
+            salida.put("status", (Integer) misdatos.get("status"));
         }
-        return resul.toJSONString();
+        return salida.toJSONString();
     }
 
     /**
@@ -188,7 +195,7 @@ public class Phonegap {
     @DELETE
     @Path("/{idapli}")
     @Produces("application/json")
-    public String delApp(@Context HttpServletRequest request,@PathParam("idapli") Long idapli) throws CurlException {
+    public String delApp(@Context HttpServletRequest request, @PathParam("idapli") Long idapli) throws CurlException {
 
         System.out.println("delapp --> " + idapli);
         Curl phonegap = new Curl();
@@ -204,28 +211,30 @@ public class Phonegap {
 
     /**
      * Añade un aplicacion a Phonegap Build utilizando un respositorio GitHub.
-     * La aplicacion generada es de ambito privado 
-     * @param request  Representa la informacion sobre la peticion realizada.
-     * @param data Datos en formato JSON que se establecen en la creacion de la aplicacion
-     * (titulo, etc..)
-     * @return Respuesta en JSON con la informacion de la aplicacion creada en Phonegap Build
-     * @throws CurlException 
+     * La aplicacion generada es de ambito privado
+     *
+     * @param request Representa la informacion sobre la peticion realizada.
+     * @param data Datos en formato JSON que se establecen en la creacion de la
+     * aplicacion (titulo, etc..)
+     * @return Respuesta en JSON con la informacion de la aplicacion creada en
+     * Phonegap Build
+     * @throws CurlException
      */
     @POST
     @Produces("application/json")
     public String addApp(@Context HttpServletRequest request, @FormParam("datos") String data) throws CurlException {
 
         JSONParser parser = new JSONParser();
-     
 
-       
+
+
         JSONObject respuestaJSON = null;
         try {
             respuestaJSON = Util.isNulo(data) ? null : (JSONObject) parser.parse(data);
 
             Curl phonegap = new Curl();
             JSONObject misdatos;
-           // System.out.println((String) respuestaJSON.get("title") + " " + (String) respuestaJSON.get("method") + " " + (String) respuestaJSON.get("url"));
+            // System.out.println((String) respuestaJSON.get("title") + " " + (String) respuestaJSON.get("method") + " " + (String) respuestaJSON.get("url"));
             misdatos = phonegap.createApp((String) respuestaJSON.get("title"), (String) respuestaJSON.get("method"), null, (String) respuestaJSON.get("url"), null);
             //if(Util.isNulo(respuestaJSON)) return "";
             return misdatos.toJSONString();
@@ -241,7 +250,7 @@ public class Phonegap {
     @POST
     @Path("/{idapli}/build/{platform}")
     @Produces("application/json")
-    public String buildApp(@Context HttpServletRequest request,@PathParam("idapli") Long idapli, @PathParam("platform") String platform) throws CurlException {
+    public String buildApp(@Context HttpServletRequest request, @PathParam("idapli") Long idapli, @PathParam("platform") String platform) throws CurlException {
 
         System.out.println("buildapp --> " + idapli);
         System.out.println(platform);
@@ -259,7 +268,7 @@ public class Phonegap {
     @POST
     @Path("/{idapli}/build")
     @Produces("application/json")
-    public String buildApp(@Context HttpServletRequest request,@PathParam("idapli") Long idapli) throws CurlException {
+    public String buildApp(@Context HttpServletRequest request, @PathParam("idapli") Long idapli) throws CurlException {
 
         Curl phonegap = new Curl();
         JSONObject misdatos;
@@ -370,28 +379,28 @@ public class Phonegap {
         JSONObject resul = new JSONObject();
         resul.put("lab_id", lab_id);
         resul.put("lab_experiment_id", lab_experiment_id);
-        
+
         File source = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "git" + File.separator + "origen" + File.separator + "www");
-        if(!source.exists()){
-            GitControl gc; 
-            try {
-                gc = new GitControl(source, remotePath);
-                gc.cloneRepo();
-                gc.pullFromRepo();
-            } catch (IOException ex) {
-                Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
-                resul.put("status", "error");
-            return resul.toJSONString();
-            } catch (GitAPIException ex) {
-                Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
-                resul.put("status", "error");
-            return resul.toJSONString();
-            }
+        if (!source.exists()) {
+            /* GitControl gc; 
+             try {
+             gc = new GitControl(source, remotePath);
+             gc.cloneRepo();
+             gc.pullFromRepo();
+             } catch (IOException ex) {
+             Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+             resul.put("status", "error");
+             return resul.toJSONString();
+             } catch (GitAPIException ex) {
+             Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+             resul.put("status", "error");
+             return resul.toJSONString();
+             }*/
         }
-        
+
         File dest = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "tmp");
         //dest.mkdirs();
-      
+
 
 
         try {
@@ -701,8 +710,8 @@ public class Phonegap {
                 resul.put("status", "error");
                 return resul.toJSONString();
             }
-            
-             file.delete();
+
+            file.delete();
 
 
             resul.put("status", "ok");
@@ -751,6 +760,4 @@ public class Phonegap {
 
         return resul.toJSONString();
     }
-    
-    
 }

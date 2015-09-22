@@ -10,7 +10,7 @@ import org.jdom2.Element;
 
 /**
  *
- * @author adrastea
+ * @author Miguel Sánchez Román
  */
 public class Util {
     
