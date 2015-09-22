@@ -753,6 +753,8 @@ public class Curl {
         return resultado;
     }
 
+    
+    
     private JSONObject getResponseJSONWithDowload(HttpResponse _response) throws CurlException {
         InputStream content = null;
 
@@ -785,7 +787,7 @@ public class Curl {
                 respuestaJSON.put("name", fileTmp.getName());
 
             }
-            //respuestaJSON = (JSONObject) obj;
+           
 
         } catch (ParseException ex) {
             Logger.getLogger(Curl.class.getName()).log(Level.SEVERE, null, ex);
@@ -801,6 +803,8 @@ public class Curl {
             return respuestaJSON;
         }
     }
+    
+    
 
     /**
      * Realiza la llamada a un metodo de phonegap POST y la respuesta la
