@@ -7,7 +7,6 @@ package es.uned.msanchez.tfm.phonegap.curl;
 import es.uned.msanchez.tfm.phonegap.curl.exception.CurlException;
 import es.uned.msanchez.tfm.utilidades.Util;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,15 +43,15 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClients;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-//import org.apache.http.client.utils.URIBuilder;
+
 /**
- *
- * @author adrastea
+ * Establece un cliente RESTFul con los servicios ofrecidos por la API de 
+ * Phonegap Build Developer
+ * @author miguesr
  */
 public class Curl {
 
@@ -60,74 +59,19 @@ public class Curl {
     private RequestConfig localConfig;
     private HttpClient httpclient;
 
-     private static String path_base_tmp;
-    static{
+    private static String path_base_tmp;
+
+    static {
         ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.wizard");
         path_base_tmp = rb.getString("path_tmp").trim();
     }
-    
-    public static void main(String[] args) throws Exception {
-        Curl curl = new Curl();
-
-        //Accediendo a los datos del usuario 
-        JSONObject misdatos = curl.getMe();
-        JSONObject infoApps = (JSONObject) misdatos.get("apps");
-        JSONArray appsJSON = (JSONArray) infoApps.get("all");
-//
-        System.out.println(infoApps);
-        System.out.println(appsJSON);
-        /*
-         File miproyecto = new File("/Users/adrastea/NetBeansProjects/TFM/web/myapp/www.zip");
-         curl.createApp("Memoria", "file", miproyecto);
-
-         //Accediendo a los datos de las aplicaciones del usuario. 
-         JSONObject infoApps2 = (JSONObject)curl.getApps().get("respuesta");
-         JSONArray appsJSON2 = (JSONArray) infoApps2.get("apps");
-         System.out.println(infoApps2);
-         System.out.println(appsJSON2.size());
-       
-         for (int i = 0; i < appsJSON2.size(); i++) {
-         JSONObject apli = (JSONObject) appsJSON2.get(i);
-         Long idApli = (Long) apli.get("id");
-         JSONObject infoIcon = (JSONObject) apli.get("icon");
-         // JSONObject icon = Curl.getIcon((String) infoIcon.get("link"));
-         //  System.out.println(icon);
-         //JSONObject platform = Curl.getPlatform(idApli, "android");
-         //System.out.println(platform);
-         JSONObject keys = curl.getKeysPlatform("ios");
-         System.out.println(keys);
-
-         //  File miproyecto = new File("/Users/adrastea/NetBeansProjects/TFM/web/myapp/www.zip");
-         //  File miproyecto = new File("/Users/adrastea/NetBeansProjects/TFM/web/myapp/www/index.html");
 
 
-         //JSONObject dataApp = new JSONObject();
-         //dataApp.put("title", "Prueba API");
-         //dataApp.put("create_method", "file");
-         //JSONObject infoApps3 = Curl.updateApp(idApli,dataApp,miproyecto);
-         //System.out.println(infoApps3);
-
-         File miIcon = new File("/Users/adrastea/NetBeansProjects/TFM/web/myapp/www/resources/imagenes/default.png");
-         JSONObject jIcon = curl.setIcon(idApli, miIcon);
-         System.out.println(jIcon);
-         //    System.out.println(apli.get("title"));
-         // JSONObject dataApp = new JSONObject();
-         //dataApp.put("title", "Nuevo Title");
-         //curl.updateApp(idApli.toString(), dataApp);
-         //  Curl.buildApp(idApli.toString(), null);
-         // JSONObject result = Curl.deleteApp(idApli);
-         //System.out.println(result);
-
-         }
-
-         */
-
-        /*             JSONObject dataApp = new JSONObject();
-         dataApp.put("title", "Prueba API");
-         dataApp.put("create_method", "file");
-         */
-    }
-
+/**
+ * Inicializa la conexion con el servicio, estableciendo la autenticacion
+ * utilizando los valores correspondientes del fichero de propiedades
+ * config.properties
+ */
     public void init() {
         Properties prop = new Properties();
         String user;
@@ -318,7 +262,7 @@ public class Curl {
     public JSONObject getPlatform(Long _idApp, String _platform) throws CurlException {
 
         JSONObject respuestaJSON = getMethodPhonegapWithDowload("/api/v1/apps/" + _idApp.toString() + "/" + _platform);
-        System.out.println("getPlatForm-->"+respuestaJSON);
+        System.out.println("getPlatForm-->" + respuestaJSON);
         return respuestaJSON;
 
     }
@@ -436,10 +380,9 @@ public class Curl {
         StringBody data_p = new StringBody(_data.toJSONString(), ContentType.TEXT_PLAIN);
 
         Map<String, Object> params = new HashMap<String, Object>();
-        
+
         params.put("data", data_p);
         params.put("file", file);
-        
 
         respuestaJSON = postMethodPhonegap("/api/v1/apps/", params);
 
@@ -460,7 +403,7 @@ public class Curl {
     private JSONObject createApp(JSONObject _data, String _url) throws CurlException {
 
         JSONObject respuestaJSON = null;
-      //  _data.put("private", false);
+        //  _data.put("private", false);
         _data.put("repo", _url);
 
         StringBody data_p = new StringBody(_data.toJSONString(), ContentType.TEXT_PLAIN);
@@ -762,7 +705,6 @@ public class Curl {
                 Random ale = new Random(System.currentTimeMillis());
                 File dir_tmp = new File(Curl.path_base_tmp + File.separator + "tmp");
                 dir_tmp.mkdirs();
-
 
                 File fileTmp = File.createTempFile(Math.abs(ale.nextInt()) + "", null, dir_tmp);
                 FileOutputStream outFile = new FileOutputStream(fileTmp);

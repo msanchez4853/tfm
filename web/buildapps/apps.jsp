@@ -91,8 +91,12 @@
                 <input type="hidden" id="_ff_addApp_method" name="method" value="remote_repo"/>
                 <label class="form_etiqueta" for="_ff_addApp_title"> Titulo: </label>
                 <input type="text" id="_ff_addApp_title" name ="title"/><br/>
-                <label class="form_etiqueta" for="_ff_addApp_url"> Url: </label>
+                <label class="form_etiqueta" for="_ff_addApp_url"> Url del repositorio GitHub: </label>
                 <input type="text" id="_ff_addApp_url" name ="url" />
+                <div class="_ff_nota">
+                    <strong>Nota:</strong>  Si en el repositorio está definido el fichero config.xml el título
+                    de la aplicación definido en config.xml prevalece sobre el indicado en este formulario.
+                </div>
             </form>
         </div>
         <div id="_dd_ff_downApp">
