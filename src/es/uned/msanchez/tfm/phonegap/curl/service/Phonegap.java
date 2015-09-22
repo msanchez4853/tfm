@@ -188,7 +188,7 @@ public class Phonegap {
     @DELETE
     @Path("/{idapli}")
     @Produces("application/json")
-    public String delApp(@PathParam("idapli") Long idapli) throws CurlException {
+    public String delApp(@Context HttpServletRequest request,@PathParam("idapli") Long idapli) throws CurlException {
 
         System.out.println("delapp --> " + idapli);
         Curl phonegap = new Curl();
@@ -202,22 +202,30 @@ public class Phonegap {
         return misdatos.toJSONString();
     }
 
+    /**
+     * Añade un aplicacion a Phonegap Build utilizando un respositorio GitHub.
+     * La aplicacion generada es de ambito privado 
+     * @param request  Representa la informacion sobre la peticion realizada.
+     * @param data Datos en formato JSON que se establecen en la creacion de la aplicacion
+     * (titulo, etc..)
+     * @return Respuesta en JSON con la informacion de la aplicacion creada en Phonegap Build
+     * @throws CurlException 
+     */
     @POST
     @Produces("application/json")
-    public String addApp(@Context UriInfo uri, @Context Application request, @FormParam("datos") String data) throws CurlException {
+    public String addApp(@Context HttpServletRequest request, @FormParam("datos") String data) throws CurlException {
 
         JSONParser parser = new JSONParser();
-        System.out.println(data);
-        System.out.println("URI_Path -->" + uri.getRequestUri().getHost());
+     
 
-        //System.out.println("ip_Path -->"+request.getRemoteAddr());
+       
         JSONObject respuestaJSON = null;
         try {
             respuestaJSON = Util.isNulo(data) ? null : (JSONObject) parser.parse(data);
 
             Curl phonegap = new Curl();
             JSONObject misdatos;
-            System.out.println((String) respuestaJSON.get("title") + " " + (String) respuestaJSON.get("method") + " " + (String) respuestaJSON.get("url"));
+           // System.out.println((String) respuestaJSON.get("title") + " " + (String) respuestaJSON.get("method") + " " + (String) respuestaJSON.get("url"));
             misdatos = phonegap.createApp((String) respuestaJSON.get("title"), (String) respuestaJSON.get("method"), null, (String) respuestaJSON.get("url"), null);
             //if(Util.isNulo(respuestaJSON)) return "";
             return misdatos.toJSONString();
@@ -233,7 +241,7 @@ public class Phonegap {
     @POST
     @Path("/{idapli}/build/{platform}")
     @Produces("application/json")
-    public String buildApp(@PathParam("idapli") Long idapli, @PathParam("platform") String platform) throws CurlException {
+    public String buildApp(@Context HttpServletRequest request,@PathParam("idapli") Long idapli, @PathParam("platform") String platform) throws CurlException {
 
         System.out.println("buildapp --> " + idapli);
         System.out.println(platform);
@@ -251,7 +259,7 @@ public class Phonegap {
     @POST
     @Path("/{idapli}/build")
     @Produces("application/json")
-    public String buildApp(@PathParam("idapli") Long idapli) throws CurlException {
+    public String buildApp(@Context HttpServletRequest request,@PathParam("idapli") Long idapli) throws CurlException {
 
         Curl phonegap = new Curl();
         JSONObject misdatos;
