@@ -149,7 +149,7 @@ function defineEvents(){
     
     $("a[name='del']").click(delApp); 
     $("a[name='add']").click(addApp); 
-    $("a[name='edit']").click(editApp); 
+    $("a[name='edit']").click(rebuilApp); 
     eventsAccionesApp();
     
 }
@@ -166,7 +166,8 @@ function delApp(e){
     var row = $('#apps_phonegap').datagrid('getSelected');
     if (row){        
         
-        $.messager.confirm('Mis Apps', 'Esta seguro de eliminar la aplicacion seleccionada?', function(r){
+        $.messager.confirm('Mis Apps', 
+            'Esta seguro de eliminar la aplicacion seleccionada?', function(r){
             if (r){
                 mitoken = getAuthorization('apps/'+row.id,'DELETE',{
                     idApp:''+row.id
@@ -218,10 +219,6 @@ function gestionRespuestaWithReload(_data,  textStatus,  jqXHR){
         gestionError(_data,textStatus,jqXHR);
         closeProgress();
     }
-    
- 
-    
-    
 }
 
 function gestionRespuestaNoReload(_data,  textStatus,  jqXHR){
@@ -258,7 +255,7 @@ function reloadApp(e){
     mitoken = getAuthorization('apps','GET',{},gestionRespuestaNoReload,gestionError);  
 }
 
-function editApp(e){
+function rebuilApp(e){
     var row = $('#apps_phonegap').datagrid('getSelected');
     if (row){        
         
@@ -447,8 +444,7 @@ function closeProgress(){
 function getAuthorization(_url,_method,_data, _gestionRespuesta, _gestionError){
     initProgress();
     if($.support.cors){
-        $.ajax({        
-            //url:'http://localhost:8084/tfm/webservices/'+_url,
+        $.ajax({                
             url:serverRest+_url,
             method:_method,
             data:_data,
@@ -460,8 +456,7 @@ function getAuthorization(_url,_method,_data, _gestionRespuesta, _gestionError){
                 // If this is enabled, your server must respond with the header
                 // 'Access-Control-Allow-Credentials: true'.
                 withCredentials: false
-            },
-            //crossDomain: true,                    
+            },                    
             error:_gestionError,
             beforeSend: setHeader
         })
@@ -473,13 +468,9 @@ function getAuthorization(_url,_method,_data, _gestionRespuesta, _gestionError){
 
 function setHeader(xhr) {
 
-    //xhr.setRequestHeader('Authorization', token);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-    //xhr.setRequestHeader("Content-Type", "application/json");
     xhr.setRequestHeader("Access-Control-Allow-Methods","GET, PUT, POST, DELETE, OPTIONS"),
     xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-  
-    //   xhr.setRequestHeader("X-Requested-With","XMLHttpRequest");
     xhr.setRequestHeader("Accept","application/json");
 }
 

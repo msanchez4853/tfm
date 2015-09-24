@@ -6,7 +6,7 @@ var dialogGuardar = null;
 
 $(window).ready(function(){
     $("#mensajeSeleccion").hide();
-  /*  if($("a.navbar-brand").attr("data-aspecto")=='related'){
+    /*  if($("a.navbar-brand").attr("data-aspecto")=='related'){
         $("#contenido").hide();
         $("#mensajeSeleccion").show();
     }*/
@@ -30,7 +30,7 @@ $(window).ready(function(){
     
     //$("#_alert_apli").addClass("alert alert-danger alert-dismissible");
     //$("#_alert_apli").alert('close');
-    console.log($("a.navbar-brand").attr("data-aspecto"));
+    
     if( $("a.navbar-brand").attr("data-aspecto")!='completo'
         && $("a.navbar-brand").attr("data-aspecto")!='reducida'){
         dialogGuardar=  $("#_dd_guardar").dialog({
@@ -38,20 +38,20 @@ $(window).ready(function(){
             closed:true,
             modal:true,
             buttons:[{
-                text:'Guardar',
-                handler:guardarXML
-            },{
-                text:'Mostrar',
-                handler:mostrarXML
-            },{
-                text:'Generar',
-                handler:generarApli
-            },{
-                text:'Cerrar',
-                handler:function(){
-                    $("#_dd_guardar").dialog('close');
-                }
-            }],
+                    text:'Guardar',
+                    handler:guardarXML
+                },{
+                    text:'Mostrar',
+                    handler:mostrarXML
+                },{
+                    text:'Generar',
+                    handler:generarApli
+                },{
+                    text:'Cerrar',
+                    handler:function(){
+                        $("#_dd_guardar").dialog('close');
+                    }
+                }],
             width:400
         });
     }else{
@@ -60,17 +60,17 @@ $(window).ready(function(){
             closed:true,
             modal:true,
             buttons:[{
-                text:'Guardar',
-                handler:guardarXML
-            },{
-                text:'Mostrar',
-                handler:mostrarXML
-            },{
-                text:'Cerrar',
-                handler:function(){
-                    $("#_dd_guardar").dialog('close');
-                }
-            }],
+                    text:'Guardar',
+                    handler:guardarXML
+                },{
+                    text:'Mostrar',
+                    handler:mostrarXML
+                },{
+                    text:'Cerrar',
+                    handler:function(){
+                        $("#_dd_guardar").dialog('close');
+                    }
+                }],
             width:400
         });
     }
@@ -149,8 +149,14 @@ function establecerAspectoIni(_this){
             _span_title.addClass("glyphicon-eye-open");
         }else{
             $("[data-ex-apli='"+_this.attr("data-aspecto")+"']").hide();
-            $("[data-select-to='"+_this.attr("data-aspecto")+"']").prop( "checked", true );
-        //   $("[data-select-to='"+_this.attr("data-aspecto")+"']").prop('readonly', true);
+            $("[data-select-to='"+_this.attr("data-aspecto")+"']").each(function(){
+                var _this = $(this);
+                _this.prop( "checked", true );
+                _this.prop("disabled", true);
+                //  var o = $("[data-select-to='"+_this.attr("data-aspecto")+"']");
+                var p = _this.parent();
+                p.append($("<input type='hidden' value='on' name='"+_this.attr("name")+"' id='h_"+_this.attr("id")+"'/>"));
+            });
         }
     }
 }
@@ -158,7 +164,7 @@ function establecerAspectoIni(_this){
 function cambiarAspecto(){
     _this = $(this);
     _span_title =  _this.children("span.nav-aspecto");
-    // console.log(_span_title.length)
+   
     if(_this.attr("data-aspecto")=='completo'){
         $("[data-agr='avanzada']").hide();
         _this.attr("data-aspecto",'reducido');
@@ -315,7 +321,7 @@ function accederOpciones(e){
 
 function grupoOpcionesAvanzadas(){
     _this=$(this);
-    console.log(this.id)
+   // console.log(this.id)
     if(this.id=='_bt_avan_option_ios'){
         $("#_opc_avan_ios").show();
         $("#_opc_avan_android").hide();
@@ -336,7 +342,7 @@ function grupoOpciones(){
         if($(radios[i]).attr('id')==this.id){ 
             $("#"+$(radios[i]).attr('value')).show();
             var s_pop_title = $(radios[i]).parent().children("span.data-title");
-            console.log(s_pop_title.html())
+           // console.log(s_pop_title.html())
             $("#"+$(radios[i]).attr('data-text')).html(s_pop_title.html());
         }
         else{
@@ -496,7 +502,7 @@ function seleccionarAcceso(){
     $("#_bt_perm_mod_acc").removeClass('disabled');
     $("#_bt_perm_add_acc").prop('disabled',true);
     $("#_bt_perm_add_acc").addClass('disabled');
-//  console.log('fin seleccionarAcceso indice --> '+_indice)
+    //  console.log('fin seleccionarAcceso indice --> '+_indice)
 }
 
 

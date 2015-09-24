@@ -38,7 +38,7 @@
         for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
             String param = (String) e.nextElement();
             String value = request.getParameter(param);
-            System.out.println(param + ": " + value);
+            
             if (param.indexOf("_opc_gen_") >= 0) {
 
                 opciones_generales.put(param.replaceFirst("_opc_gen_", ""), value);
@@ -79,34 +79,14 @@
         String login = request.getParameter("login");
         login = Util.isNulo(login) ? "S" : login;
 
-        boolean _onlyLabApp = true;
+       // boolean _onlyLabApp = true;
         if (!Util.isNulo(apli_ext) && apli_ext.equalsIgnoreCase("related")) {
             aspecto = "related";
             ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.related");
-            String s_plugins =rb.getString("plugins");
-            String[] plugins = s_plugins.split(",");
-            System.out.println(plugins[2]);
             String pag_inicio = rb.getString("pag_inicio").trim();
-           // if (!Util.isNulo(lab_id)) {
-           // String pag_inicio = "mobile.html";
+            opciones_generales.put("source_file", pag_inicio);
 
-             /*   if (opciones_generales.containsKey("source_file")) {
-                    pag_inicio = (String) opciones_generales.get("source_file");
-                    opciones_generales.remove("source_file");
-                }
 
-                if (!pag_inicio.contains("?")) {
-                    pag_inicio = pag_inicio + "?lab_id=" + lab_id;
-                }
-                pag_inicio = pag_inicio + "&lab_id=" + lab_id;
-
-                if (!Util.isNulo(lab_experiment_id)) {
-                    pag_inicio = pag_inicio + "&lab_experiment_id=" + lab_experiment_id;
-                    _onlyLabApp = false;
-                }*/
-                opciones_generales.put("source_file", pag_inicio);
-
-            //}
         }
 
         session.setAttribute("opciones_generales", opciones_generales);
@@ -160,7 +140,7 @@
                             <li ><a href="#_opciones_desarrollador">Info. Desarrollador</a></li>
                             <li><a href="#_opciones_plugins">Plugins</a></li>
                             <li><a id="_opciones_guardar" href="#"><span class="glyphicon glyphicon-floppy-disk">&nbsp;Guardar</span></a></li>                    
-                                <%if (aspecto.equalsIgnoreCase("related")) {%>
+                            <%if (aspecto.equalsIgnoreCase("related")) {%>
                             <li><a href="#">User: <span id="user">None</span></a></li>
                             <li><!-- Button trigger modal -->
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#labsSelectionModalDialog">
@@ -181,17 +161,30 @@
         <section id="contenido">
             <form id="form_guardar" method="POST" action="save_config.jsp">
                 <input type="hidden" name="option" id="option" value="default">
+                <input type="hidden" name="apli" id="apli" value="<%=aspecto%>">
                 <input type="hidden" name="lab_id" id="lab_id" value="<%=lab_id%>">
                 <input type="hidden" name="lab_experiment_id" id="lab_experiment_id" value="<%=lab_experiment_id%>">
-                <jsp:include  page="opc_generales.jsp"/>
-                <jsp:include  page="opc_avanzadas.jsp"/>
-                <jsp:include  page="opc_iconos.jsp"/>
-                <jsp:include  page="opc_splash.jsp"/>
+                <jsp:include  page="opc_generales.jsp">
+                    <jsp:param name="aspecto" value="<%=aspecto%>"></jsp:param>
+                </jsp:include>    
+                <jsp:include  page="opc_avanzadas.jsp">
+                    <jsp:param name="aspecto" value="<%=aspecto%>"></jsp:param>
+                </jsp:include>    
+                <jsp:include  page="opc_iconos.jsp">
+                    <jsp:param name="aspecto" value="<%=aspecto%>"></jsp:param>
+                </jsp:include>    
+                <jsp:include  page="opc_splash.jsp">
+                    <jsp:param name="aspecto" value="<%=aspecto%>"></jsp:param>
+                </jsp:include>    
                 <jsp:include  page="opc_permisos.jsp" >
                     <jsp:param name="aspecto" value="<%=aspecto%>"></jsp:param>
                 </jsp:include>
-                <jsp:include  page="opc_desarrollador.jsp"/>     
-                <jsp:include  page="opc_plugins.jsp"/>  
+                <jsp:include  page="opc_desarrollador.jsp">
+                    <jsp:param name="aspecto" value="<%=aspecto%>"></jsp:param>
+                </jsp:include>    
+                <jsp:include  page="opc_plugins.jsp">
+                    <jsp:param name="aspecto" value="<%=aspecto%>"></jsp:param>
+                </jsp:include>      
             </form>
         </section>        
         <%
@@ -272,26 +265,23 @@
 
                 $('#btnSelectLabExp').on('click', function () {
                     // Get info from modal
-                    var _onlyLabApp = <%=_onlyLabApp%>//$("#cbxOnlyLabApp").is(':checked');
+                    var _onlyLabApp = $("#cbxOnlyLabApp").is(':checked');
                     $('#selectedLab').text($('#labs :selected').text());
                     $('#selectedLabId').val($('#labs :selected').val())
-
+                    $('#_opc_gen_desc_app').val($('#labs :selected').attr('data-desc'))
+                    $('#_opc_gen_name_app').val($('#labs :selected').attr('data-name'))
+                
+                
                     $('#selectedExp').text("NONE");
                     if (!_onlyLabApp) {
                         $('#selectedExp').text($('#experiments :selected').text());
                         $('#selectedExpId').val($('#experiments :selected').val())
                     }
                     $('#labsSelectionModalDialog').modal('hide');
-                    // NOTA: Se usan campos escondidos como prueba, pero lo suyo es usar variables javascript
-                    // o en su defecto un bean de sesion para el control de acceso/info de los labs
-                    console.log("precarga para prueba de lab_id y lab_id");
-
-                    $('#selectedLabId').val("Mi Laboratorio");
-                    $('#selectedExpId').val("Experimento");
-
+                    
                     //Preparar entorno al laboratorio selecionado.
-                    $("#form_guardar input[id='id_lab']").val($('#selectedLabId').val());
-                    $("#form_guardar input[id='id_experiment_lab']").val($('#selectedExpId').val());
+                    $("#form_guardar input[id='lab_id']").val($('#selectedLabId').val());
+                    $("#form_guardar input[id='lab_experiment_id']").val($('#selectedExpId').val());
                 });
 
             });
@@ -309,12 +299,12 @@
                 var sel = $('#labs');
                 var count = 0;
                 // Sort by name
-                console.log(userInfo);
-                console.log(userInfo.labs);
+
+
                 if (userInfo.labs != undefined) {
-                    userInfo.labs.sort(sortLabsByName);
+                    //  userInfo.labs.sort(sortLabsByName);//No encuentra la funcion
                     $(userInfo.labs).each(function () {
-                        sel.append($("<option>").attr('value', this.ID).text(this.name));
+                        sel.append($("<option>").attr('value', this.ID).text(this.name).attr("data-name",this.name).attr("data-desc",this.description));
                         count++;
                     });
                     if (count > 0) {
@@ -330,7 +320,7 @@
                                 var sel2 = $('#experiments');
                                 sel2.find("option").remove();
                                 $(experiments).each(function () {
-                                    sel2.append($("<option>").attr('value', this.id).text(this.experiment_name));
+                                    sel2.append($("<option>").attr('value', this.id).text(this.experiment_name).attr("data-name",this.experiment_name));
                                 });
                             }
                         });
@@ -364,13 +354,12 @@
             <ul>
                 <li><strong>Guardar</strong>: Guarda en su pc el fichero generado. </li>
                 <li><strong>Mostrar</strong>: Muestra en el navegador el fichero generado. </li>
-                    <%
-                        if (aspecto.equalsIgnoreCase("related")) {
-                    %>
+                <%
+                    if (aspecto.equalsIgnoreCase("related")) {
+                %>
                 <li><strong>Generar</strong>: Genera el laboratorio con el fichero generado. </li>
-                    <%
-                        }
-                    %>
+                <%                        }
+                %>
                 <li><strong>Cancelar</strong>: No genera el documento. </li>
             </ul>
         </div>

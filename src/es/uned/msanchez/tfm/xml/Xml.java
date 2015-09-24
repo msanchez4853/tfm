@@ -30,59 +30,7 @@ public class Xml {
 
     private Element widget;
 
-    public static void main(String[] args) throws Exception {
-
-        Xml xml = new Xml();
-
-
-        try {
-
-            xml.createRaizConfig("es.uned.miguesr.tfm.memoria", "1.0.0", null);
-            xml.setNameApp("Aplicacion de memoria");
-            xml.setAuthorApp("Miguel S.R.", "www.ugr.es/local/miguesr", "msanchez4853@alumno.uned.es");
-            xml.setDescripApp("Juego para ejercitar la memoria");
-            List<String> platform = new ArrayList<String>();
-            platform.add("ios");
-            platform.add("android");
-            platform.add("winphone");
-            xml.setPlatform(platform);
-            xml.setPlatform(platform);
-
-            xml.setPreference("phonegap-version", "3.7.0");
-            xml.setPreference("ois-phonegap-version", "3.7.0");
-            xml.setPreference("phonegap-version", "3.7.0");
-
-            xml.setAccess("http://phonegap", Boolean.TRUE, null);
-            xml.setAccess("http://phonegap", Boolean.TRUE, null);
-            xml.setIconIos("icon.png", "ios", "200", "100");
-            xml.setIconAndroid("icon.png", "android", "ldpi");
-            xml.setIconWPhone("icon.png", "winphone", "background");
-
-            xml.setSplashIos("icon.png", "ios", "200", "100");
-            xml.setSplashAndroid("icon.png", "android", "ldpi");
-            xml.setSplash("icon.png", "winphone");
-
-            xml.setFeatures("http://api.phonegap.com/1.0/network");
-            xml.setPlugin("org.apache.cordova.console");
-            xml.setPlugin("org.apache.cordova.battery-status", "0.2.11");
-
-            Document doc = new Document(xml.getWidget());
-            //   doc.setRootElement(company);
-
-
-
-            // new XMLOutputter().output(doc, System.out);
-            XMLOutputter xmlOutput = new XMLOutputter();
-
-            // display nice nice
-            xmlOutput.setFormat(Format.getPrettyFormat());
-            xmlOutput.output(doc, System.out);
-
-            System.out.println("File Saved!");
-        } catch (IOException io) {
-            System.out.println(io.getMessage());
-        }
-    }
+ 
 
     public Xml() {
         createRaizConfig();
@@ -111,7 +59,6 @@ public class Xml {
     public void setOpcionesGenerales(Map<String, String> _opciones_generales) throws Exception {
         List platform = new ArrayList();
         for (String param : _opciones_generales.keySet()) {
-           // System.out.println("Opciones Generales: " + param + " ---> " + _opciones_generales.get(param));
             String value = _opciones_generales.get(param);
             if(Util.isNulo(value)) continue;
             
@@ -164,7 +111,7 @@ public class Xml {
 
     public void setOpcionesAvanzadas(Map<String, String> _opciones_avanzadas) throws Exception {
         for (String param : _opciones_avanzadas.keySet()) {
-          //  System.out.println("Opciones Avanzadas: " + param + " ---> " + _opciones_avanzadas.get(param));
+          
             String value = _opciones_avanzadas.get(param);
 
             if (param.indexOf("CKB") >= 0) {
@@ -201,7 +148,7 @@ public class Xml {
         String path_default = _opciones_icons.get("default_path");
         path_default = Util.isNulo(path_default) ? "" : path_default;
         for (String param : _opciones_icons.keySet()) {
-          //  System.out.println("Opciones setOpcionesIcons: " + param + " ---> " + _opciones_icons.get(param));
+          
             if (param.indexOf("_path") == param.length() - 5) {
                 continue;
             }
@@ -219,13 +166,13 @@ public class Xml {
                 continue;
             }
             if (param.indexOf("win_") >= 0) {
-                //System.out.println("role en icono win --->  "+param.substring(5));
+                
                 String _rol = (param.replace("win_", "")).substring(5);
                 setIconWPhone(path_win + value, "winphone", _rol);
                 continue;
             }
             if (param.indexOf("android_") >= 0) {
-                //System.out.println("role en icono win --->  "+param.substring(5));
+                
                 String _qualifier = param.replace("android_", "");
                 setIconAndroid(path_android + value, "android", _qualifier);
                 continue;
@@ -246,7 +193,7 @@ public class Xml {
         path_default = Util.isNulo(path_default) ? "" : path_default;
 
         for (String param : _opciones_splash.keySet()) {
-            //System.out.println("Opciones setOpcionesSplash: " + param + " ---> " + _opciones_splash.get(param));
+            
             if (param.indexOf("_path") == param.length() - 5) {
                 continue;
             }
@@ -272,7 +219,7 @@ public class Xml {
                 continue;
             }
             if (param.indexOf("android_") >= 0) {
-                //System.out.println("role en icono win --->  "+param.substring(5));
+                
                 String _qualifier = param.replace("android_", "");
                 setSplashAndroid(path_android+value, "android", _qualifier);
                 continue;
@@ -285,7 +232,7 @@ public class Xml {
         HashMap<Integer, HashMap<String, String>> accesos = new HashMap<Integer, HashMap<String, String>>();
 
         for (String param : _opciones_permisos.keySet()) {
-           // System.out.println("Opciones setOpcionesPermisos: " + param + " ---> " + _opciones_permisos.get(param));
+           
             String value = _opciones_permisos.get(param);
 
             if (param.indexOf("acceso_") >= 0) {
@@ -302,13 +249,13 @@ public class Xml {
             }
 
             if (param.indexOf("android_") >= 0) {
-                //System.out.println("role en icono win --->  "+param.substring(5));
+                
                 String _perm = param.replace("android_", "");
                 setFeatures(_perm);
                 continue;
             }
             if (param.indexOf("win_") >= 0) {
-                //System.out.println("role en icono win --->  "+param.substring(5));
+                
                 String _perm = param.replace("win_", "");
                 setFeatures(_perm);
                 continue;
@@ -335,7 +282,7 @@ public class Xml {
         HashMap<Integer, HashMap<String, String>> accesos = new HashMap<Integer, HashMap<String, String>>();
 
         for (String param : _opciones_puglins.keySet()) {
-            System.out.println("Opciones setOpcionesPlugins: " + param + " ---> " + _opciones_puglins.get(param));
+            
             String value = _opciones_puglins.get(param);
 
             setPlugin(param);
@@ -347,7 +294,7 @@ public class Xml {
 
         HashMap<String, String> autor = new HashMap<String, String>();
         for (String param : _opciones_desarrollo.keySet()) {
-            System.out.println("Opciones setOpcionesDesarrollador: " + param + " ---> " + _opciones_desarrollo.get(param));
+            
             String value = _opciones_desarrollo.get(param);
             if (param.indexOf("autor_") >= 0) {
                 String info = param.replace("autor_", "");

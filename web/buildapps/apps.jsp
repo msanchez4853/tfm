@@ -2,11 +2,8 @@
 <%@page import="java.util.ResourceBundle"%>
 <%@page import="org.apache.http.HttpHeaders"%>
 
-<%//@page import="org.json.simple.JSONArray"%>
 <!DOCTYPE html>
 
-<%//@page import="es.uned.curl.Curl"%>
-<%//@page import="org.json.simple.JSONObject"%> 
 <%
     ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.phonegap.curl.resources.config");
     String serverRestFull = rb.getString("serverRESTFUL").trim();
@@ -28,8 +25,8 @@
         <script src="../resources/jquery/jquery.js"></script>
         <script src="../resources/jquery-easyui/jquery.easyui.min.js"></script>
         <script type="text/javascript">
-    var serverRest= '<%=serverRestFull%>';
-</script>
+            var serverRest= '<%=serverRestFull%>';
+        </script>
         <script src="../resources/js/build.js"></script>
 
     </head>
@@ -38,7 +35,7 @@
             <nav class="navbar navbar-default navbar-inverse" role="navigation">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        
+
                         <a class="navbar-brand" href="#">
                             <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
                         </a>
@@ -48,17 +45,17 @@
         </section>
         <section id="contenido">
             <table id="apps_phonegap" title="Aplicaciones con Phonegap Build" width="100%">
-                    <thead> 
-                      <tr>
-                          <th>Id</th>
-                          <th>Titulo</th>
-                          <th>Package</th>
-                          <th>Android</th>
-                          <th>iOS</th>
-                          <th>WinPhone</th>
-                          <th>Install</th>
-                      </tr>
-                  </thead>
+                <thead> 
+                    <tr>
+                        <th>Id</th>
+                        <th>Titulo</th>
+                        <th>Package</th>
+                        <th>Android</th>
+                        <th>iOS</th>
+                        <th>WinPhone</th>
+                        <th>Install</th>
+                    </tr>
+                </thead>
 
             </table>
             <div id="tb" style="padding:2px 5px;">
@@ -84,7 +81,7 @@
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="../resources/bootstrap/js/bootstrap.min.js"></script>
 
-        
+
         <div id="_dd_ff_addApp">
             <form id="_ff_addApp">
                 <span id="_ff_addApp_men" class="_error_form">&nbsp;</span><br/>
@@ -104,16 +101,16 @@
                 <input type="hidden" id="_ff_downApp_name" name="name" value="default"/>                
             </form>
         </div>
-        
+
         <div id="_dd_ff_infoApp">
             <table>
-              <%--  <caption>Informacion sobre la aplicacion <span id="_info_name_apli">&nbsp;</span></caption>--%>
-                
+                <%--  <caption>Informacion sobre la aplicacion <span id="_info_name_apli">&nbsp;</span></caption>--%>
+
                 <tr><td class="etiqueta_info"> Version Aplicacion</td><td class="valor_info" id="_info_vapp_apli"> --- </td></tr>
                 <tr><td class="etiqueta_info"> Version Phonegap</td><td class="valor_info" id="_info_vphonegap_apli"> --- </td></tr>
                 <tr><td class="etiqueta_info"> Descripcion</td><td class="valor_info" id="_info_desc_apli"> --- </td></tr>
-                
-                
+
+
             </table>                
         </div>
     </body>

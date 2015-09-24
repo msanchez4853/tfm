@@ -5,6 +5,7 @@
 package es.uned.msanchez.tfm.phonegap.curl.service;
 
 import com.sun.jersey.spi.resource.Singleton;
+//import es.uned.msanchez.tfm.git.GitControl;
 import es.uned.msanchez.tfm.phonegap.curl.Curl;
 import es.uned.msanchez.tfm.phonegap.curl.exception.CurlException;
 import es.uned.msanchez.tfm.utilidades.Util;
@@ -35,6 +36,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import org.apache.commons.io.FileUtils;
+//import org.eclipse.jgit.api.errors.GitAPIException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -50,17 +52,24 @@ public class Phonegap {
 
     private static String path_base_tmp;
     private static String remotePath;
+    private static String[] dir_omitir;
 
     static {
         ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.wizard");
         path_base_tmp = rb.getString("path_tmp").trim();
         remotePath = rb.getString("related_ori").trim();
+        String directorios_omitir = rb.getString("directorios_omitir");
+        if (!Util.isNulo(directorios_omitir)) {
+            dir_omitir = directorios_omitir.split(",");
+        }
     }
 
     /**
      * Obtiene la informacion de las aplicaciones registradas en Phonega Build.
      *
-     * @return
+     * @param request Representa la informacion sobre la peticion realizada.
+     * @return Representacion en JSON de las aplicaciones definidas en PhoneGap
+     * Build
      * @throws CurlException
      */
     @GET
@@ -68,10 +77,10 @@ public class Phonegap {
     public String getMeApps(@Context HttpServletRequest request) throws CurlException {
 
         String ip = request.getRemoteAddr();
-        // System.out.println("MI IP --- " + ip);
+
         Curl phonegap = new Curl();
         JSONObject misdatos = phonegap.getApps();
-        //  System.out.println("getMEapps --> "+misdatos);
+
         JSONObject resul = new JSONObject();
         JSONObject salida = new JSONObject();
 
@@ -86,7 +95,7 @@ public class Phonegap {
             JSONArray _rows = new JSONArray();
             for (int app = 0; app < appsJSON.size(); app++) {
                 JSONObject appJSON = (JSONObject) appsJSON.get(app);
-                System.out.println(appJSON);
+                
                 JSONObject _o_app = new JSONObject();
                 _o_app.put("title", (String) appJSON.get("title"));
                 _o_app.put("desc", (String) appJSON.get("description"));
@@ -123,10 +132,12 @@ public class Phonegap {
 
     /**
      * Obtiene la informacion de la aplicacion indicada que se encuentra en
-     * Phonega Build.
+     * Phonegap Build.
      *
-     * @param idapli
-     * @return
+     * @param request Representa la informacion sobre la peticion realizada.
+     * @param idapli Identificador de la aplicacion.
+     * @return Una representacion en JSON de la informacion de la aplicacion
+     * indicada.
      * @throws CurlException
      */
     @GET
@@ -135,7 +146,7 @@ public class Phonegap {
     public String getApp(@Context HttpServletRequest request, @PathParam("idapli") Long idapli) throws CurlException {
 
         String ip = request.getRemoteAddr();
-        System.out.println("MI IP --- " + ip);
+
         Curl phonegap = new Curl();
         JSONObject misdatos;
         if (Util.isNulo(idapli)) {
@@ -175,9 +186,12 @@ public class Phonegap {
     }
 
     /**
+     * Elimina la aplicacion especificada de Phonegap Build.
      *
-     * @param idapli
-     * @return
+     * @param request Representa la informacion sobre la peticion realizada.
+     * @param idapli Identificador de la aplicacion.
+     * @return Respresentacion JSON con la informacion de la aplicacion
+     * eliminada.
      * @throws CurlException
      */
     @DELETE
@@ -185,7 +199,7 @@ public class Phonegap {
     @Produces("application/json")
     public String delApp(@Context HttpServletRequest request, @PathParam("idapli") Long idapli) throws CurlException {
 
-        System.out.println("delapp --> " + idapli);
+
         Curl phonegap = new Curl();
         JSONObject misdatos;
         if (Util.isNulo(idapli)) {
@@ -222,26 +236,34 @@ public class Phonegap {
 
             Curl phonegap = new Curl();
             JSONObject misdatos;
-            // System.out.println((String) respuestaJSON.get("title") + " " + (String) respuestaJSON.get("method") + " " + (String) respuestaJSON.get("url"));
+          
             misdatos = phonegap.createApp((String) respuestaJSON.get("title"), (String) respuestaJSON.get("method"), null, (String) respuestaJSON.get("url"), null);
-            //if(Util.isNulo(respuestaJSON)) return "";
             return misdatos.toJSONString();
         } catch (ParseException ex) {
             Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-
-        //    System.out.print(headers.getRequestHeader(HttpHeaders.ACCEPT));
         return " ";
     }
 
+    /**
+     * Inicia la construccion de la plataforma especificada para la aplicacion
+     * indicada.
+     *
+     * @param request Representa la informacion sobre la peticion realizada.
+     * @param idapli Identificador de la aplicacion.
+     * @param platform Identificador de la aplicacion.
+     * @return Respuesta en JSON con la informacion de la aplicacion que se esta
+     * construyendo en Phonegap Build
+     * @throws CurlException
+     */
     @POST
     @Path("/{idapli}/build/{platform}")
     @Produces("application/json")
-    public String buildApp(@Context HttpServletRequest request, @PathParam("idapli") Long idapli, @PathParam("platform") String platform) throws CurlException {
+    public String buildAppPlatform(@Context HttpServletRequest request,
+            @PathParam("idapli") Long idapli, @PathParam("platform") String platform) throws CurlException {
 
-        System.out.println("buildapp --> " + idapli);
-        System.out.println(platform);
+
         Curl phonegap = new Curl();
         JSONObject misdatos;
         if (Util.isNulo(idapli)) {
@@ -253,6 +275,15 @@ public class Phonegap {
         return misdatos.toJSONString();
     }
 
+    /**
+     * Inicia la construccion de la aplicacion indicada.
+     *
+     * @param request Representa la informacion sobre la peticion realizada.
+     * @param idapli Identificador de la aplicacion.
+     * @return Respuesta en JSON con la informacion de la aplicacion que se esta
+     * construyendo en Phonegap Build
+     * @throws CurlException
+     */
     @POST
     @Path("/{idapli}/build")
     @Produces("application/json")
@@ -270,30 +301,46 @@ public class Phonegap {
     }
 
     /**
+     * Descarga la aplicacion movil para la plataforma y aplicacion Phonegap
+     * indicadas.
      *
-     * @param request
-     * @param idapli
-     * @param platform
-     * @param name_apli
-     * @return
+     * @param request Representa la informacion sobre la peticion realizada.
+     * @param idapli Identificador de la aplicacion.
+     * @param platform Identificador de la plataforma.
+     * @param name_apli Nombre de la aplicacion.
+     * @return Si se ha generado un error, devuelve la informacion del error en
+     * una representacion JSON; en otro caso, se devuelve el fichero de binario
+     * para la plataforma indicada.
      * @throws CurlException
      */
     @GET
     @Path("/{idapli}/{platform}")
     @Produces({MediaType.APPLICATION_OCTET_STREAM, "application/json"})
-    public Response downloadApp(@Context HttpServletRequest request, @PathParam("idapli") Long idapli, @PathParam("platform") String platform,
+    public Response downloadApp(@Context HttpServletRequest request,
+            @PathParam("idapli") Long idapli,
+            @PathParam("platform") String platform,
             @QueryParam("name") String name_apli) throws CurlException {
 
         String ip = request.getRemoteAddr();
-        System.out.println("MI IP --- " + ip);
+        JSONObject resul = new JSONObject();
+
+        if (Util.isNulo(idapli) || Util.isNulo(platform)) {
+            resul.put("status", 400);
+            resul.put("status_text", "No se han especificado los parametros obligaotrios en la llamada");
+            return Response.status(400).entity(resul)
+                    .header("Content-Type", MediaType.APPLICATION_JSON_TYPE).build();
+        }
+
+        //Conexion con el cliente de Phonegap Build, Curl
         Curl phonegap = new Curl();
-        JSONObject resul = phonegap.getPlatform(idapli, platform);
-        if (!Util.isNulo(resul) && resul.containsKey("status_text") && ((String) resul.get("status_text")).equals("OK")) {
+        resul = phonegap.getPlatform(idapli, platform);
+        if (!Util.isNulo(resul) && resul.containsKey("status_text")
+                && ((String) resul.get("status_text")).equals("OK")) {
             JSONObject datosFile = (JSONObject) resul.get("respuesta");
 
             File file = new File((String) datosFile.get("descargado"));
             String type = (String) datosFile.get("type");
-            //String name_file = Util.isNulo(idapli) ? platform : idapli.toString();
+
             String name_file = Util.isNulo(name_apli) ? platform : name_apli.toString();
             if (platform.equals("android")) {
                 name_file = name_file + ".apk";
@@ -309,12 +356,12 @@ public class Phonegap {
             rbu.header("Content-Disposition", "attachment; filename=\"" + name_file + "\"") //optional
                     .header("Content-Type", type);
 
-            //  file.delete();
+
             file.deleteOnExit();
 
             return rbu.build();
         } else {
-            //JSONObject error = new JSONObject();
+
             return Response.status(400).entity(resul)
                     .header("Content-Type", MediaType.APPLICATION_JSON_TYPE).build();
         }
@@ -322,20 +369,21 @@ public class Phonegap {
     }
 
     /**
-     * Obtiene la informacion de la aplicacion indicada que se encuentra en
-     * Phonega Build.
+     * Comprueba que el fichero de configuracion config.xml se encuentra
+     * generado para el laboratorio y experimiento especificado.
      *
-     * @param idapli
-     * @return
+     * @param request Representa la informacion sobre la peticion realizada.
+     * @param lab_id Identificador del laboratorio
+     * @param lab_experiment_id Identificador del experimento.
+     * @return Representacion JSON indicado si existe el fichero o no.
      * @throws CurlException
      */
     @GET
     @Path("/check/{lab}/{lab_experiment}")
     @Produces("application/json")
-    public String checkConfig(@Context HttpServletRequest request, @PathParam("lab") String lab_id, @PathParam("lab_experiment") String lab_experiment_id) throws CurlException {
+    public String relatedCheckConfig(@Context HttpServletRequest request, @PathParam("lab") String lab_id, @PathParam("lab_experiment") String lab_experiment_id) throws CurlException {
 
         String ip = request.getRemoteAddr();
-        System.out.println("MI IP --- " + ip);
 
 
         File f_config = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "www/config.xml");
@@ -350,47 +398,58 @@ public class Phonegap {
         }
 
 
-
-        //  resul.put("rows", _rows);
-
-
         return resul.toJSONString();
     }
 
-    @GET
+    /**
+     * Empaquete el codigo fuente del laboratorio con el fichero config.xml
+     * generado
+     *
+     * @param request Representa la informacion sobre la peticion realizada.
+     * @param lab_id Identificador del laboratorio
+     * @param lab_experiment_id Identificador del experimento.
+     * @return Represetnacion en JSON del resultado de realizar la operacion de
+     * empaquetado.
+     * @throws CurlException
+     */
+    @POST
     @Path("/pkg/{lab}/{lab_experiment}")
     @Produces("application/json")
-    public String pkgLab(@Context HttpServletRequest request, @PathParam("lab") String lab_id, @PathParam("lab_experiment") String lab_experiment_id) throws CurlException {
+    public String relatedPkgLab(@Context HttpServletRequest request, 
+    @PathParam("lab") String lab_id, @PathParam("lab_experiment") String lab_experiment_id) 
+            throws CurlException {
 
         String ip = request.getRemoteAddr();
-        System.out.println("MI IP --- " + ip);
         JSONObject resul = new JSONObject();
         resul.put("lab_id", lab_id);
         resul.put("lab_experiment_id", lab_experiment_id);
 
-        File source = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "git" + File.separator + "origen" + File.separator + "www");
-        if (!source.exists()) {
-            /* GitControl gc; 
-             try {
-             gc = new GitControl(source, remotePath);
-             gc.cloneRepo();
-             gc.pullFromRepo();
-             } catch (IOException ex) {
-             Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
-             resul.put("status", "error");
-             return resul.toJSONString();
-             } catch (GitAPIException ex) {
-             Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
-             resul.put("status", "error");
-             return resul.toJSONString();
-             }*/
+        File source = new File(Phonegap.path_base_tmp + File.separator + "tmp" 
+                + File.separator + "git" + File.separator + "origen" + File.separator + "www");
+/*        GitControl gc;
+        try {
+            gc = new GitControl(source, remotePath);
+            if (!source.exists()) {
+                gc.pullFromRepo();
+            } else {
+                gc.cloneRepo();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+            resul.put("status", "error");
+            return resul.toJSONString();
+        } catch (GitAPIException ex) {
+            Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+            resul.put("status", "error");
+            return resul.toJSONString();
         }
+*/
 
-        File dest = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "tmp");
+        //Copiamos el codigo base al directorio tmp de la aplicacion que se esta generando.
+        File dest = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator 
+                + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id 
+                + File.separator + "tmp");
         //dest.mkdirs();
-
-
-
         try {
             FileUtils.copyDirectory(source, dest);
         } catch (IOException ex) {
@@ -400,7 +459,11 @@ public class Phonegap {
         }
 
 
-        File f_config = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "www/config.xml");
+        //Se copia el fichero config.xml generado previamente al directorio tmp de la aplicacion 
+        //que se esta generando. 
+        File f_config = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator 
+                + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id 
+                + File.separator + "www/config.xml");
         try {
             FileUtils.copyFileToDirectory(f_config, dest);
         } catch (IOException ex) {
@@ -409,7 +472,57 @@ public class Phonegap {
             return resul.toJSONString();
         }
 
+        //Elimina el fichero phonegap.js o cordova.js del directorio raiz de la aplicacion.
+        File f_phonegap = new File(dest, "phonegap.js");
+        if (f_phonegap.exists() && f_phonegap.isFile()) {
+            //se elimina
+            f_phonegap.delete();
+        }
+        File f_cordova = new File(dest, "cordova.js");
+        if (f_cordova.exists() && f_cordova.isFile()) {
+            //se elimina
+            f_cordova.delete();
+        }
+        //Se crea el fichero .pgbomit en los directorios que se quieren omitir en la aplicacion.
+        if (!Util.isNulo(Phonegap.dir_omitir) && Phonegap.dir_omitir.length > 0) {
+            //Si se ha especificado directorios se añade el fichero .pgbomit
+            for (String dir : Phonegap.dir_omitir) {
+                File f_pgbomit = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + File.separator
+                        + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator
+                        + "tmp" + File.separator + dir + File.separator + ".pgbomit");
+                try {
+                    f_pgbomit.createNewFile();
+                } catch (IOException ex) {
+                    Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+                    resul.put("status", "error");
+                    return resul.toJSONString();
+                }
+            }
+        }
 
+        //Generar el fichero config.json
+        JSONObject config_json = new JSONObject();
+        config_json.put("lab_id", lab_id);
+        if (!lab_experiment_id.equals("default")) {
+            config_json.put("lab_experiment_id", lab_experiment_id);
+        } else {
+            config_json.put("lab_experiment_id", "");
+        }
+        File f_config_json = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + File.separator
+                + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator
+                + "tmp" + File.separator + "conf" + File.separator + "config.json");
+        FileWriter fw_config_json;
+        try {
+            fw_config_json = new FileWriter(f_config_json);
+            fw_config_json.write(config_json.toJSONString());
+            fw_config_json.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
+            resul.put("status", "error");
+            return resul.toJSONString();
+        }
+
+        //Se crea el fichero zip del directorio tmp de la aplicacion que se esta generando y se copia en el directorio zip de la aplicacion.
         File dest_zip = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "zip");
         try {
             Zip.zipDirectorio(dest, dest_zip, "lab", Zip.Extension.ZIP);
@@ -429,26 +542,30 @@ public class Phonegap {
     }
 
     /**
-     * Obtiene la informacion de la aplicacion indicada que se encuentra en
-     * Phonega Build.
+     * Realiza la peticion de construccion de un laboratorio de RELATED.
      *
-     * @param idapli
-     * @return
+     * @param request Representa la informacion sobre la peticion realizada.
+     * @param lab_id Identificador del laboratorio
+     * @param lab_experiment_id Identificador del experimento.
+     * @return Una representacion de JSON de la informacion de la aplicacion que
+     * se esta construyendo en Phonegap Build asociada al laboratorio.
      * @throws CurlException
      */
-    @GET
+    @POST
     @Path("/build/{lab}/{lab_experiment}")
     @Produces("application/json")
-    public synchronized String buildLab(@Context HttpServletRequest request, @PathParam("lab") String lab_id, @PathParam("lab_experiment") String lab_experiment_id) throws CurlException {
+    public static synchronized String relatedBuildLab(@Context HttpServletRequest request, 
+    @PathParam("lab") String lab_id, @PathParam("lab_experiment") String lab_experiment_id) 
+            throws CurlException {
 
         String ip = request.getRemoteAddr();
-        System.out.println("MI IP --- " + ip);
+
         Curl phonegap = new Curl();
 
         // Comprobamos si existe otra aplicacion en Phonegap privada.
         JSONObject info_apps = phonegap.getApps();
         JSONObject apliPrivada = null;
-        System.out.println(info_apps);
+        
         if (((Integer) info_apps.get("status")) == 200) {
             JSONObject respuesta = (JSONObject) info_apps.get("respuesta");
             JSONArray apps = (JSONArray) respuesta.get("apps");
@@ -473,14 +590,17 @@ public class Phonegap {
                 String value = (String) i.next();
                 if (value.contains("pending")) {
                     //existe una aplicacion pendiente de ejecutar.
-                    resul.put("error", "Existe una aplicacion privada. La aplicacion esta pendiente de crearse para una plataforma.");
+                    resul.put("error", "Existe una aplicacion privada. La aplicacion esta "
+                            + "pendiente de crearse para una plataforma.");
                     resul.put("status", "error");
                     return resul.toJSONString();
                 }
             }
+            
             //Comprobamos si se ha realizado el download de la aplicacion privada
             Long idApliPho = (Long) apliPrivada.get("id");
-            File dir_back = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "backup" + File.separator + idApliPho);
+            File dir_back = new File(Phonegap.path_base_tmp + File.separator + "tmp" 
+                    + File.separator + "backup" + File.separator + idApliPho);
             if (dir_back.exists() && dir_back.isDirectory()) {
                 //La aplicacion privada no se ha realizado download
                 //Leemos los datos del laboratorio.
@@ -498,13 +618,12 @@ public class Phonegap {
                     BufferedReader re_labExpId = new BufferedReader(fr_labExpId);
                     antLabExpId = re_labExpId.readLine();
                     re_labExpId.close();
-                    fr_labExpId.close();
-
-                    System.out.println(antLabId + " -- " + antLabExpId);
+                    fr_labExpId.close();                   
 
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
-                    resul.put("error", "Existe una aplicacion privada. No se ha podido identificar la aplicacion privada.");
+                    resul.put("error", "Existe una aplicacion privada. No se ha podido "
+                            + "identificar la aplicacion privada.");
                     resul.put("status", "error");
                     return resul.toJSONString();
                 } catch (IOException ex) {
@@ -516,19 +635,22 @@ public class Phonegap {
 
                 //descargamos la aplicaciones para las distintas plataformas.
                 Set platfs = info_status.keySet();
-                System.out.println("info_status ---> " + info_status);
+                
                 for (Iterator i = platfs.iterator(); i.hasNext();) {
                     String platform = (String) i.next();
                     if (((String) info_status.get(platform)).equals("complete")) {
                         //descargamos la aplicacion
 
                         JSONObject info_des = phonegap.getPlatform(idApliPho, platform);
-                        System.out.println("info_des -->" + info_des);
-                        if (!Util.isNulo(info_des) && info_des.containsKey("status_text") && ((String) info_des.get("status_text")).equals("OK")) {
+                        
+                        if (!Util.isNulo(info_des) && info_des.containsKey("status_text") 
+                                && ((String) info_des.get("status_text")).equals("OK")) {
                             JSONObject datosFile = (JSONObject) info_des.get("respuesta");
 
                             File file = new File((String) datosFile.get("descargado"));
-                            File dir_down = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + antLabId + File.separator + antLabExpId + File.separator + "download" + File.separator + platform);
+                            File dir_down = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator 
+                                    + "create_app" + File.separator + antLabId + File.separator + antLabExpId 
+                                    + File.separator + "download" + File.separator + platform);
                             try {
                                 FileUtils.deleteDirectory(dir_down);
                             } catch (IOException ex) {
@@ -583,19 +705,19 @@ public class Phonegap {
             }
         }
 
+        
+        //Enviamos el codigo a phonegap para crear la aplicacion.
         File lab_zip = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "zip" + File.separator + "lab" + ".zip");
-
-
         resul.put("lab_id", lab_id);
         resul.put("lab_experiment_id", lab_experiment_id);
 
-        System.out.println(lab_zip.getAbsolutePath());
+        
         JSONObject misdatos = null;
         JSONObject respuesta = null;
         if (lab_zip.exists()) {
             misdatos = phonegap.createApp(lab_id, "file", lab_zip, "", null);
 
-            System.out.println("Respuesta Crear --> " + misdatos);
+        
             respuesta = (JSONObject) misdatos.get("respuesta");
             if (((Integer) misdatos.get("status")) == 201) {
                 //respuesta satisfactoria
@@ -617,10 +739,11 @@ public class Phonegap {
 
 
         //Establecemos que la aplicacion esta en proceso de creacion y download
-        System.out.println("respuesta ---> " + respuesta);
+
         Long idPhonegap = (Long) respuesta.get("id");
 
-        File dir_back = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "backup" + File.separator + idPhonegap);
+        File dir_back = new File(Phonegap.path_base_tmp + File.separator 
+                + "tmp" + File.separator + "backup" + File.separator + idPhonegap);
         dir_back.mkdirs();
         File f_labId = new File(dir_back, "idLab");
         File f_labExperimentId = new File(dir_back, "idLabExperiment");
@@ -648,24 +771,30 @@ public class Phonegap {
     }
 
     /**
+     * Descarga la aplicacion movil del laboratorio y experimentos indicados
+     * para la plataforma especificada.
      *
-     * @param request
-     * @param idapli
-     * @param platform
-     * @param name_apli
-     * @return
+     * @param request Representa la informacion sobre la peticion realizada.
+     * @param lab_id Identificador del laboratorio.
+     * @param lab_experiment_id Identificador del experimento
+     * @param idapli Identificador de la aplicacion en Phonegap Build
+     * @param platform Identificador de la plataforma
+     * @param name_apli Nombre de la aplicacion.
+     * @return Si se ha generado un error, devuelve la informacion del error en
+     * una representacion JSON; en otro caso, se devuelve el fichero de binario
+     * para la plataforma indicada.
      * @throws CurlException
      */
     @GET
     @Path("/download/{lab}/{lab_experiment}/{idapli}/{platform}")
     @Produces("application/json")
-    public String downloadLab(@Context HttpServletRequest request,
+    public String relatedDownloadLab(@Context HttpServletRequest request,
             @PathParam("lab") String lab_id, @PathParam("lab_experiment") String lab_experiment_id,
             @PathParam("idapli") Long idapli, @PathParam("platform") String platform,
             @QueryParam("name") String name_apli) throws CurlException {
 
         String ip = request.getRemoteAddr();
-        System.out.println("MI IP --- " + ip);
+        
         Curl phonegap = new Curl();
         JSONObject resul = new JSONObject();
         resul.put("platform", platform);
@@ -716,21 +845,21 @@ public class Phonegap {
     }
 
     /**
+     * Desbloquea la aplicacion Phongap Build del ultimo laboratorio creado.
+     * Permitiendo que se pueda generar otro laboratorio.
      *
-     * @param request
-     * @param idapli
-     * @param platform
-     * @param name_apli
-     * @return
-     * @throws CurlException
+     * @param request Representa la informacion sobre la peticion realizada.
+     * @param idapli Identificador de la aplicaicon en PHonegap Build asociada
+     * al laboratorio.
+     * @return Representacion en JSON del resultado de aplicar esta funcion.
      */
-    @GET
+    @POST
     @Path("/desbloquea/{idapli}")
     @Produces("application/json")
-    public String desbloqueaLab(@Context HttpServletRequest request, @PathParam("idapli") Long idapli) {
+    public String relatedDesbloqueaLab(@Context HttpServletRequest request, @PathParam("idapli") Long idapli) {
 
         String ip = request.getRemoteAddr();
-        System.out.println("MI IP --- " + ip);
+
 
         JSONObject resul = new JSONObject();
         resul.put("idApli", idapli);

@@ -1,7 +1,4 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 var mitoken = null;
 var _pasActivo = null
@@ -63,7 +60,7 @@ function gestionRespuestaPaso1(_data, textStatus, jqXHR) {
         tr_paso.addClass("success");
         pasoActivo = "p_p_2";
         //Iniciamos el paso 2
-        mitoken = getAuthorization('apps/pkg/' + lab_id + '/' + lab_experiment_id, 'GET', {}, gestionRespuestaPaso2, gestionError);
+        mitoken = getAuthorization('apps/pkg/' + lab_id + '/' + lab_experiment_id, 'POST', {}, gestionRespuestaPaso2, gestionError);
     } else {
         //No se ha encontrado el fichero config.xml.
         tr_paso.addClass("warning");
@@ -81,7 +78,7 @@ function gestionRespuestaPaso2(_data, textStatus, jqXHR) {
         tr_paso.addClass("success");
         pasoActivo = "p_p_3";
         //Iniciamos el paso 3
-        mitoken = getAuthorization('apps/build/' + lab_id + '/' + lab_experiment_id, 'GET', {}, gestionRespuestaPaso3, gestionError);
+        mitoken = getAuthorization('apps/build/' + lab_id + '/' + lab_experiment_id, 'POST', {}, gestionRespuestaPaso3, gestionError);
     } else {
         //No se ha encontrado el fichero config.xml.
         tr_paso.addClass("warning");
@@ -210,7 +207,7 @@ function  mostrarEnlaceDescarga(_data) {
 
 
 function quitarBloqueoLab(_data) {
-    mitoken = getAuthorization('apps/desbloquea/' + _data.idApli, 'GET', {}, function () {
+    mitoken = getAuthorization('apps/desbloquea/' + _data.idApli, 'POST', {}, function () {
     }, function () {
     });
 }

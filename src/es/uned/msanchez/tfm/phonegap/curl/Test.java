@@ -22,9 +22,7 @@ public class Test {
         JSONObject misdatos = curl.getMe();
         JSONObject infoApps = (JSONObject) misdatos.get("apps");
         JSONArray appsJSON = (JSONArray) infoApps.get("all");
-//
-        System.out.println(infoApps);
-        System.out.println(appsJSON);
+
         /*
          File miproyecto = new File("/Users/adrastea/NetBeansProjects/TFM/web/myapp/www.zip");
          curl.createApp("Memoria", "file", miproyecto);
@@ -32,19 +30,18 @@ public class Test {
          //Accediendo a los datos de las aplicaciones del usuario. 
          JSONObject infoApps2 = (JSONObject)curl.getApps().get("respuesta");
          JSONArray appsJSON2 = (JSONArray) infoApps2.get("apps");
-         System.out.println(infoApps2);
-         System.out.println(appsJSON2.size());
+
        
          for (int i = 0; i < appsJSON2.size(); i++) {
          JSONObject apli = (JSONObject) appsJSON2.get(i);
          Long idApli = (Long) apli.get("id");
          JSONObject infoIcon = (JSONObject) apli.get("icon");
          // JSONObject icon = Curl.getIcon((String) infoIcon.get("link"));
-         //  System.out.println(icon);
+
          //JSONObject platform = Curl.getPlatform(idApli, "android");
-         //System.out.println(platform);
+       
          JSONObject keys = curl.getKeysPlatform("ios");
-         System.out.println(keys);
+        
 
          //  File miproyecto = new File("/Users/adrastea/NetBeansProjects/TFM/web/myapp/www.zip");
          //  File miproyecto = new File("/Users/adrastea/NetBeansProjects/TFM/web/myapp/www/index.html");
@@ -54,18 +51,17 @@ public class Test {
          //dataApp.put("title", "Prueba API");
          //dataApp.put("create_method", "file");
          //JSONObject infoApps3 = Curl.updateApp(idApli,dataApp,miproyecto);
-         //System.out.println(infoApps3);
+         
 
          File miIcon = new File("/Users/adrastea/NetBeansProjects/TFM/web/myapp/www/resources/imagenes/default.png");
          JSONObject jIcon = curl.setIcon(idApli, miIcon);
-         System.out.println(jIcon);
-         //    System.out.println(apli.get("title"));
+        
          // JSONObject dataApp = new JSONObject();
          //dataApp.put("title", "Nuevo Title");
          //curl.updateApp(idApli.toString(), dataApp);
          //  Curl.buildApp(idApli.toString(), null);
          // JSONObject result = Curl.deleteApp(idApli);
-         //System.out.println(result);
+         
 
          }
 

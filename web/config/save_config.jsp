@@ -16,9 +16,12 @@
     ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.wizard");
     String path_build = rb.getString("path_build_lab").trim();
     String path_base_tmp = rb.getString("path_tmp").trim();
-    
+
     String option = request.getParameter("option");
     option = Util.isNulo(option) ? "default" : option;
+
+    String aspecto = request.getParameter("apli");
+    aspecto = Util.isNulo(aspecto) ? "completo" : aspecto;
 
     String lab_id = request.getParameter("lab_id");
     lab_id = Util.isNulo(lab_id) ? "default" : lab_id;
@@ -38,7 +41,17 @@
         String params = (String) e.nextElement();
         String valueParams = request.getParameter(params);
         if (params.indexOf("_opc_gen_") >= 0) {
+          
+            if (params.equals("_opc_gen_source_file") && aspecto.equals("related")) {
+                //Si la aplicacion es related, modificamos la apgina de inicio.
+                if (!valueParams.contains("?")) {
+                    valueParams = valueParams + "?lab_id=" + lab_id+(lab_experiment_id.equals("default")?"":"&lab_experiment_id="+lab_experiment_id);
+                } else {
+                    valueParams = valueParams + "&lab_id=" + lab_id+(lab_experiment_id.equals("default")?"":"&lab_experiment_id="+lab_experiment_id);
+                }
+            }
             opciones_generales.put(params.replaceFirst("_opc_gen_", ""), valueParams);
+            
         }
         if (params.indexOf("_opc_avan_") >= 0) {
             opciones_avanzadas.put(params.replaceFirst("_opc_avan_", ""), valueParams);
