@@ -31,7 +31,7 @@
     } 
     lab_id = Util.isNulo(lab_id) ? "default" : lab_id;
     String lab_experiment_id = request.getParameter("lab_experiment_id");
-    lab_experiment_id = Util.isNulo(lab_experiment_id) ? "default" : lab_experiment_id;
+    lab_experiment_id = (Util.isNulo(lab_experiment_id)||lab_experiment_id.equals("--")) ? "default" : lab_experiment_id;
 
     Map opciones_generales = new HashMap();
     Map opciones_avanzadas = new HashMap();

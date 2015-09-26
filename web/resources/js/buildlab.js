@@ -68,6 +68,7 @@ function gestionRespuestaPaso1(_data, textStatus, jqXHR) {
     }
 }
 
+
 function gestionRespuestaPaso2(_data, textStatus, jqXHR) {
 
     $('#' + pasoActivo).progressbar('setValue', 100);
@@ -78,7 +79,9 @@ function gestionRespuestaPaso2(_data, textStatus, jqXHR) {
         tr_paso.addClass("success");
         pasoActivo = "p_p_3";
         //Iniciamos el paso 3
-        mitoken = getAuthorization('apps/build/' + lab_id + '/' + lab_experiment_id, 'POST', {}, gestionRespuestaPaso3, gestionError);
+        mitoken = getAuthorization('apps/build/' + lab_id + '/' 
+            + lab_experiment_id, 'POST', {}, gestionRespuestaPaso3,
+        gestionError);
     } else {
         //No se ha encontrado el fichero config.xml.
         tr_paso.addClass("warning");
