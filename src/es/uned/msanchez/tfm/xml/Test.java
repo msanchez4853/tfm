@@ -13,10 +13,15 @@ import org.jdom2.output.XMLOutputter;
 
 /**
  *
- * @author adrastea
+ * @author Miguel Sanchez Roman
  */
 public class Test {
-       public static void main(String[] args) throws Exception {
+    /**
+     * Metodo principal para realizar pruebas con Xml.java
+     * @param args
+     * @throws Exception 
+     */   
+    public static void main(String[] args) throws Exception {
 
         Xml xml = new Xml();
 

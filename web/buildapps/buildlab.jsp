@@ -13,11 +13,11 @@
     ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.phonegap.curl.resources.config");
     String serverRestFull = rb.getString("serverRESTFUL").trim();
     ResourceBundle rb_w = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.wizard");
-    
+
     String url_download = rb_w.getString("url_download_lab");
-    
-    String lab_id= Util.isNulo(request.getAttribute("lab_id"))?"default":(String)request.getAttribute("lab_id");
-    String lab_experiment_id= Util.isNulo(request.getAttribute("lab_experiment_id"))?"default":(String)request.getAttribute("lab_experiment_id");
+
+    String lab_id = Util.isNulo(request.getAttribute("lab_id")) ? "default" : (String) request.getAttribute("lab_id");
+    String lab_experiment_id = Util.isNulo(request.getAttribute("lab_experiment_id")) ? "default" : (String) request.getAttribute("lab_experiment_id");
 %>
 <html>
     <head>
@@ -58,15 +58,27 @@
                 <div class="col-md-12 table-responsive">
                     <table class="table table-striped">
                         <caption></caption>
-                        <tr id="paso_1"><td>1</td><td>Comprobando el fichero config.xml</td><td class="_info_paso">
-                                <div id="p_p_1" data-paso="paso_1" class="easyui-progressbar" data-options="value:0" style="width:100%;"></div>
-                            </td></tr>
-                        <tr id="paso_2"><td>2</td><td>Empaquetando el codigo de la aplicacion.</td><td class="_info_paso">
-                                <div id="p_p_2" data-paso="paso_2" class="easyui-progressbar" data-options="value:0" style="width:100%;"></div>
-                            </td></tr>
-                        <tr id="paso_3"><td>3</td><td>Subiendo a Phonegap Build.</td><td class="_info_paso">
-                                <div id="p_p_3" data-paso="paso_3" class="easyui-progressbar" data-options="value:0" style="width:100%;"></div>
-                            </td></tr>
+                        <tr id="paso_1">
+                            <td>1</td>
+                            <td>Comprobando el fichero config.xml</td>
+                            <td class="_info_paso">
+                                <div id="p_p_1" data-paso="paso_1" class="easyui-progressbar" data-options="value:0" style="width:100%;">&nbsp;</div>
+                            </td>
+                        </tr>
+                        <tr id="paso_2">
+                            <td>2</td>
+                            <td>Empaquetando el codigo de la aplicacion.</td>
+                            <td class="_info_paso">
+                                <div id="p_p_2" data-paso="paso_2" class="easyui-progressbar" data-options="value:0" style="width:100%;">&nbsp;</div>
+                            </td>
+                        </tr>
+                        <tr id="paso_3">
+                            <td>3</td>
+                            <td>Subiendo a Phonegap Build.</td>
+                            <td class="_info_paso">
+                                <div id="p_p_3" data-paso="paso_3" class="easyui-progressbar" data-options="value:0" style="width:100%;">&nbsp;</div>
+                            </td>
+                        </tr>
 
                     </table> 
                 </div>
@@ -81,8 +93,7 @@
                         <tr><td class="etiqueta_info_lab"> Version Aplicacion</td><td class="valor_info" id="_info_vapp_apli"> --- </td></tr>
                         <tr><td class="etiqueta_info_lab"> Package Aplicacion</td><td class="valor_info" id="_info_package_apli"> --- </td></tr>
                         <tr><td class="etiqueta_info_lab"> Version Phonegap</td><td class="valor_info" id="_info_vphonegap_apli"> --- </td></tr>
-                        <tr><td class="etiqueta_info_lab"> Id Phonegap</td><td class="valor_info" id="_info_idphonegap_apli"> --- </td></tr>
-                        <%--<tr><td class="etiqueta_info"> Url repositorio</td><td class="valor_info" id="_info_repo_apli"> --- </td></tr>--%>
+                        <tr><td class="etiqueta_info_lab"> Id Phonegap</td><td class="valor_info" id="_info_idphonegap_apli"> --- </td></tr>                       
                         <tr><td class="etiqueta_info_lab"> Android</td><td class="valor_info" id="_info_android_apli"> --- </td></tr>
                         <tr><td class="etiqueta_info_lab"> iOS</td><td class="valor_info" id="_info_ios_apli"> --- </td></tr>
                         <tr><td class="etiqueta_info_lab"> WinPhone</td><td class="valor_info" id="_info_winphone_apli"> --- </td></tr>

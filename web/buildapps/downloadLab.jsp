@@ -14,17 +14,18 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
+    
     ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.wizard");
 
     String path_base_tmp = rb.getString("path_tmp").trim();
 
-    String lab_id = Util.isNulo(request.getParameter("lab_id")) ? "default" : (String) request.getParameter("lab_id");
+    String lab_id = Util.isNulo(request.getParameter("lab_id")) ? "" : (String) request.getParameter("lab_id");
     String lab_experiment_id = Util.isNulo(request.getParameter("lab_experiment_id")) ? "default" : (String) request.getParameter("lab_experiment_id");
     String platform = Util.isNulo(request.getParameter("platform")) ? null : (String) request.getParameter("platform");
     String name_file = Util.isNulo(request.getParameter("name")) ? platform : (String) request.getParameter("name");
 
-    if (Util.isNulo(platform)) {
-        response.sendError(404, "No ha indicado la plataforma.");
+    if (Util.isNulo(platform) || Util.isNulo(lab_id)) {
+        response.sendError(404, "No ha indicado algunos de los parametros obligatorios.");
         return;
     }
 
@@ -58,5 +59,6 @@
         outFile.close(); // todo
     } else {
         response.sendError(404, "No se ha encontrado la aplicacion movil para la plataforma indicada.");
+        return;
     }
 %>

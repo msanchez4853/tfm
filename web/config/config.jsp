@@ -38,7 +38,7 @@
         for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
             String param = (String) e.nextElement();
             String value = request.getParameter(param);
-            
+
             if (param.indexOf("_opc_gen_") >= 0) {
 
                 opciones_generales.put(param.replaceFirst("_opc_gen_", ""), value);
@@ -79,7 +79,7 @@
         String login = request.getParameter("login");
         login = Util.isNulo(login) ? "S" : login;
 
-       // boolean _onlyLabApp = true;
+        // boolean _onlyLabApp = true;
         if (!Util.isNulo(apli_ext) && apli_ext.equalsIgnoreCase("related")) {
             aspecto = "related";
             ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.related");
@@ -162,8 +162,8 @@
             <form id="form_guardar" method="POST" action="save_config.jsp">
                 <input type="hidden" name="option" id="option" value="default">
                 <input type="hidden" name="apli" id="apli" value="<%=aspecto%>">
-                <input type="hidden" name="lab_id" id="lab_id" value="<%=lab_id%>">
-                <input type="hidden" name="lab_experiment_id" id="lab_experiment_id" value="<%=lab_experiment_id%>">
+                <input type="hidden" name="lab_id" id="lab_id" value="--">
+                <input type="hidden" name="lab_experiment_id" id="lab_experiment_id" value="--">
                 <jsp:include  page="opc_generales.jsp">
                     <jsp:param name="aspecto" value="<%=aspecto%>"></jsp:param>
                 </jsp:include>    
@@ -198,16 +198,16 @@
             </div>
         </section>       
         <section id="loginInfo">
-            <p class="alert alert-info" role="alert">Opening login window...</p>
-            <p class="alert alert-info hidden" role="alert" id="loginWindowOpenned">Waiting for login data...</p>
+            <p class="alert alert-info" role="alert">Abriendo ventana de login...</p>
+            <p class="alert alert-info hidden" role="alert" id="loginWindowOpenned">Esperando la respuesta de login...</p>
         </section>
 
         <section id="pie">
             <button class="btn btn-primary" type="button">
-                Selected lab: <span class="badge" id="selectedLab">NONE</span>
+                Laboratorio Seleccionado: <span class="badge" id="selectedLab">NONE</span>
             </button>
             <button class="btn btn-primary" type="button">
-                Selected experiment: <span class="badge" id="selectedExp">NONE</span>
+                Experimento Seleccionado: <span class="badge" id="selectedExp">NONE</span>
             </button>
             <!--<span class="label label-default">Selected lab: <span id="selectedLab">NONE</span></span>
             <span class="label label-default">Selected experiment: <span id="selectedExp">NONE</span></span>-->
@@ -221,24 +221,24 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Select lab/experiment</h4>
+                        <h4 class="modal-title" id="myModalLabel">Selección del laboratorio/experimento</h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="labs">Select lab:</label>
+                            <label for="labs">Seleccciona el laboratorio:</label>
                             <select id="labs" class="form-control"></select>
-                            <label for="experiments">Select experiment:</label>
+                            <label for="experiments">Selecciona Experimento</label>
                             <select id="experiments" class="form-control"></select>
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input id="cbxOnlyLabApp" type="checkbox" checked> Generate App only for Lab
+                                <input id="cbxOnlyLabApp" type="checkbox" checked> Generar App solo para laboratorio
                             </label>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button id="btnSelectLabExp" type="button" class="btn btn-primary">Select</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button id="btnSelectLabExp" type="button" class="btn btn-primary">Seleccionar</button>
                     </div>
                 </div>
             </div>
@@ -287,27 +287,30 @@
             });
 
             function onInfoMessageReceived(userInfo) {
-                // Hide main sections !!!
-                $('#loginInfo').addClass("hidden");
-                // Add the customized content
-                $('#user').text(userInfo.user);
-                // Show main sections !!!
-                $('#navegacion').removeClass("hidden");
-                $('#contenido').removeClass("hidden");
-                $('#pie').removeClass("hidden");
                 // Add the lab content to the footer
                 var sel = $('#labs');
                 var count = 0;
-                // Sort by name
-
 
                 if (userInfo.labs != undefined) {
-                    //  userInfo.labs.sort(sortLabsByName);//No encuentra la funcion
                     $(userInfo.labs).each(function () {
-                        sel.append($("<option>").attr('value', this.ID).text(this.name).attr("data-name",this.name).attr("data-desc",this.description));
+                        sel.append($("<option>")
+                        .attr('value', this.ID)
+                        .text(this.name)
+                        .attr("data-name",this.name)
+                        .attr("data-desc",this.description));
                         count++;
                     });
+                    
                     if (count > 0) {
+                        // Hide main sections !!!
+                        $('#loginInfo').addClass("hidden");
+                        // Add the customized content
+                        $('#user').text(userInfo.user);
+                        // Show main sections !!!
+                        $('#navegacion').removeClass("hidden");
+                        $('#contenido').removeClass("hidden");
+                        $('#pie').removeClass("hidden");
+               
                         // Add the event to select
                         $("#labs").change(function () {
                             var _lab_id = this.value;
@@ -320,10 +323,17 @@
                                 var sel2 = $('#experiments');
                                 sel2.find("option").remove();
                                 $(experiments).each(function () {
-                                    sel2.append($("<option>").attr('value', this.id).text(this.experiment_name).attr("data-name",this.experiment_name));
+                                    sel2.append($("<option>")
+                                    .attr('value', this.id)
+                                    .text(this.experiment_name)
+                                    .attr("data-name",this.experiment_name));
                                 });
                             }
                         });
+                        $('button[data-target="#labsSelectionModalDialog"').click();
+                    }else{
+                        $.messager.alert('Wizard Config','No tiene acceso a ningun laboratorio o experimiento. No puede acceder a la configuracion.','error')
+            
                     }
                 }
             }

@@ -24,11 +24,15 @@
     aspecto = Util.isNulo(aspecto) ? "completo" : aspecto;
 
     String lab_id = request.getParameter("lab_id");
+    if(aspecto.equals("related") && (Util.isNulo(lab_id) || lab_id.equals("--"))){
+        response.setContentType("text/html");
+        response.sendError(402, "No se ha especficado ningun laboratorio");
+        return; 
+    } 
     lab_id = Util.isNulo(lab_id) ? "default" : lab_id;
     String lab_experiment_id = request.getParameter("lab_experiment_id");
     lab_experiment_id = Util.isNulo(lab_experiment_id) ? "default" : lab_experiment_id;
 
-    Xml xml = new Xml();
     Map opciones_generales = new HashMap();
     Map opciones_avanzadas = new HashMap();
     Map opciones_iconos = new HashMap();
@@ -74,7 +78,10 @@
 
     }
 
-
+    // 1) Instanciar el objeto de clase Xml, se establece el elemento raiz (widget) del fichero 
+    Xml xml = new Xml();
+    
+    // 2) Se crean los distintos grupos de elementos 
     xml.setOpcionesGenerales(opciones_generales);
     xml.setOpcionesAvanzadas(opciones_avanzadas);
     xml.setOpcionesIcons(opciones_iconos);
@@ -83,6 +90,8 @@
     xml.setOpcionesPlugins(opciones_plugins);
     xml.setOpcionesDesarrollador(opciones_desarrollo);
 
+    // 3) Se genera el fichero xml en byte para que pueda ser guardado, mostrado o 
+    // utilizado para generacion automatica
     if (option.equals("default") || option.equals("mostrar") || option.equals("guardar")) {
         if (option.equals("guardar")) {
             response.setHeader("Content-Disposition", "attachment;filename=config.xml");

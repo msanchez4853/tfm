@@ -45,17 +45,17 @@ function iniciaGeneracionApp(lab_id, lab_experiment_id) {
     //Obtner las aplicaciones al entrar en la aplicacion.
     pasoActivo = "p_p_1";
     startPaso();
+    //Chequeamos que el fichero existe para el laboratorio especificado.
     mitoken = getAuthorization('apps/check/' + lab_id + '/' + lab_experiment_id, 'GET', {}, gestionRespuestaPaso1, gestionError);
 }
 
 
 function gestionRespuestaPaso1(_data, textStatus, jqXHR) {
-    console.log(_data)
-    console.log(textStatus)
+  
     $('#' + pasoActivo).progressbar('setValue', 100);
     tr_paso = $('#' + $('#' + pasoActivo).attr('data-paso'));
     pasoActivo = null; //parar barra de progreso
-    console.log('gestionRespuestaPaso1');
+  
     if (_data.status == 'ok') {
         tr_paso.addClass("success");
         pasoActivo = "p_p_2";
@@ -64,16 +64,16 @@ function gestionRespuestaPaso1(_data, textStatus, jqXHR) {
     } else {
         //No se ha encontrado el fichero config.xml.
         tr_paso.addClass("warning");
+        gestionError(_data, textStatus, jqXHR);
     }
 }
 
 function gestionRespuestaPaso2(_data, textStatus, jqXHR) {
-    console.log(_data)
-    console.log(textStatus)
+
     $('#' + pasoActivo).progressbar('setValue', 100);
     tr_paso = $('#' + $('#' + pasoActivo).attr('data-paso'));
     pasoActivo = null; //parar barra de progreso
-    console.log('gestionRespuestaPaso2');
+
     if (_data.status == 'ok') {
         tr_paso.addClass("success");
         pasoActivo = "p_p_3";
@@ -82,31 +82,28 @@ function gestionRespuestaPaso2(_data, textStatus, jqXHR) {
     } else {
         //No se ha encontrado el fichero config.xml.
         tr_paso.addClass("warning");
+        gestionError(_data, textStatus, jqXHR);
     }
 }
 
 function gestionRespuestaPaso3(_data, textStatus, jqXHR) {
-    console.log(_data)
-    console.log(textStatus)
+
     $('#' + pasoActivo).progressbar('setValue', 100);
     tr_paso = $('#' + $('#' + pasoActivo).attr('data-paso'));
     pasoActivo = null; //parar barra de progreso
-    console.log('gestionRespuestaPaso3');
+    ;
     if (_data.status == 'ok') {
         tr_paso.addClass("success");
         mostrarLab(_data.info_apli);
     } else {
         //No se ha encontrado el fichero config.xml.
         tr_paso.addClass("warning");
+        gestionError(_data, textStatus, jqXHR);
     }
 }
 
 
 function mostrarLab(infoLab) {
-
-    console.log('mostrarLab')
-    console.log(infoLab)
-
 
     if (infoLab.status == 201) {
         nPlatform = 0;
@@ -128,12 +125,13 @@ function mostrarLab(infoLab) {
 
 
     } else {
-        //No se ha creado correctamente
+    //No se ha creado correctamente
     }
 
     $("#_dd_ff_infoApp").show();
 
 }
+
 
 function comprobarInfoPlatform(idApli, platform, status, error) {
 
@@ -141,7 +139,8 @@ function comprobarInfoPlatform(idApli, platform, status, error) {
         nPlatform++;
         $("#_info_" + platform + "_apli").html("Construyendose ...");
         $("#_info_" + platform + "_apli").addClass('warning');
-        setTimeout(comprobarEstado(idApli, platform), 2500);
+        //  setTimeout(comprobarEstado(idApli, platform), 20000);
+        setTimeout(comprobarEstado,15000,idApli, platform);
     }
     if (status == 'error') {
         $("#_info_" + platform + "_apli").html("No se ha podido generar la aplicacion. Motivo: " + error);
@@ -156,6 +155,7 @@ function comprobarInfoPlatform(idApli, platform, status, error) {
 }
 
 function comprobarEstado(idApli, platform) {
+    
     mitoken = getAuthorization('apps/download/' + lab_id + '/' + lab_experiment_id + '/' + idApli + '/' + platform, 'GET', {
         name: $("#_info_name_apli").html()
     }, gestionComprobarEstado, gestionError);
@@ -169,9 +169,10 @@ function gestionComprobarEstado(_data, textStatus, jqXHR) {
         $("#_info_" + _data.platform + "_apli").html("Generada. &nbsp;");
         mostrarEnlaceDescarga(_data);
     } else {
-        console.log(_data.respuesta);
+     
         $("#_info_" + _data.platform + "_apli").append(".");
-        setTimeout(comprobarEstado(_data.idApli, _data.platform), 1000);
+        // setTimeout(comprobarEstado(_data.idApli, _data.platform), 10000);
+        setTimeout(comprobarEstado,10000,_data.idApli, _data.platform);
     }
 }
 
@@ -208,8 +209,8 @@ function  mostrarEnlaceDescarga(_data) {
 
 function quitarBloqueoLab(_data) {
     mitoken = getAuthorization('apps/desbloquea/' + _data.idApli, 'POST', {}, function () {
-    }, function () {
-    });
+        }, function () {
+        });
 }
 
 
@@ -236,9 +237,12 @@ function startPaso() {
 
 function gestionError(jqXHR, textStatus, errorThrown) {
     pasoActivo = null;
-    console.log(jqXHR);
-    console.log(textStatus);
-    $.messager.alert('Mis Apps', 'Se ha generado un error al realizar la operacion', 'error');
+    if(jqXHR.respuesta==undefined){
+        $.messager.alert('Mis Apps','Se ha generado un error al realizar la operacion','error');
+    }else{
+        var respuesta  = jqXHR.respuesta
+        $.messager.alert('Mis Apps','Se ha generado un error al realizar la operacion. <br/> <strong style="color:red">'+respuesta.error+'</strong>','error');
+    }
 }
 
 
@@ -266,9 +270,6 @@ function getAuthorization(_url, _method, _data, _gestionRespuesta, _gestionError
             error: _gestionError,
             beforeSend: setHeader
         })
-    } else {
-        console.log('No soportado');
-
     }
 }
 
@@ -278,7 +279,7 @@ function setHeader(xhr) {
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
     //xhr.setRequestHeader("Content-Type", "application/json");
     xhr.setRequestHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS"),
-            xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+    xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
 
     //   xhr.setRequestHeader("X-Requested-With","XMLHttpRequest");
     xhr.setRequestHeader("Accept", "application/json");

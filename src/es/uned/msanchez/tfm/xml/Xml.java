@@ -5,7 +5,6 @@
 package es.uned.msanchez.tfm.xml;
 
 import es.uned.msanchez.tfm.utilidades.Util;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -16,13 +15,14 @@ import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
-import org.jdom2.filter.ContentFilter;
 import org.jdom2.filter.Filter;
 import org.jdom2.filter.Filters;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 /**
+ * Define un fichero xml siguiendo las especificaciones definidas para widget
+ * por W3C
  *
  * @author Miguel Sánchez Román
  */
@@ -30,8 +30,9 @@ public class Xml {
 
     private Element widget;
 
- 
-
+    /**
+     * Constructor por defecto.
+     */
     public Xml() {
         createRaizConfig();
     }
@@ -49,20 +50,24 @@ public class Xml {
         xmlOutput.setFormat(Format.getPrettyFormat());
         xmlOutput.output(doc, out);
     }
-    
 
     /**
-     * Nos permite generar las opciones generales de Phonegap Build, para una aplicacion movil.
-     * @param _opciones_generales Maps con los valores con los pares parametro valor
-     * @throws Exception 
+     * Nos permite generar las opciones generales de Phonegap Build, para una
+     * aplicacion movil.
+     *
+     * @param _opciones_generales Maps con los valores con los pares parametro
+     * valor
+     * @throws Exception
      */
     public void setOpcionesGenerales(Map<String, String> _opciones_generales) throws Exception {
         List platform = new ArrayList();
         for (String param : _opciones_generales.keySet()) {
             String value = _opciones_generales.get(param);
-            if(Util.isNulo(value)) continue;
-            
-            
+            if (Util.isNulo(value)) {
+                continue;
+            }
+
+
             if (param.equals("name_app")) {
                 setNameApp(value);
             }
@@ -85,8 +90,8 @@ public class Xml {
             if (param.equals("package_app")) {
                 setIdApp(value);
             }
-            
-            
+
+
             if (param.equals("pgap_version")) {
                 setPreference("phonegap-version", value);
             }
@@ -98,9 +103,9 @@ public class Xml {
                 setContentApp(value);
             }
             if (param.equals("ErrorUrl_file")) {
-                setPreference("ErrorUrl",value);
+                setPreference("ErrorUrl", value);
             }
-            
+
 
         }
         if (!Util.isNulo(platform)) {
@@ -109,9 +114,17 @@ public class Xml {
 
     }
 
+    /**
+     * Nos permite generar las opciones avanzadas de Phonegap Build, para una
+     * aplicacion movil.
+     *
+     * @param _opciones_avanzadas Maps con los valores con los pares parametro
+     * valor
+     * @throws Exception
+     */
     public void setOpcionesAvanzadas(Map<String, String> _opciones_avanzadas) throws Exception {
         for (String param : _opciones_avanzadas.keySet()) {
-          
+
             String value = _opciones_avanzadas.get(param);
 
             if (param.indexOf("CKB") >= 0) {
@@ -136,6 +149,13 @@ public class Xml {
         }
     }
 
+    /**
+     * Nos permite generar las opciones de definicion de iconos de Phonegap
+     * Build, para una aplicacion movil.
+     *
+     * @param _opciones_icons Maps con los valores con los pares parametro valor
+     * @throws Exception
+     */
     public void setOpcionesIcons(Map<String, String> _opciones_icons) throws Exception {
 
         //Obtenemos los path relativa si los hubiera;
@@ -148,7 +168,7 @@ public class Xml {
         String path_default = _opciones_icons.get("default_path");
         path_default = Util.isNulo(path_default) ? "" : path_default;
         for (String param : _opciones_icons.keySet()) {
-          
+
             if (param.indexOf("_path") == param.length() - 5) {
                 continue;
             }
@@ -166,13 +186,13 @@ public class Xml {
                 continue;
             }
             if (param.indexOf("win_") >= 0) {
-                
+
                 String _rol = (param.replace("win_", "")).substring(5);
                 setIconWPhone(path_win + value, "winphone", _rol);
                 continue;
             }
             if (param.indexOf("android_") >= 0) {
-                
+
                 String _qualifier = param.replace("android_", "");
                 setIconAndroid(path_android + value, "android", _qualifier);
                 continue;
@@ -181,6 +201,14 @@ public class Xml {
         }
     }
 
+    /**
+     * Nos permite generar las opcionesde definicion de Splash Screen de
+     * Phonegap Build, para una aplicacion movil.
+     *
+     * @param _opciones_splash Maps con los valores con los pares parametro
+     * valor
+     * @throws Exception
+     */
     public void setOpcionesSplash(Map<String, String> _opciones_splash) throws Exception {
 
         String path_ios = _opciones_splash.get("ios_path");
@@ -193,7 +221,7 @@ public class Xml {
         path_default = Util.isNulo(path_default) ? "" : path_default;
 
         for (String param : _opciones_splash.keySet()) {
-            
+
             if (param.indexOf("_path") == param.length() - 5) {
                 continue;
             }
@@ -204,35 +232,43 @@ public class Xml {
 
 
             if (param.indexOf("default_") >= 0) {
-                setSplash(path_default+value, "");
+                setSplash(path_default + value, "");
                 continue;
             }
             if (param.indexOf("ios") >= 0) {
 
                 String _width = param.substring(param.indexOf("_") + 1, param.indexOf("x"));
                 String _height = param.substring(param.indexOf("x") + 1);
-                setSplashIos(path_ios+value, "ios", _width, _height);
+                setSplashIos(path_ios + value, "ios", _width, _height);
                 continue;
             }
             if (param.indexOf("win_") >= 0) {
-                setSplash(path_win+value, "winphone");
+                setSplash(path_win + value, "winphone");
                 continue;
             }
             if (param.indexOf("android_") >= 0) {
-                
+
                 String _qualifier = param.replace("android_", "");
-                setSplashAndroid(path_android+value, "android", _qualifier);
+                setSplashAndroid(path_android + value, "android", _qualifier);
                 continue;
             }
 
         }
     }
 
+    /**
+     * Nos permite generar la definicion de caracteristica y permisos de
+     * Phonegap Build, para una aplicacion movil.
+     *
+     * @param _opciones_permisos Maps con los valores con los pares parametro
+     * valor
+     * @throws Exception
+     */
     public void setOpcionesPermisos(Map<String, String> _opciones_permisos) throws Exception {
         HashMap<Integer, HashMap<String, String>> accesos = new HashMap<Integer, HashMap<String, String>>();
 
         for (String param : _opciones_permisos.keySet()) {
-           
+
             String value = _opciones_permisos.get(param);
 
             if (param.indexOf("acceso_") >= 0) {
@@ -249,13 +285,13 @@ public class Xml {
             }
 
             if (param.indexOf("android_") >= 0) {
-                
+
                 String _perm = param.replace("android_", "");
                 setFeatures(_perm);
                 continue;
             }
             if (param.indexOf("win_") >= 0) {
-                
+
                 String _perm = param.replace("win_", "");
                 setFeatures(_perm);
                 continue;
@@ -278,11 +314,19 @@ public class Xml {
 
     }
 
+    /**
+     * Nos permite generar las definiciones de los plugins de Phonegap Build,
+     * para una aplicacion movil.
+     *
+     * @param _opciones_puglins Maps con los valores con los pares parametro
+     * valor
+     * @throws Exception
+     */
     public void setOpcionesPlugins(Map<String, String> _opciones_puglins) throws Exception {
         HashMap<Integer, HashMap<String, String>> accesos = new HashMap<Integer, HashMap<String, String>>();
 
         for (String param : _opciones_puglins.keySet()) {
-            
+
             String value = _opciones_puglins.get(param);
 
             setPlugin(param);
@@ -290,11 +334,19 @@ public class Xml {
 
     }
 
+    /**
+     * Nos permite generar las opciones de desarrollador de Phonegap Build, para
+     * una aplicacion movil.
+     *
+     * @param _opciones_desarrollo Maps con los valores con los pares parametro
+     * valor
+     * @throws Exception
+     */
     public void setOpcionesDesarrollador(Map<String, String> _opciones_desarrollo) throws Exception {
 
         HashMap<String, String> autor = new HashMap<String, String>();
         for (String param : _opciones_desarrollo.keySet()) {
-            
+
             String value = _opciones_desarrollo.get(param);
             if (param.indexOf("autor_") >= 0) {
                 String info = param.replace("autor_", "");
@@ -310,20 +362,27 @@ public class Xml {
         setAuthorApp(autor.get("name"), autor.get("url"), autor.get("mail"));
     }
 
+    /**
+     * Crea el elemento raiz de fichero xml.
+     *
+     * @return La representacion del elemento creado
+     */
     private Element createRaizConfig() {
         this.widget = new Element("widget");
         widget.setAttribute(new Attribute("xmls", "http://www.w3.org.ns/widgets"));
         widget.addNamespaceDeclaration(Namespace.getNamespace("gap", "http://phonegap.com/ns/1.0"));
-         widget.setAttribute(new Attribute("id", "uned.phonegap.example"));
-         widget.setAttribute(new Attribute("version", "1.0.0"));
+        widget.setAttribute(new Attribute("id", "uned.phonegap.example"));
+        widget.setAttribute(new Attribute("version", "1.0.0"));
         return widget;
     }
 
     /**
+     * Crea el elemento raiz de fichero xml, utilizando los valores de los
+     * parametros.
      *
-     * @param _id
-     * @param _version
-     * @param _versionCode
+     * @param _id Identificador de los fuentes
+     * @param _version Valor de la version
+     * @param _versionCode Version del codigo.
      * @return
      */
     public Element createRaizConfig(String _id, String _version, String _versionCode) {
@@ -342,6 +401,12 @@ public class Xml {
         return widget;
     }
 
+    /**
+     * Modifica el atributo version del elemento raiz.
+     *
+     * @param _versionApp Nuevo valor de la version
+     * @throws Exception
+     */
     private void setVersionApp(String _versionApp) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -349,8 +414,14 @@ public class Xml {
         String version = Util.isNulo(_versionApp) ? "1.0.0" : _versionApp;
         widget.setAttribute(new Attribute("version", version));
     }
-    
-   private void setIdApp(String _idApp) throws Exception {
+
+    /**
+     * Modifica el atributo de identificador de fuentes del elemento raiz
+     *
+     * @param _idApp Nuevo valor del identificador de fuentes.
+     * @throws Exception
+     */
+    private void setIdApp(String _idApp) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
         }
@@ -358,6 +429,12 @@ public class Xml {
         widget.setAttribute(new Attribute("id", version));
     }
 
+    /**
+     * Modifica el atributo de version del codigo del elemento raiz
+     *
+     * @param _versionCode Nuevo valor de la version del codigo
+     * @throws Exception
+     */
     private void setVersionCode(String _versionCode) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -367,6 +444,13 @@ public class Xml {
         }
     }
 
+    /**
+     * Añade el elemento name si no existe previamente. Si existia se modifica
+     * el contenido con el nuevo indicado en el parametro
+     *
+     * @param _name Contenido del elemento name.
+     * @throws Exception
+     */
     private void setNameApp(String _name) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -385,6 +469,13 @@ public class Xml {
         e_name.addContent(name);
     }
 
+    /**
+     * Añade el elemento description, si no existe previamente. Si existia se
+     * modifica el contenido con el nuevo indicado en el parametro
+     *
+     * @param _desc Contenido del elemento description.
+     * @throws Exception
+     */
     public void setDescripApp(String _desc) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -403,6 +494,14 @@ public class Xml {
         e_desc.addContent(descripcion);
     }
 
+    /**
+     * Se crea el elemento content con el contenido especificado en el
+     * parametro. Si el elemento existia previamente, el conetido es modificado
+     * con el nuevo valor que indica el parametro.
+     *
+     * @param _content Contenido del elemento content
+     * @throws Exception
+     */
     public void setContentApp(String _content) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -418,10 +517,21 @@ public class Xml {
 
         String descripcion = Util.isNulo(_content) ? "index.html" : _content;
 
-       // e_cont.addContent(descripcion);
+        // e_cont.addContent(descripcion);
         e_cont.setAttribute("src", descripcion);
     }
 
+    /**
+     * Se crea el elemento author con el contenido especificado en _author y con
+     * los atributos href y mail que toman los valores _href y _email
+     * respectivamente. Si el elemento ya existia previamente este se actualiza
+     * con los nuevos valores.
+     *
+     * @param _author Contenido de la etiqueta author
+     * @param _href El valor del atributo href
+     * @param _email Indica el valor del atributo mail
+     * @throws Exception
+     */
     public void setAuthorApp(String _author, String _href, String _email) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -447,6 +557,13 @@ public class Xml {
         }
     }
 
+    /**
+     * Añade tantos elementos platform como los indicados en el parametro.
+     *
+     * @param _nPlatform Lista de valores del atributo name del elemento
+     * platform.
+     * @throws Exception
+     */
     public void setPlatform(List<String> _nPlatform) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -466,6 +583,14 @@ public class Xml {
 
     }
 
+    /**
+     * Añade el elemento preference con el contenido indicado en _valuePref, y
+     * con el atributo name tomando el valor de _namePred
+     *
+     * @param _namePref Valor del atributo name
+     * @param _valuePref Contenido del elemento preference
+     * @throws Exception
+     */
     public void setPreference(String _namePref, String _valuePref) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -486,6 +611,16 @@ public class Xml {
         this.widget.addContent(preference);
     }
 
+    /**
+     * Añade el elemento access y los atributos origin, subdomains y
+     * launch-external, el valor para cada atributo se especifica en los
+     * parametros _origin, _subdomains y _external respectivamente
+     *
+     * @param _origin Valor del atributo origin
+     * @param _subdomains Valor del atributo subdomains
+     * @param _external Valor del atributo launch-external
+     * @throws Exception
+     */
     public void setAccess(String _origin, Boolean _subdomains, Boolean _external) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -513,6 +648,14 @@ public class Xml {
 
     }
 
+    /**
+     * Define el elemento icon con los atributos src y platform
+     *
+     * @param _src Valor del atributo src
+     * @param _platform Valor del atributo platform
+     * @return El elemento creado.
+     * @throws Exception
+     */
     public Element setIcon(String _src, String _platform) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -526,6 +669,16 @@ public class Xml {
         return icon;
     }
 
+    /**
+     * Define un elemento icon especifico para la plataforma Ios.
+     *
+     * @param _src Valor del atributo src
+     * @param _platform Valor del atributo platform
+     * @param _width Valor del atributo width
+     * @param _height Valor del atributo height
+     * @return El elmento creado
+     * @throws Exception
+     */
     public Element setIconIos(String _src, String _platform, String _width, String _height) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -541,6 +694,15 @@ public class Xml {
         return icon;
     }
 
+    /**
+     * Define un elemento icon especifico para la plataforma Android.
+     *
+     * @param _src Valor del atributo src
+     * @param _platform Valor del atributo platform
+     * @param _qualifier Valor del atributo qualifier
+     * @return El elmento creado
+     * @throws Exception
+     */
     public Element setIconAndroid(String _src, String _platform, String _qualifier) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -554,6 +716,15 @@ public class Xml {
         return icon;
     }
 
+    /**
+     * Define un elemento icon especifico para la plataforma windows Phone.
+     *
+     * @param _src Valor del atributo src
+     * @param _platform Valor del atributo platform
+     * @param _role Valor del atributo role
+     * @return El elmento creado
+     * @throws Exception
+     */
     public Element setIconWPhone(String _src, String _platform, String _role) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -566,6 +737,14 @@ public class Xml {
         return icon;
     }
 
+    /**
+     * Crear el elemento splash
+     *
+     * @param _src Valor del atributo src
+     * @param _platform Valor del atributo platform
+     * @return El elemento creado
+     * @throws Exception
+     */
     public Element setSplash(String _src, String _platform) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -579,6 +758,16 @@ public class Xml {
         return splash;
     }
 
+    /**
+     * Crear el elemento splash especifico para la plataforma iOS
+     *
+     * @param _src Valor del atributo src
+     * @param _platform Valor del atributo platform
+     * @param _width Valor del atributo width
+     * @param _height Valor del atributo height
+     * @return El elemento creado
+     * @throws Exception
+     */
     public Element setSplashIos(String _src, String _platform, String _width, String _height) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -594,6 +783,15 @@ public class Xml {
         return splash;
     }
 
+    /**
+     * Crear el elemento splash especifico para la plataforma Android
+     *
+     * @param _src Valor del atributo src
+     * @param _platform Valor del atributo platform
+     * @param _qualifier Valor del atributo quealifier
+     * @return El elemento creado
+     * @throws Exception
+     */
     public Element setSplashAndroid(String _src, String _platform, String _qualifier) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -607,6 +805,13 @@ public class Xml {
         return splash;
     }
 
+    /**
+     * Crear el elemento feature con el atribute name
+     *
+     * @param _feature Valor del atributo name
+     * @return El elemento creado
+     * @throws Exception
+     */
     private Element setFeatures(String _feature) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -618,6 +823,13 @@ public class Xml {
         return feature;
     }
 
+    /**
+     * Crea el elemento plugin
+     *
+     * @param _plugin Valor del atributo name
+     * @return El elemento creado
+     * @throws Exception
+     */
     private Element setPlugin(String _plugin) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -629,6 +841,14 @@ public class Xml {
         return plugin;
     }
 
+    /**
+     * Crea el elemento plugin con el atributo version
+     *
+     * @param _plugin Valor del atributo name
+     * @param _version Valor del atributo version
+     * @return El elemento creado
+     * @throws Exception
+     */
     public Element setPlugin(String _plugin, String _version) throws Exception {
         if (Util.isNulo(this.widget)) {
             throw new Exception();
@@ -640,6 +860,15 @@ public class Xml {
         return plugin;
     }
 
+    /**
+     * Establece un atributo al elemento especificado
+     *
+     * @param _element Elemento al que se va a añadir el atributo
+     * @param _nameAtt Nombre del atributo
+     * @param _valueAtt Valor del atributo
+     * @return El atributo creado.
+     * @throws Exception
+     */
     private Attribute setAttributeElement(Element _element, String _nameAtt, String _valueAtt) throws Exception {
         if (Util.isNulo(_element)) {
             throw new Exception();
@@ -664,7 +893,18 @@ public class Xml {
         return att;
     }
 
-    private Attribute setAttributeElement(Element _element, String _nameAtt, String _valueAtt, String _prefix) throws Exception {
+    /**
+     * Establece un atributo al elemento especificado indicando su NameSpace
+     *
+     * @param _element Elemento al que se va a añadir el atributo
+     * @param _nameAtt Nombre del atributo
+     * @param _valueAtt Valor del atributo
+     * @param _prefix NameSpace del atribubuto si lo necesita
+     * @return El atributo creado.
+     * @throws Exception
+     */
+    private Attribute setAttributeElement(Element _element, String _nameAtt,
+            String _valueAtt, String _prefix) throws Exception {
         if (Util.isNulo(_element)) {
             throw new Exception();
         }
@@ -688,6 +928,11 @@ public class Xml {
         return att;
     }
 
+    /**
+     * Obtiene el elemento raiz del documento.
+     *
+     * @return El elemento raiz.
+     */
     public Element getWidget() {
         return widget;
     }
