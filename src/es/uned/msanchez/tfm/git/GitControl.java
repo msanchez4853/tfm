@@ -38,7 +38,7 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
  */
 public class GitControl {
 
-  /*  private String localPath, remotePath;
+    private String localPath, remotePath;
     private Repository localRepo;
     private Git git;
     private CredentialsProvider cp;
@@ -105,5 +105,5 @@ public class GitControl {
             NoHeadException, GitAPIException {
         git.pull().call();
     }
-*/
+
 }

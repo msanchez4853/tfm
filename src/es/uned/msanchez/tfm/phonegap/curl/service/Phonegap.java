@@ -5,7 +5,7 @@
 package es.uned.msanchez.tfm.phonegap.curl.service;
 
 import com.sun.jersey.spi.resource.Singleton;
-//import es.uned.msanchez.tfm.git.GitControl;
+import es.uned.msanchez.tfm.git.GitControl;
 import es.uned.msanchez.tfm.phonegap.curl.Curl;
 import es.uned.msanchez.tfm.phonegap.curl.exception.CurlException;
 import es.uned.msanchez.tfm.utilidades.Util;
@@ -36,7 +36,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import org.apache.commons.io.FileUtils;
-//import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -426,7 +426,7 @@ public class Phonegap {
 
         File source = new File(Phonegap.path_base_tmp + File.separator + "tmp" 
                 + File.separator + "git" + File.separator + "origen" + File.separator + "www");
-/*        GitControl gc;
+        GitControl gc;
         try {
             gc = new GitControl(source, remotePath);
             if (!source.exists()) {
@@ -443,7 +443,7 @@ public class Phonegap {
             resul.put("status", "error");
             return resul.toJSONString();
         }
-*/
+
 
         //Copiamos el codigo base al directorio tmp de la aplicacion que se esta generando.
         File dest = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator 
