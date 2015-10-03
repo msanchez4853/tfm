@@ -43,7 +43,7 @@ public class GitControl {
     private Git git;
     private CredentialsProvider cp;
     private String name = "username";
-    private String password = "password";
+    private String password = "password"; 
 
     public GitControl(String localPath, String remotePath) throws IOException {
         this.localPath = localPath;
