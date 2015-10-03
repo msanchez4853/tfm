@@ -104,7 +104,9 @@
 
     if (option.equals("generar")) {
         out.println("Generando");
-        File dir_tmp = new File(path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "www");
+        File dir_tmp = new File(path_base_tmp + File.separator 
+                + "create_app" + File.separator + lab_id + File.separator 
+                + lab_experiment_id + File.separator + "config");
         dir_tmp.mkdirs();
 
         File f_config = new File(dir_tmp, "config.xml");

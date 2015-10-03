@@ -147,13 +147,13 @@ String aspecto = request.getParameter("aspecto");
                             %>
                             <tr id="_opc_perm_fila_acceso_1" data-i="1">
                                 <td name="url">*</td>
-                                <td name="subdomains">false</td>
+                                <td name="subdomains">true</td>
                                 <td name="external">
-                                    <span>false</span>
+                                    <span>true</span>
 
                                     <input id="_opc_perm_acceso_1_url" name="_opc_perm_acceso_1_url" value="*" type="hidden"/>
-                                    <input id="_opc_perm_acceso_1_subdomains" name="_opc_perm_acceso_1_subdomains" value="false" type="hidden"/>
-                                    <input id="_opc_perm_acceso_1_external" name="_opc_perm_acceso_1_external" value="false" type="hidden"/>
+                                    <input id="_opc_perm_acceso_1_subdomains" name="_opc_perm_acceso_1_subdomains" value="true" type="hidden"/>
+                                    <input id="_opc_perm_acceso_1_external" name="_opc_perm_acceso_1_external" value="true" type="hidden"/>
                                 </td>
                             </tr>
                             <%    }else{

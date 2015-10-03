@@ -41,8 +41,11 @@
         name_file = name_file + ".ipa";
     }
 
-    File file = new File(path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id
-            + File.separator + "download" + File.separator + platform + File.separator + name_file);
+    File file = new File(path_base_tmp + File.separator 
+            + "create_app" + File.separator + lab_id 
+            + File.separator + lab_experiment_id
+            + File.separator + "download" + File.separator 
+            + platform + File.separator + name_file);
 
     if (file.exists() && file.isFile()) {
         response.setHeader("Content-Disposition", "attachment; filename=\"" + name_file + "\""); //optional

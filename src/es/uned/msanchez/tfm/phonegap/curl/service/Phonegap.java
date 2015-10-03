@@ -6,10 +6,12 @@ package es.uned.msanchez.tfm.phonegap.curl.service;
 
 import com.sun.jersey.spi.resource.Singleton;
 import es.uned.msanchez.tfm.git.GitControl;
+//import es.uned.msanchez.tfm.git.GitControl;
 import es.uned.msanchez.tfm.phonegap.curl.Curl;
 import es.uned.msanchez.tfm.phonegap.curl.exception.CurlException;
 import es.uned.msanchez.tfm.utilidades.Util;
 import es.uned.msanchez.tfm.utilidades.Zip;
+import es.uned.msanchez.tfm.utilidades.ZipDirectory;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,7 +38,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import org.apache.commons.io.FileUtils;
-import org.eclipse.jgit.api.errors.GitAPIException;
+//import org.eclipse.jgit.api.errors.GitAPIException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -386,7 +388,9 @@ public class Phonegap {
         String ip = request.getRemoteAddr();
 
 
-        File f_config = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "www/config.xml");
+        File f_config = new File(Phonegap.path_base_tmp+ File.separator 
+                + "create_app" + File.separator + lab_id + File.separator 
+                + lab_experiment_id + File.separator + "config/config.xml");
 
         JSONObject resul = new JSONObject();
         resul.put("lab_id", lab_id);
@@ -424,46 +428,48 @@ public class Phonegap {
         resul.put("lab_id", lab_id);
         resul.put("lab_experiment_id", lab_experiment_id);
 
-        File source = new File(Phonegap.path_base_tmp + File.separator + "tmp" 
-                + File.separator + "git" + File.separator + "origen" + File.separator + "www");
-        GitControl gc;
+        // Path for git repositry $BASE_PATH/git/source
+       File source = new File(Phonegap.path_base_tmp + File.separator + "git" + File.separator + "source");
+ /*        GitControl gc;
         try {
             gc = new GitControl(source, remotePath);
-            if (!source.exists()) {
+            // if (!source.exists()) {
+            if (source.exists()) {
                 gc.pullFromRepo();
             } else {
                 gc.cloneRepo();
             }
-        } catch (IOException ex) {
-            Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
-            resul.put("status", "error");
-            return resul.toJSONString();
-        } catch (GitAPIException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
             resul.put("status", "error");
             return resul.toJSONString();
         }
-
-
+*/
+        File phonegap_git_www_source = new File(Phonegap.path_base_tmp + File.separator + "git" + File.separator + "source" + File.separator + "www" ); 
+        
         //Copiamos el codigo base al directorio tmp de la aplicacion que se esta generando.
-        File dest = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator 
-                + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id 
-                + File.separator + "tmp");
-        //dest.mkdirs();
+        File dest = new File(Phonegap.path_base_tmp + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id 
+                + File.separator + "phonegap");
+        // Create folder/folders for phonegap source
+        dest.mkdirs();
         try {
-            FileUtils.copyDirectory(source, dest);
+            // Source:$BASE_PATH/git/source
+            // Dest: $BASE_PATH/create_app/lab_id/lab_experiment_id/phonegap
+            FileUtils.copyDirectory(phonegap_git_www_source, dest);
         } catch (IOException ex) {
             Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
             resul.put("status", "error");
             return resul.toJSONString();
         }
 
+        
+      
 
         //Se copia el fichero config.xml generado previamente al directorio tmp de la aplicacion 
         //que se esta generando. 
-        File f_config = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator 
+        File f_config = new File(Phonegap.path_base_tmp  + File.separator 
                 + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id 
-                + File.separator + "www/config.xml");
+                + File.separator + "config/config.xml");
         try {
             FileUtils.copyFileToDirectory(f_config, dest);
         } catch (IOException ex) {
@@ -487,9 +493,9 @@ public class Phonegap {
         if (!Util.isNulo(Phonegap.dir_omitir) && Phonegap.dir_omitir.length > 0) {
             //Si se ha especificado directorios se añade el fichero .pgbomit
             for (String dir : Phonegap.dir_omitir) {
-                File f_pgbomit = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + File.separator
+                File f_pgbomit = new File(Phonegap.path_base_tmp  + File.separator + File.separator
                         + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator
-                        + "tmp" + File.separator + dir + File.separator + ".pgbomit");
+                        + "phonegap" + File.separator + dir + File.separator + ".pgbomit");
                 try {
                     f_pgbomit.createNewFile();
                 } catch (IOException ex) {
@@ -500,7 +506,7 @@ public class Phonegap {
             }
         }
 
-        //Generar el fichero config.json
+        //Generar el fichero lab_config.json
         JSONObject config_json = new JSONObject();
         config_json.put("lab_id", lab_id);
         if (!lab_experiment_id.equals("default")) {
@@ -508,13 +514,18 @@ public class Phonegap {
         } else {
             config_json.put("lab_experiment_id", "");
         }
-        File f_config_json = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + File.separator
+        File f_config_json = new File(Phonegap.path_base_tmp + File.separator + File.separator
                 + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator
-                + "tmp" + File.separator + "conf" + File.separator + "config.json");
+                + "phonegap" + File.separator + "conf" + File.separator + "lab_config.js");
         FileWriter fw_config_json;
         try {
             fw_config_json = new FileWriter(f_config_json);
-            fw_config_json.write(config_json.toJSONString());
+            String file_content = "// Configuration file for use a RELATED Lab\n" +
+                "// lab_id: Unique ID for Lab, generated by RLAB Server\n" +
+                "// lab_experiment_id: ID for experiment included in the Lab\n" +
+                "var lab_config = ";
+            file_content+=config_json.toJSONString();
+            fw_config_json.write(file_content);
             fw_config_json.close();
         } catch (IOException ex) {
             Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
@@ -523,9 +534,12 @@ public class Phonegap {
         }
 
         //Se crea el fichero zip del directorio tmp de la aplicacion que se esta generando y se copia en el directorio zip de la aplicacion.
-        File dest_zip = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "zip");
+        File dest_zip = new File(Phonegap.path_base_tmp  + File.separator 
+                + "create_app" + File.separator + lab_id + File.separator +
+                lab_experiment_id + File.separator + "zip");
         try {
-            Zip.zipDirectorio(dest, dest_zip, "lab", Zip.Extension.ZIP);
+               ZipDirectory.createZip(dest, dest_zip, "lab", Zip.Extension.ZIP);
+           // Zip.zipDirectorio(dest, dest_zip, "lab", Zip.Extension.ZIP);
         } catch (IOException ex) {
             Logger.getLogger(Phonegap.class.getName()).log(Level.SEVERE, null, ex);
             resul.put("status", "error");
@@ -599,7 +613,7 @@ public class Phonegap {
             
             //Comprobamos si se ha realizado el download de la aplicacion privada
             Long idApliPho = (Long) apliPrivada.get("id");
-            File dir_back = new File(Phonegap.path_base_tmp + File.separator + "tmp" 
+            File dir_back = new File(Phonegap.path_base_tmp
                     + File.separator + "backup" + File.separator + idApliPho);
             if (dir_back.exists() && dir_back.isDirectory()) {
                 //La aplicacion privada no se ha realizado download
@@ -648,7 +662,7 @@ public class Phonegap {
                             JSONObject datosFile = (JSONObject) info_des.get("respuesta");
 
                             File file = new File((String) datosFile.get("descargado"));
-                            File dir_down = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator 
+                            File dir_down = new File(Phonegap.path_base_tmp+ File.separator 
                                     + "create_app" + File.separator + antLabId + File.separator + antLabExpId 
                                     + File.separator + "download" + File.separator + platform);
                             try {
@@ -707,7 +721,10 @@ public class Phonegap {
 
         
         //Enviamos el codigo a phonegap para crear la aplicacion.
-        File lab_zip = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "zip" + File.separator + "lab" + ".zip");
+        File lab_zip = new File(Phonegap.path_base_tmp+ File.separator 
+                + "create_app" + File.separator + lab_id + File.separator 
+                + lab_experiment_id + File.separator + "zip" 
+                + File.separator + "lab" + ".zip");
         resul.put("lab_id", lab_id);
         resul.put("lab_experiment_id", lab_experiment_id);
 
@@ -742,8 +759,7 @@ public class Phonegap {
 
         Long idPhonegap = (Long) respuesta.get("id");
 
-        File dir_back = new File(Phonegap.path_base_tmp + File.separator 
-                + "tmp" + File.separator + "backup" + File.separator + idPhonegap);
+        File dir_back = new File(Phonegap.path_base_tmp + File.separator + "backup" + File.separator + idPhonegap);
         dir_back.mkdirs();
         File f_labId = new File(dir_back, "idLab");
         File f_labExperimentId = new File(dir_back, "idLabExperiment");
@@ -806,7 +822,10 @@ public class Phonegap {
             JSONObject datosFile = (JSONObject) info_down.get("respuesta");
 
             File file = new File((String) datosFile.get("descargado"));
-            File dir_down = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "create_app" + File.separator + lab_id + File.separator + lab_experiment_id + File.separator + "download" + File.separator + platform);
+            File dir_down = new File(Phonegap.path_base_tmp+ File.separator 
+                    + "create_app" + File.separator + lab_id + File.separator 
+                    + lab_experiment_id + File.separator + "download" 
+                    + File.separator + platform);
             dir_down.mkdirs();
             String name_file = Util.isNulo(name_apli) ? platform : name_apli.toString();
             name_file = name_file.replaceAll(" ", "");
@@ -863,7 +882,7 @@ public class Phonegap {
 
         JSONObject resul = new JSONObject();
         resul.put("idApli", idapli);
-        File dir_back = new File(Phonegap.path_base_tmp + File.separator + "tmp" + File.separator + "backup" + File.separator + idapli);
+        File dir_back = new File(Phonegap.path_base_tmp+ File.separator + "backup" + File.separator + idapli);
         try {
             FileUtils.deleteDirectory(dir_back);
         } catch (IOException ex) {

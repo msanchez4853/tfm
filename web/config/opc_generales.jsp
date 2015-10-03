@@ -195,8 +195,10 @@
                             <option value="3.3.0">3.3.0</option>
                             <option value="3.4.0">3.4.0</option>
                             <option value="3.5.0">3.5.0</option>
-                            <option value="3.6.3" selected="selected">3.6.3 (default)</option>
+                            <option value="3.6.3" >3.6.3</option>
                             <option value="3.7.0">3.7.0</option>
+                            <option value="cli-5.1.1" >5.1.1 </option>
+                            <option value="cli-5.2.0" selected="selected">5.2.0 (default)</option>
                         </select>
                     </div>
                 </div>

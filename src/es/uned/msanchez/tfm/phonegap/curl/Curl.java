@@ -13,6 +13,11 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -21,6 +26,8 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -36,21 +43,30 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContextBuilder;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-
 /**
- * Establece un cliente RESTFul con los servicios ofrecidos por la API de 
+ * Establece un cliente RESTFul con los servicios ofrecidos por la API de
  * Phonegap Build Developer
+ *
  * @author miguesr
  */
 public class Curl {
@@ -58,7 +74,6 @@ public class Curl {
     private CredentialsProvider credsProvider;
     private RequestConfig localConfig;
     private HttpClient httpclient;
-
     private static String path_base_tmp;
 
     static {
@@ -66,12 +81,11 @@ public class Curl {
         path_base_tmp = rb.getString("path_tmp").trim();
     }
 
-
-/**
- * Inicializa la conexion con el servicio, estableciendo la autenticacion
- * utilizando los valores correspondientes del fichero de propiedades
- * config.properties
- */
+    /**
+     * Inicializa la conexion con el servicio, estableciendo la autenticacion
+     * utilizando los valores correspondientes del fichero de propiedades
+     * config.properties
+     */
     public void init() {
         Properties prop = new Properties();
         String user;
@@ -101,8 +115,56 @@ public class Curl {
         localConfig = RequestConfig.copy(globalConfig)
                 .setCookieSpec(CookieSpecs.STANDARD)
                 .build();
-        httpclient = HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
+        // httpclient = HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
 
+        try {
+            httpclient = createHttpClient_AcceptsUntrustedCerts(credsProvider);
+        } catch (NoSuchAlgorithmException e) {
+            httpclient = HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
+        } catch (KeyStoreException e) {
+            httpclient = HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
+        } catch (KeyManagementException e) {
+            httpclient = HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
+        }
+    }
+
+    private HttpClient createHttpClient_AcceptsUntrustedCerts(CredentialsProvider credsProvider) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+        HttpClientBuilder b = HttpClientBuilder.create();
+        b.setDefaultCredentialsProvider(credsProvider);
+
+        // setup a Trust Strategy that allows all certificates.
+        //
+        SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+            @Override
+            public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+                return true;
+            }
+        }).build();
+        b.setSslcontext(sslContext);
+
+        // don't check Hostnames, either.
+        //      -- use SSLConnectionSocketFactory.getDefaultHostnameVerifier(), if you don't want to weaken
+        HostnameVerifier hostnameVerifier = SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+
+        // here's the special part:
+        //      -- need to create an SSL Socket Factory, to use our weakened "trust strategy";
+        //      -- and create a Registry, to register it.
+        //
+        SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+                .register("http", PlainConnectionSocketFactory.getSocketFactory())
+                .register("https", sslSocketFactory)
+                .build();
+
+        // now, we create connection-manager using our Registry.
+        //      -- allows multi-threaded use
+        PoolingHttpClientConnectionManager connMgr = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+        b.setConnectionManager(connMgr);
+
+        // finally, build the HttpClient;
+        //      -- done!
+        HttpClient client = b.build();
+        return client;
     }
 
     /**
@@ -202,8 +264,8 @@ public class Curl {
      * Phonegap Build.
      *
      * @param _idApp Identificador de la aplicacion en phonegap
-     * @return Una representacion en JSON con la informacion de la aplicacion del
-     * usuario
+     * @return Una representacion en JSON con la informacion de la aplicacion
+     * del usuario
      * @see
      * http://docs.build.phonegap.com/en_US/developer_api_read.md.html#_get_https_build_phonegap_com_api_v1_apps_id
      * @throws CurlException
@@ -261,7 +323,7 @@ public class Curl {
      */
     public JSONObject getPlatform(Long _idApp, String _platform) throws CurlException {
 
-        JSONObject respuestaJSON = getMethodPhonegapWithDowload("/api/v1/apps/" + _idApp.toString() + "/" + _platform);       
+        JSONObject respuestaJSON = getMethodPhonegapWithDowload("/api/v1/apps/" + _idApp.toString() + "/" + _platform);
         return respuestaJSON;
 
     }
@@ -463,7 +525,7 @@ public class Curl {
 
     }
 
-    /**     
+    /**
      * Establece el icono de la apliacion al recibido como parametro.
      *
      * @param _idApli Identificador de la aplicacion.
@@ -473,7 +535,6 @@ public class Curl {
      * http://docs.build.phonegap.com/en_US/developer_api_write.md.html#_post_https_build_phonegap_com_api_v1_apps_id_icon
      * @throws CurlException
      */
-     
     public JSONObject setIcon(Long _idApli, File _icon) throws CurlException {
         JSONObject respuestaJSON = null;
 
@@ -493,16 +554,17 @@ public class Curl {
 
     }
 
-    /**     
+    /**
      * Añade un colaborador al equipo de desarrollo de la aplicacion..
      *
      * @param _idApli Identificador de la aplicacion.
-     * @param _data Los parametros necesarios para la definicion del colaborador.
+     * @param _data Los parametros necesarios para la definicion del
+     * colaborador.
      * @return Representacion JSON
      * @see
      * http://docs.build.phonegap.com/en_US/developer_api_write.md.html#_post_https_build_phonegap_com_api_v1_apps_id_collaborators
      * @throws CurlException
-     */   
+     */
     public JSONObject addCollab(Long _idApli, JSONObject _data) throws CurlException {
         JSONObject respuestaJSON = null;
 
@@ -518,8 +580,9 @@ public class Curl {
 
     }
 
-    /**     
-     * Modifica el rol de un colaborador al equipo de desarrollo de la aplicacion..
+    /**
+     * Modifica el rol de un colaborador al equipo de desarrollo de la
+     * aplicacion..
      *
      * @param _idApli Identificador de la aplicacion.
      * @param _idCollab Identificador del colaborador.
@@ -528,7 +591,7 @@ public class Curl {
      * @see
      * http://docs.build.phonegap.com/en_US/developer_api_write.md.html#_post_https_build_phonegap_com_api_v1_apps_id_collaborators
      * @throws CurlException
-     */   
+     */
     public JSONObject setRoleCollab(Long _idApli, Long _idCollab, JSONObject _data) throws CurlException {
         JSONObject respuestaJSON = null;
 
@@ -544,9 +607,10 @@ public class Curl {
 
     }
 
-    /**     
-     * Actualiza el codigo fuente de una aplicacion en Phonegap, a partir de un fichero zip
-     * con el codigo fuente de la aplicacion.     
+    /**
+     * Actualiza el codigo fuente de una aplicacion en Phonegap, a partir de un
+     * fichero zip con el codigo fuente de la aplicacion.
+     *
      * @param _idApli Identificador de la aplicacion.
      * @param _data Los parametros necesarios la actualizacion.
      * @param _proyecto Fichero zip con el nuevo codigo fuente de la aplicacion.
@@ -554,10 +618,9 @@ public class Curl {
      * @see
      * http://docs.build.phonegap.com/en_US/developer_api_write.md.html#_put_https_build_phonegap_com_api_v1_apps_id
      * @throws CurlException
-     */   
-   
+     */
     public JSONObject updateApp(Long _idApli, JSONObject _data, File _proyecto) throws CurlException {
-        
+
         JSONObject respuestaJSON = null;
         FileBody file = new FileBody(_proyecto);
         StringBody data_p = new StringBody(_data.toJSONString(), ContentType.TEXT_PLAIN);
@@ -572,14 +635,15 @@ public class Curl {
 
     }
 
-    /**     
-     * Elimina la aplicacion del repositorio de Phonegap Build    
+    /**
+     * Elimina la aplicacion del repositorio de Phonegap Build
+     *
      * @param _idApli Identificador de la aplicacion.
      * @return Representacion JSON
      * @see
      * http://docs.build.phonegap.com/en_US/developer_api_write.md.html#_delete_https_build_phonegap_com_api_v1_apps_id
      * @throws CurlException
-     */  
+     */
     public JSONObject deleteApp(Long _idApli) throws CurlException {
         //  HttpGet httpget = new HttpGet()
         JSONObject respuestaJSON = deleteMethodPhonegap("/api/v1/apps/" + _idApli);
@@ -589,15 +653,16 @@ public class Curl {
 
     }
 
-    /**     
+    /**
      * Elimina un colaborador del equipo de una aplicacion.
+     *
      * @param _idApli Identificador de la aplicacion.
      * @param _idCollab Identificador del Colaborador
      * @return Representacion JSON
      * @see
      * http://docs.build.phonegap.com/en_US/developer_api_write.md.html#_delete_https_build_phonegap_com_api_v1_apps_id_collaborators_id
      * @throws CurlException
-     */     
+     */
     public JSONObject deleteCollab(Long _idApli, Long _idCollab) throws CurlException {
         //  HttpGet httpget = new HttpGet()
         JSONObject respuestaJSON = deleteMethodPhonegap("/api/v1/apps/" + _idApli + "/collaborators/" + _idCollab);
@@ -605,15 +670,16 @@ public class Curl {
 
     }
 
-    /**     
+    /**
      * Elimina la key especificada como parametro de la plataforma indicada.
-     * @param _platform  Identificador de la plataforma.
+     *
+     * @param _platform Identificador de la plataforma.
      * @param _idKey Identificador de la Key
      * @return Representacion JSON
      * @see
      * http://docs.build.phonegap.com/en_US/developer_api_write.md.html#_delete_https_build_phonegap_com_api_v1_keys_platform_id
      * @throws CurlException
-     */     
+     */
     public JSONObject deleteKeyPlatform(String _platform, Long _idKey) throws CurlException {
         //  HttpGet httpget = new HttpGet()
         JSONObject respuestaJSON = deleteMethodPhonegap("/api/v1/keys/" + _platform + "/" + _idKey);
@@ -663,7 +729,7 @@ public class Curl {
             StringWriter writer = new StringWriter();
             IOUtils.copy(content, writer);
             String theString = writer.toString();
-            JSONParser parser = new JSONParser();           
+            JSONParser parser = new JSONParser();
             respuestaJSON = Util.isNulo(theString) ? null : (JSONObject) parser.parse(theString);
 
         } catch (ParseException ex) {
@@ -752,8 +818,6 @@ public class Curl {
         return resultado;
     }
 
-    
-    
     private JSONObject getResponseJSONWithDowload(HttpResponse _response) throws CurlException {
         InputStream content = null;
 
@@ -786,7 +850,7 @@ public class Curl {
                 respuestaJSON.put("name", fileTmp.getName());
 
             }
-           
+
 
         } catch (ParseException ex) {
             Logger.getLogger(Curl.class.getName()).log(Level.SEVERE, null, ex);
@@ -802,8 +866,6 @@ public class Curl {
             return respuestaJSON;
         }
     }
-    
-    
 
     /**
      * Realiza la llamada a un metodo de phonegap POST y la respuesta la
@@ -847,7 +909,7 @@ public class Curl {
         resultado.put("status", response.getStatusLine().getStatusCode());
         resultado.put("status_text", response.getStatusLine().getReasonPhrase());
         resultado.put("respuesta", respuestaJSON);
-        
+
         return resultado;
     }
 

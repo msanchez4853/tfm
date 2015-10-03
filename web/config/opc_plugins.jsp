@@ -9,20 +9,20 @@
 <%@page import="java.util.ResourceBundle"%>
 <%@page import="es.uned.msanchez.tfm.utilidades.Util"%>
 <%
-String aspecto = request.getParameter("aspecto");
-String [] plugins = null;
-Map mplugins = new HashMap();
- if (!Util.isNulo(aspecto) && aspecto.equalsIgnoreCase("related")) {
-     ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.related");
-     String s_plugins = rb.getString("plugins");
-     if(!Util.isNulo(s_plugins)){
-         plugins= s_plugins.split(",");
-         for(String p:plugins){
-             mplugins.put(p, "related");
-         }
-         
-     }
- }
+    String aspecto = request.getParameter("aspecto");
+    String[] plugins = null;
+    Map mplugins = new HashMap();
+    if (!Util.isNulo(aspecto) && aspecto.equalsIgnoreCase("related")) {
+        ResourceBundle rb = ResourceBundle.getBundle("es.uned.msanchez.tfm.resources.related");
+        String s_plugins = rb.getString("plugins");
+        if (!Util.isNulo(s_plugins)) {
+            plugins = s_plugins.split(",");
+            for (String p : plugins) {
+                mplugins.put(p, "related");
+            }
+
+        }
+    }
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -95,7 +95,7 @@ Map mplugins = new HashMap();
                                         <input data-select-to="<%=Util.getValue(mplugins, "file")%>"  type="checkbox"  name="_opc_plug_file" id="_opc_plug_file">&nbsp;File
                                     </label>
                                 </div>
-                                
+
 
                             </div> 
                             <div class="col-md-5 col-md-offset-1">
@@ -144,6 +144,11 @@ Map mplugins = new HashMap();
                                 <div class="col-md-12 checkbox">
                                     <label>
                                         <input data-select-to="<%=Util.getValue(mplugins, "vibration")%>"  type="checkbox"  name="_opc_plug_vibration" id="_opc_plug_vibration">&nbsp;Vibration
+                                    </label>
+                                </div>
+                                <div class="col-md-12 checkbox">
+                                    <label>
+                                        <input data-select-to="<%=Util.getValue(mplugins, "whitelist")%>"  type="checkbox"  name="_opc_plug_whitelist" id="_opc_plug_whitelist">&nbsp;White List
                                     </label>
                                 </div>
                             </div>

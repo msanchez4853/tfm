@@ -835,8 +835,11 @@ public class Xml {
             throw new Exception();
         }
         Element plugin = new Element("plugin", this.widget.getNamespace("gap"));
-        String raiz = "org.apache.cordova.";
+       /* String raiz = "org.apache.cordova.";
+        setAttributeElement(plugin, "name", raiz + _plugin);*/
+        String raiz = "cordova-plugin-";
         setAttributeElement(plugin, "name", raiz + _plugin);
+        setAttributeElement(plugin, "source", "npm");
         this.widget.addContent(plugin);
         return plugin;
     }
